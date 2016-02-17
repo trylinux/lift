@@ -48,7 +48,7 @@ def testips(dest_ip,dport):
 		a = c.getpeercert(True)
 		b = str(ssl.DER_cert_to_PEM_cert(a))
 		device = (certs.getcertinfo(b))
-		print device
+		#print device
 
 		if device is not None:
 			if device is "ubiquiti":
@@ -71,6 +71,14 @@ def testips(dest_ip,dport):
 				print str(dest_ip).rstrip('\r\n)') + ": Lifesize Product (SSL)"
 			elif "filemaker" in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Filemaker Secure Database Website (SSL)"
+			elif  device is "verizon_jungo":
+				print str(dest_ip).rstrip('\r\n)') + ": Verizon Jungo OpenRG product (SSL/8443)"
+			elif  device is "canon_iradv":
+				print str(dest_ip).rstrip('\r\n)') + ": Canon IR-ADV Login Page (SSL/8443)"
+			elif "colubris" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": HPE MSM Series Device (SSL)"
+			elif device is "ecessa":
+				print str(dest_ip).rstrip('\r\n)') + ": Ecessa PowerLink Wan Optimizer (SSL)"
 			else:
 				print "Not in registry"
 		if device is None and 'Ubiquiti' in a:
@@ -84,6 +92,18 @@ def testips(dest_ip,dport):
 					print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
 			except:
 				print "error in second pass"
+				pass
+		if device is None and 'iR-ADV' in a:
+			hostname = "https://%s:%s" % (dest_ip,dport)
+			try:		
+				checkheaders = urllib2.urlopen(hostname,context=ctx)
+				html = checkheaders.read()
+				soup = BeautifulSoup.BeautifulSoup(html)
+				title = soup.html.head.title
+				if 'Catwalk' in title.contents:
+					print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
+			except:
+				print "error in third pass"
 				pass
 		s.close()
 	except KeyboardInterrupt:
