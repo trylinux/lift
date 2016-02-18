@@ -14,20 +14,25 @@ def main():
 #	parser.add_argument("-u","--user", help="The user you want to use")
 	parser.add_argument("-f","--ifile", help="A file of IPs")
 	parser.add_argument("-p","--port", help="A port")
+	parser.add_argument("-v","--verbose", help="Verbosity On")
 	args=parser.parse_args()
+	if args.verbose is None:
+		verbose = None
+	else:
+	   	verbose = args.verbose
 	if args.port is None:
 		dport = 443
 	else:
 		dport = int(args.port)
 	if args.ip:
 		dest_ip = args.ip
-		testips(args.ip,dport)
+		testips(args.ip,dport,verbose)
 	elif args.ifile:
 		ipfile = args.ifile
 		try:
 			with open(ipfile) as f:
 				for line in f:
-					testips(line,dport)
+					testips(line,dport,verbose)
 		except KeyboardInterrupt:
                 	#print "Quitting"
                 	sys.exit(0)
@@ -36,19 +41,21 @@ def main():
 			print "error in first try"
 			pass
 
-def testips(dest_ip,dport):
+def testips(dest_ip,dport,verbose=None):
+	device = None
 	ctx = ssl.create_default_context()
 	ctx.check_hostname = False
 	ctx.verify_mode = ssl.CERT_NONE
 	try:	
 		s = socket()
-		s.settimeout(10)
+		s.settimeout(5)
 		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)
 		c.connect((dest_ip,dport))
 		a = c.getpeercert(True)
 		b = str(ssl.DER_cert_to_PEM_cert(a))
 		device = (certs.getcertinfo(b))
-		#print device
+		if verbose is 1:
+			print "Trying: ",str(dest_ip).rstrip('\r\n)')
 
 		if device is not None:
 			if device is "ubiquiti":
@@ -79,39 +86,78 @@ def testips(dest_ip,dport):
 				print str(dest_ip).rstrip('\r\n)') + ": HPE MSM Series Device (SSL)"
 			elif device is "ecessa":
 				print str(dest_ip).rstrip('\r\n)') + ": Ecessa PowerLink Wan Optimizer (SSL)"
-			else:
-				print "Not in registry"
-		if device is None and 'Ubiquiti' in a:
-			hostname = "https://%s" % dest_ip
-			try:
-				checkheaders = urllib2.urlopen(hostname,context=ctx)
-				html = checkheaders.read()
-				soup = BeautifulSoup.BeautifulSoup(html)
-				title = soup.html.head.title
-				if 'EdgeOS' in title.contents:
-					print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
-			except:
-				print "error in second pass"
-				pass
-		if device is None and 'iR-ADV' in a:
-			hostname = "https://%s:%s" % (dest_ip,dport)
-			try:		
-				checkheaders = urllib2.urlopen(hostname,context=ctx)
-				html = checkheaders.read()
-				soup = BeautifulSoup.BeautifulSoup(html)
-				title = soup.html.head.title
-				if 'Catwalk' in title.contents:
-					print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
-			except:
-				print "error in third pass"
-				pass
+			elif device is "nomadix_ag_1":
+				print str(dest_ip).rstrip('\r\n)') + ": Nomadix AG series Gateway (SSL)"
+			elif "netvanta" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": ADTRAN NetVanta Total Access Device (SSL)"
+			elif "valuepoint_gwc_1" is device:
+				print str(dest_ip).rstrip('\r\n)') + ": ValuePoint Networks Gateway Controller Series (SSL)"
+			elif device is "broadcom_1":
+				print str(dest_ip).rstrip('\r\n)') + ": Broadcom Generic Modem (SSL)"
+		elif a is not None and device is None:
+			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
+		elif a is None and device is None:
+			getheaders(dest_ip,dport,verbose)
+		else:
+			print "Something error happened"
 		s.close()
 	except KeyboardInterrupt:
                         print "Quitting"
                         sys.exit(0)		
-	except:
+	except Exception as e:
 		s.close()
+		if verbose is 2:
+			print "Error in Final Pass: ",e
 		sys.exc_info()[0]
+	if device is None and dport is 443:
+		getheaders_ssl(dest_ip,dport,a,verbose,ctx)
+	else:
+		getheaders(dest_ip,dport,verbose)
+	s.close()
+def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
+	hostname = "https://%s:%s" % (dest_ip,dport)
+	try:
+		checkheaders = urllib2.urlopen(hostname,context=ctx)
+		server = checkheaders.info().get('Server')
+		html = checkheaders.read()
+		soup = BeautifulSoup.BeautifulSoup(html)
+		title = soup.html.head.title
+		if title is None:
+			title = soup.html.title
+		 
+		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
+			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
+		if 'iR-ADV' in cert and 'Catwalk' in title.contents:
+			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
+		if 'Cyberoam' in cert:
+			print str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)"
+		else:
+			getheaders(dest_ip,80,vbose)
+	except Exception as e:
+		if dport is 443:
+			dport = 80
+		getheaders(dest_ip,dport,vbose)
+		if vbose is 2:
+			print "Error in Second Pass: "
+		pass
+def getheaders(dest_ip,dport,vbose):
+	if dport == 443:
+		dport = 80
+	try:
+		hostname = "http://%s:%s" % (dest_ip,dport)
+		checkheaders = urllib2.urlopen(hostname)
+		server = checkheaders.info().get('Server')
+		html = checkheaders.read()
+		soup = BeautifulSoup.BeautifulSoup(html)
+		title = soup.html.head.title
+		if title is None:
+			title = soup.html.title
+		if 'Cambium' in server and 'ePMP' in str(title.contents):
+			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
+	
+	except Exception as e:
+		if vbose is 2:
+			print "Error in Final Pass: ",e
 		pass
 
 if __name__ == '__main__':	
