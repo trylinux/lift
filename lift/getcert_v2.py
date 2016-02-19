@@ -94,6 +94,16 @@ def testips(dest_ip,dport,verbose=None):
 				print str(dest_ip).rstrip('\r\n)') + ": ValuePoint Networks Gateway Controller Series (SSL)"
 			elif device is "broadcom_1":
 				print str(dest_ip).rstrip('\r\n)') + ": Broadcom Generic Modem (SSL)"
+			elif device is "lg_nas_1":
+				print str(dest_ip).rstrip('\r\n)') + ": LG NAS Device (SSL)"
+			elif device is "edgewater_1":
+				print str(dest_ip).rstrip('\r\n)') + ": EdgeWater Networks VOIP Solution (SSL)"
+			elif device is "foscam_cam":
+				print str(dest_ip).rstrip('\r\n)') + ": Foscam IPcam Client Login (SSL)"
+			elif device is "lacie_1":
+				print str(dest_ip).rstrip('\r\n)') + ": LaCie CloudBox (SSL)"
+			elif device is "huawei_hg658":
+				print str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway HG658d (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		elif a is None and device is None:
@@ -131,6 +141,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
 		if 'Cyberoam' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)"
+		if 'TG582n' in cert:
+			print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)"
 		else:
 			getheaders(dest_ip,80,vbose)
 	except Exception as e:
