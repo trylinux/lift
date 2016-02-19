@@ -104,6 +104,10 @@ def testips(dest_ip,dport,verbose=None):
 				print str(dest_ip).rstrip('\r\n)') + ": LaCie CloudBox (SSL)"
 			elif device is "huawei_hg658":
 				print str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway HG658d (SSL)"
+			elif device is "interpeak_device":
+				print str(dest_ip).rstrip('\r\n)') + ": Something made by interpeak (SSL)"
+			elif device is "fujistu_celvin":
+				print str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		elif a is None and device is None:
