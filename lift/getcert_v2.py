@@ -41,22 +41,23 @@ def main():
 			print "error in first try"
 			pass
 
-def testips(dest_ip,dport,verbose=None):
+def testips(dest_ip,dport,verbose):
 	device = None
 	ctx = ssl.create_default_context()
 	ctx.check_hostname = False
 	ctx.verify_mode = ssl.CERT_NONE
+	ctx.set_ciphers('ALL')
+	s = socket()
+	s.settimeout(5)
 	try:	
-		s = socket()
-		s.settimeout(5)
 		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)
 		c.connect((dest_ip,dport))
 		a = c.getpeercert(True)
 		b = str(ssl.DER_cert_to_PEM_cert(a))
 		device = (certs.getcertinfo(b))
-		if verbose is 1:
-			print "Trying: ",str(dest_ip).rstrip('\r\n)')
-
+		#if verbose is not None:
+			#print "Trying: ",str(dest_ip).rstrip('\r\n)')
+			#print "device: ",device
 		if device is not None:
 			if device is "ubiquiti":
 				print str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)"
@@ -108,28 +109,27 @@ def testips(dest_ip,dport,verbose=None):
 				print str(dest_ip).rstrip('\r\n)') + ": Something made by interpeak (SSL)"
 			elif device is "fujistu_celvin":
 				print str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)"
+			elif device is "opengear_default_cert":
+				print str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
-		elif a is None and device is None:
-			getheaders(dest_ip,dport,verbose)
 		else:
 			print "Something error happened"
+
 		s.close()
 	except KeyboardInterrupt:
                         print "Quitting"
                         sys.exit(0)		
 	except Exception as e:
 		s.close()
-		if verbose is 2:
-			print "Error in Final Pass: ",e
+		if 111 in e:
+			getheaders(dest_ip,dport,verbose)
+		if verbose is not None:
+			print "Error Catch at line 133",e
 		sys.exc_info()[0]
-	if device is None and dport is 443:
-		getheaders_ssl(dest_ip,dport,a,verbose,ctx)
-	else:
-		getheaders(dest_ip,dport,verbose)
-	s.close()
 def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
-	hostname = "https://%s:%s" % (dest_ip,dport)
+	hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
+	
 	try:
 		checkheaders = urllib2.urlopen(hostname,context=ctx)
 		server = checkheaders.info().get('Server')
@@ -141,26 +141,28 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 		 
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
-		if 'iR-ADV' in cert and 'Catwalk' in title.contents:
+		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
-		if 'Cyberoam' in cert:
+		elif 'Cyberoam' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)"
-		if 'TG582n' in cert:
+		elif 'TG582n' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)"
 		else:
 			getheaders(dest_ip,80,vbose)
+		checkheaders.close()
 	except Exception as e:
 		if dport is 443:
 			dport = 80
 		getheaders(dest_ip,dport,vbose)
-		if vbose is 2:
-			print "Error in Second Pass: "
+		if vbose is not None:
+			print "Error in getsslheaders: ",e
 		pass
+	return
 def getheaders(dest_ip,dport,vbose):
 	if dport == 443:
 		dport = 80
 	try:
-		hostname = "http://%s:%s" % (dest_ip,dport)
+		hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 		checkheaders = urllib2.urlopen(hostname)
 		server = checkheaders.info().get('Server')
 		html = checkheaders.read()
@@ -170,10 +172,12 @@ def getheaders(dest_ip,dport,vbose):
 			title = soup.html.title
 		if 'Cambium' in server and 'ePMP' in str(title.contents):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
-	
+		if 'Wimax CPE Configuration' in str(title.contents) and 'httpd' in server:
+			print str(dest_ip).rstrip('\r\n)') + ": Huawei Device w/ guest/guest (Server type + title)"
+		checkheaders.close()
 	except Exception as e:
-		if vbose is 2:
-			print "Error in Final Pass: ",e
+		if vbose is not None:
+			print "Error in getheaders(): ",e
 		pass
 
 if __name__ == '__main__':	
