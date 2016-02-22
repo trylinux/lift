@@ -3,11 +3,12 @@ import ssl
 import argparse
 import time
 import sys
-import signal
 import urllib2
 sys.path.append("/opt/sectools/lift/lib/")
 import certs
 import BeautifulSoup
+import netaddr
+import os
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i","--ip", help="An Ip address")
@@ -15,6 +16,7 @@ def main():
 	parser.add_argument("-f","--ifile", help="A file of IPs")
 	parser.add_argument("-p","--port", help="A port")
 	parser.add_argument("-v","--verbose", help="Verbosity On")
+	parser.add_argument("-s","--subnet", help="A subnet!")
 	args=parser.parse_args()
 	if args.verbose is None:
 		verbose = None
@@ -40,6 +42,17 @@ def main():
 			sys.exc_info()[0]
 			print "error in first try"
 			pass
+	elif args.subnet:
+		for ip in netaddr.IPNetwork(str(args.subnet)):
+			testips(str(ip),dport,verbose)
+
+
+def ishostup(dest_ip,dport,verbose):
+	response = os.system("ping -c 1 " + dest_ip)
+	if response == 0:
+  		testips(dest_ip,dport,verbose)
+	else:
+  		pass
 
 def testips(dest_ip,dport,verbose):
 	device = None
@@ -49,7 +62,8 @@ def testips(dest_ip,dport,verbose):
 	ctx.set_ciphers('ALL')
 	s = socket()
 	s.settimeout(5)
-	try:	
+	try:
+			
 		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)
 		c.connect((dest_ip,dport))
 		a = c.getpeercert(True)
@@ -111,6 +125,8 @@ def testips(dest_ip,dport,verbose):
 				print str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)"
 			elif device is "opengear_default_cert":
 				print str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)"
+			elif device is "zyxel_pk5001z":
+				print str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		else:
@@ -124,9 +140,10 @@ def testips(dest_ip,dport,verbose):
 		s.close()
 		if 111 in e:
 			getheaders(dest_ip,dport,verbose)
+		elif "timed out" in e:
+			pass
 		if verbose is not None:
 			print "Error Catch at line 133",e
-		sys.exc_info()[0]
 def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 	hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 	
