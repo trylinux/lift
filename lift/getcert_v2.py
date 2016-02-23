@@ -9,15 +9,17 @@ import certs
 import BeautifulSoup
 import netaddr
 import os
+import pyasn
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i","--ip", help="An Ip address")
-#	parser.add_argument("-u","--user", help="The user you want to use")
 	parser.add_argument("-f","--ifile", help="A file of IPs")
 	parser.add_argument("-p","--port", help="A port")
 	parser.add_argument("-v","--verbose", help="Verbosity On")
 	parser.add_argument("-s","--subnet", help="A subnet!")
+	parser.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
 	args=parser.parse_args()
+	asndb=pyasn.pyasn('lib/ipasn.dat')
 	if args.verbose is None:
 		verbose = None
 	else:
@@ -45,6 +47,10 @@ def main():
 	elif args.subnet:
 		for ip in netaddr.IPNetwork(str(args.subnet)):
 			testips(str(ip),dport,verbose)
+	elif args.asn:
+		for subnet in asndb.get_as_prefixes(int(args.asn)):
+			for ip in netaddr.IPNetwork(str(subnet)):
+                        	testips(str(ip),dport,verbose)
 
 
 def ishostup(dest_ip,dport,verbose):
@@ -83,8 +89,8 @@ def testips(dest_ip,dport,verbose):
 				print str(dest_ip).rstrip('\r\n)') + ": Hikvision Default Cert"
 			elif device is "avigilon":
 				print str(dest_ip).rstrip('\r\n)') + ": Aviligon Gateway Default cert"
-			elif "netgear" in device:
-				print str(dest_ip).rstrip('\r\n)') + ": NetGear Default cert"
+			elif device is "netgear_1":
+				print str(dest_ip).rstrip('\r\n)') + ": NetGear Default cert UTM  (SSL)"
 			elif device is "verifone_sapphire":
 				print str(dest_ip).rstrip('\r\n)') + ": Verifone Sapphire Device (SSL)"
 			elif "Vigor" in device:
