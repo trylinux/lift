@@ -8,8 +8,9 @@ class ssdp_scan:
   		pck = ip/udp/req
   		try:
    			rep = sr1(pck, verbose=0)
-   			print rep[Raw].load
-  		except:
-   			print "\n[-] Can't send packet :/\n"
+   			results = rep[Raw].load
+  		except Exception as e:
+   			results = None
+		return results
 
 
