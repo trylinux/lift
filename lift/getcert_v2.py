@@ -19,7 +19,7 @@ def main():
 	parser.add_argument("-s","--subnet", help="A subnet!")
 	parser.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
 	args=parser.parse_args()
-	asndb=pyasn.pyasn('lib/ipasn.dat')
+	asndb=pyasn.pyasn('/opt/sectools/lift/lib/ipasn.dat')
 	if args.verbose is None:
 		verbose = None
 	else:
@@ -133,6 +133,10 @@ def testips(dest_ip,dport,verbose):
 				print str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)"
 			elif device is "zyxel_pk5001z":
 				print str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)"
+			elif device is "audiocodecs_8443":
+				print str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)"
+			elif device is "supermicro_ipmi":
+				print str(dest_ip).rstrip('\r\n)') + ": Supermicro Nuvoton Chip IPMI Default Cert (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		else:
@@ -196,7 +200,7 @@ def getheaders(dest_ip,dport,vbose):
 		if 'Cambium' in server and 'ePMP' in str(title.contents):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
 		if 'Wimax CPE Configuration' in str(title.contents) and 'httpd' in server:
-			print str(dest_ip).rstrip('\r\n)') + ": Huawei Device w/ guest/guest (Server type + title)"
+			print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc). with (guest/guest) (Server type + title)"
 		checkheaders.close()
 	except Exception as e:
 		if vbose is not None:
