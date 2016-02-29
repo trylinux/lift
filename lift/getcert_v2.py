@@ -137,6 +137,8 @@ def testips(dest_ip,dport,verbose):
 				print str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)"
 			elif device is "supermicro_ipmi":
 				print str(dest_ip).rstrip('\r\n)') + ": Supermicro Nuvoton Chip IPMI Default Cert (SSL)"
+			elif device is "enco_player_1":
+				print str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		else:
