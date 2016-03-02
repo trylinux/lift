@@ -10,6 +10,7 @@ import BeautifulSoup
 import netaddr
 import os
 import pyasn
+import dns.resolver
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i","--ip", help="An Ip address")
@@ -18,6 +19,7 @@ def main():
 	parser.add_argument("-v","--verbose", help="Verbosity On")
 	parser.add_argument("-s","--subnet", help="A subnet!")
 	parser.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
+	parser.add_argument("-r","--recurse", help="Test Recursion", action="store_true")
 	args=parser.parse_args()
 	asndb=pyasn.pyasn('/opt/sectools/lift/lib/ipasn.dat')
 	if args.verbose is None:
@@ -28,10 +30,10 @@ def main():
 		dport = 443
 	else:
 		dport = int(args.port)
-	if args.ip:
+	if args.ip and not args.recurse:
 		dest_ip = args.ip
 		testips(args.ip,dport,verbose)
-	elif args.ifile:
+	elif args.ifile and not args.recurse:
 		ipfile = args.ifile
 		try:
 			with open(ipfile) as f:
@@ -51,6 +53,22 @@ def main():
 		for subnet in asndb.get_as_prefixes(int(args.asn)):
 			for ip in netaddr.IPNetwork(str(subnet)):
                         	testips(str(ip),dport,verbose)
+	elif args.ifile and args.recurse:
+		ipfile = args.ifile
+		try:
+                        with open(ipfile) as f:
+                                for line in f:
+                                        recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
+                except KeyboardInterrupt:
+                        #print "Quitting"
+                        sys.exit(0)
+                except Exception as e:
+                        sys.exc_info()[0]
+                        print "error in recurse try",e
+                        pass
+	elif args.ip and args.recurse:
+		recurse_DNS_check(str(args.ip),verbose)
+
 
 
 def ishostup(dest_ip,dport,verbose):
@@ -139,6 +157,10 @@ def testips(dest_ip,dport,verbose):
 				print str(dest_ip).rstrip('\r\n)') + ": Supermicro Nuvoton Chip IPMI Default Cert (SSL)"
 			elif device is "enco_player_1":
 				print str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)"
+			elif device is "ami_megarac":
+				print str(dest_ip).rstrip('\r\n)') + ": AMI MegaRac Remote Management Default Cert (SSL)"
+			elif device is "avocent_1":
+				print str(dest_ip).rstrip('\r\n)') + ": Avocent Default cert (unknown device) (SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		else:
@@ -208,6 +230,27 @@ def getheaders(dest_ip,dport,vbose):
 		if vbose is not None:
 			print "Error in getheaders(): ",e
 		pass
+def recurse_DNS_check(dest_ip,vbose):
+	myResolver = dns.resolver.Resolver()
+	myResolver.nameservers = [str(dest_ip)]
+	try:
+		start = time.time()
+		while time.time() < start + 3: 
+			myAnswers = myResolver.query("google.com", "A")
+			if myAnswers:
+				print dest_ip, "is a resolver"
+			else:
+				print dest_ip, "is a nope"
+			break
+		else:
+			print dest_ip, "is a nope"
+	except KeyboardInterrupt:
+		print "Quitting"
+		sys.exit()
+	except:
+		print "Nope"
+		pass
+
 
 if __name__ == '__main__':	
 	main()
