@@ -11,6 +11,7 @@ import netaddr
 import os
 import pyasn
 import dns.resolver
+import ssdp_info
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i","--ip", help="An Ip address")
@@ -58,16 +59,37 @@ def main():
 		try:
                         with open(ipfile) as f:
                                 for line in f:
-                                        recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
-                except KeyboardInterrupt:
-                        #print "Quitting"
-                        sys.exit(0)
+					try:
+						if dport == 53:
+	                                        	recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
+						elif dport == 1900:
+							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
+        					else:
+							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
+							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)        
+					except KeyboardInterrupt:
+		                        #print "Quitting"
+                		        	sys.exit(0)
+               				except Exception as e:
+		                        	sys.exc_info(0)
+                		        	print "error in recurse try",e
+                        			pass
+		except KeyboardInterrupt:
+			sys.exit(0)
+		
                 except Exception as e:
                         sys.exc_info()[0]
                         print "error in recurse try",e
-                        pass
+			pass
 	elif args.ip and args.recurse:
-		recurse_DNS_check(str(args.ip),verbose)
+		if dport == 53:
+			recurse_DNS_check(str(args.ip),verbose)
+		elif dport == 1900:
+			recurse_ssdp_check(str(args.ip),verbose)
+		else:
+			print "Trying both 53 and 1900!"
+			recurse_DNS_check(str(args.ip),verbose)
+			recurse_ssdp_check(str(args.ip),verbose)
 
 
 
@@ -184,6 +206,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 	try:
 		checkheaders = urllib2.urlopen(hostname,context=ctx)
 		server = checkheaders.info().get('Server')
+		if not server:
+			server = None 	
 		html = checkheaders.read()
 		soup = BeautifulSoup.BeautifulSoup(html)
 		title = soup.html.head.title
@@ -198,6 +222,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 			print str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)"
 		elif 'TG582n' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)"
+		elif 'RouterOS' in title.contents:
+			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
 		else:
 			getheaders(dest_ip,80,vbose)
 		checkheaders.close()
@@ -215,20 +241,26 @@ def getheaders(dest_ip,dport,vbose):
 	try:
 		hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 		checkheaders = urllib2.urlopen(hostname)
-		server = checkheaders.info().get('Server')
+		try:
+			server = checkheaders.info().get('Server')
+		except:
+			server = None
 		html = checkheaders.read()
 		soup = BeautifulSoup.BeautifulSoup(html)
 		title = soup.html.head.title
 		if title is None:
 			title = soup.html.title
-		if 'Cambium' in server and 'ePMP' in str(title.contents):
+		a = title.contents
+		if 'RouterOS' in str(a) and server is None:
+			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
+		elif 'Cambium' in server and 'ePMP' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
-		if 'Wimax CPE Configuration' in str(title.contents) and 'httpd' in server:
+		elif 'Wimax CPE Configuration' in str(a) and 'httpd' in server:
 			print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc). with (guest/guest) (Server type + title)"
 		checkheaders.close()
 	except Exception as e:
 		if vbose is not None:
-			print "Error in getheaders(): ",e
+			print "Error in getheaders(): "
 		pass
 def recurse_DNS_check(dest_ip,vbose):
 	myResolver = dns.resolver.Resolver()
@@ -248,9 +280,36 @@ def recurse_DNS_check(dest_ip,vbose):
 		print "Quitting"
 		sys.exit()
 	except:
-		print "Nope"
+		print dest_ip, "is not a reflector"
 		pass
-
+def recurse_ssdp_check(dest_ip,vbose):
+	try:
+		start = time.time()
+		while time.time() < start + 3:
+			a = ssdp_info.get_ssdp_information(dest_ip)
+			if a is None:
+				pass
+			if vbose is not None and a:
+				print dest_ip, "is an SSDP reflector with result", a
+				break
+			elif a and vbose is None:
+				print dest_ip, "is an SSDP reflector"
+				break
+			else: 
+				print "Not a reflector"
+				pass
+			break
+			pass
+		else:
+			print "Passing"
+			pass
+	except KeyboardInterrupt:
+                print "Quitting"
+                sys.exit()
+        except Exception as e:
+                print "Nope",e
+                pass
+ 
 
 if __name__ == '__main__':	
 	main()
