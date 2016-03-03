@@ -33,7 +33,10 @@ def main():
 		dport = int(args.port)
 	if args.ip and not args.recurse:
 		dest_ip = args.ip
-		testips(args.ip,dport,verbose)
+		if dport is 80:
+			getheaders(args.ip,dport,verbose)
+		else:
+			testips(args.ip,dport,verbose)
 	elif args.ifile and not args.recurse:
 		ipfile = args.ifile
 		try:
@@ -66,7 +69,7 @@ def main():
 							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
         					else:
 							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
-							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)        
+							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
 					except KeyboardInterrupt:
 		                        #print "Quitting"
                 		        	sys.exit(0)
@@ -76,7 +79,7 @@ def main():
                         			pass
 		except KeyboardInterrupt:
 			sys.exit(0)
-		
+
                 except Exception as e:
                         sys.exc_info()[0]
                         print "error in recurse try",e
@@ -107,9 +110,8 @@ def testips(dest_ip,dport,verbose):
 	ctx.verify_mode = ssl.CERT_NONE
 	ctx.set_ciphers('ALL')
 	s = socket()
-	s.settimeout(5)
+	s.settimeout(7)
 	try:
-			
 		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)
 		c.connect((dest_ip,dport))
 		a = c.getpeercert(True)
@@ -183,6 +185,12 @@ def testips(dest_ip,dport,verbose):
 				print str(dest_ip).rstrip('\r\n)') + ": AMI MegaRac Remote Management Default Cert (SSL)"
 			elif device is "avocent_1":
 				print str(dest_ip).rstrip('\r\n)') + ": Avocent Default cert (unknown device) (SSL)"
+			elif device is "ligowave_1":
+				print str(dest_ip).rstrip('\r\n)') + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)"
+			elif "intelbras_wom500" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": IntelBras Wom500 (admin/admin) (SSL)"
+			elif "netgear_2" in devices:
+				print str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
 		else:
@@ -191,29 +199,34 @@ def testips(dest_ip,dport,verbose):
 		s.close()
 	except KeyboardInterrupt:
                         print "Quitting"
-                        sys.exit(0)		
+                        sys.exit(0)
 	except Exception as e:
 		s.close()
 		if 111 in e:
 			getheaders(dest_ip,dport,verbose)
-		elif "timed out" in e:
+		elif "timed out" or 'sslv3' in e:
+			getheaders(dest_ip,dport,verbose)
 			pass
+			if verbose is not None:
+				print e
+		#if 'sslv3' in str(e):
+		#	getheaders(dest_ip,dport,verbose)
 		if verbose is not None:
 			print "Error Catch at line 133",e
 def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 	hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-	
+
 	try:
 		checkheaders = urllib2.urlopen(hostname,context=ctx)
 		server = checkheaders.info().get('Server')
 		if not server:
-			server = None 	
+			server = None
 		html = checkheaders.read()
 		soup = BeautifulSoup.BeautifulSoup(html)
 		title = soup.html.head.title
 		if title is None:
 			title = soup.html.title
-		 
+
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
 		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
@@ -224,13 +237,15 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 			print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)"
 		elif 'RouterOS' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
+		elif 'axhttpd/1.4.0' in str(server):
+                        print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		else:
 			getheaders(dest_ip,80,vbose)
 		checkheaders.close()
 	except Exception as e:
 		if dport is 443:
 			dport = 80
-		getheaders(dest_ip,dport,vbose)
+			getheaders(dest_ip,dport,vbose)
 		if vbose is not None:
 			print "Error in getsslheaders: ",e
 		pass
@@ -253,6 +268,8 @@ def getheaders(dest_ip,dport,vbose):
 		a = title.contents
 		if 'RouterOS' in str(a) and server is None:
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
+		elif 'axhttpd/1.4.0' in str(server):
+                        print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		elif 'Cambium' in server and 'ePMP' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
 		elif 'Wimax CPE Configuration' in str(a) and 'httpd' in server:
@@ -267,7 +284,7 @@ def recurse_DNS_check(dest_ip,vbose):
 	myResolver.nameservers = [str(dest_ip)]
 	try:
 		start = time.time()
-		while time.time() < start + 3: 
+		while time.time() < start + 3:
 			myAnswers = myResolver.query("google.com", "A")
 			if myAnswers:
 				print dest_ip, "is a resolver"
@@ -295,7 +312,7 @@ def recurse_ssdp_check(dest_ip,vbose):
 			elif a and vbose is None:
 				print dest_ip, "is an SSDP reflector"
 				break
-			else: 
+			else:
 				print "Not a reflector"
 				pass
 			break
@@ -309,7 +326,7 @@ def recurse_ssdp_check(dest_ip,vbose):
         except Exception as e:
                 print "Nope",e
                 pass
- 
 
-if __name__ == '__main__':	
+
+if __name__ == '__main__':
 	main()
