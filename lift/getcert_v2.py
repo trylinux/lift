@@ -300,17 +300,24 @@ def getheaders(dest_ip,dport,vbose):
 			title = soup.html.title
 		a = title.contents
 		if 'RouterOS' in str(a) and server is None:
-			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
+			router_os_version = soup.find('body').h1.contents
+			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop())," (Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		elif 'Cambium' in server and 'ePMP' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
 		elif 'Wimax CPE Configuration' in str(a) and 'httpd' in server:
 			print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc). with (guest/guest) (Server type + title)"
+		elif 'NXC2500' in str(a) and server is None:
+			print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
+		elif 'IIS' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()),"Server (Page Title)"
+		else:
+			print "Title on IP ",str(dest_ip).rstrip('\r\n)'),"is", a
 		checkheaders.close()
 	except Exception as e:
 		if vbose is not None:
-			print "Error in getheaders(): "
+			print "Error in getheaders(): ",e
 		pass
 
 
