@@ -10,20 +10,18 @@ class ssdp_scan:
 		ip=IP(dst=target)
   		udp=UDP(sport=random.randint(49152,65536), dport=1900)
   		pck = ip/udp/req
-  		try:	
+  		try:
 			start = time.time()
 			while time.time() < start + 5:
-	  			rep = sr1(pck, verbose=0,timeout=7)
+	  			rep = sr1(pck, verbose=0,timeout=5)
 				if rep[Raw]:
    					results = rep[Raw].load
 				else:
 					pass
 				break
 		except KeyboardInterrupt:
-			sys.exit(0)	
+			sys.exit(0)
   		except Exception as e:
    			results = None
 			#print e
 		return results
-
-

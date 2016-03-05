@@ -11,7 +11,8 @@ import netaddr
 import os
 import pyasn
 import dns.resolver
-import ssdp_info
+import ssdp_info, ntp_function
+
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i","--ip", help="An Ip address")
@@ -23,6 +24,7 @@ def main():
 	parser.add_argument("-r","--recurse", help="Test Recursion", action="store_true")
 	parser.add_argument("-I","--info", help="Get more info about operations", action="store_true")
 	parser.add_argument("-S","--ssl",help="For doing SSL checks only", action="store_true")
+	parser.add_argument("-R","--recon",help="Gather information about a given device", action="store_true")
 	args=parser.parse_args()
 	asndb=pyasn.pyasn('/opt/sectools/lift/lib/ipasn.dat')
 	if args.verbose is None:
@@ -37,7 +39,7 @@ def main():
 		ssl_only=1
 	else:
 		ssl_only=0
-	if args.ip and not args.recurse:
+	if args.ip and not args.recurse and not args.recon:
 		dest_ip = args.ip
 		if dport is 80:
 			getheaders(args.ip,dport,verbose)
@@ -76,9 +78,13 @@ def main():
 							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
 						elif dport == 1900:
 							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
+						elif dport == 123:
+							ntp_monlist_check(str(line).rstrip('\r\n'),verbose)
 						else:
 							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
 							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
+							ntp_monlist_check(str(line).rstrip('\r\n'),verbose)
+
 					except KeyboardInterrupt:
 		                        #print "Quitting"
                 		        	sys.exit(0)
@@ -98,10 +104,27 @@ def main():
 			recurse_DNS_check(str(args.ip),verbose)
 		elif dport == 1900:
 			recurse_ssdp_check(str(args.ip),verbose)
+		elif dport == 123:
+			ntp_monlist_check(str(args.ip).rstrip('\r\n'),verbose)
 		else:
-			print "Trying both 53 and 1900!"
+			print "Trying 53,1900 and 123!"
 			recurse_DNS_check(str(args.ip),verbose)
 			recurse_ssdp_check(str(args.ip),verbose)
+			ntp_monlist_check(str(args.ip).rstrip('\r\n'),verbose)
+
+	if args.ip and args.recon:
+		print "Doing recon on ", args.ip
+		dest_ip = args.ip
+		try:
+			testips(dest_ip,dport,verbose,ssl_only)
+			recurse_DNS_check(str(args.ip),verbose)
+			recurse_ssdp_check(str(args.ip),verbose)
+			ntp_monlist_check(str(args.ip).rstrip('\r\n'),verbose)
+		except KeyboardInterrupt:
+			print "Quitting"
+			sys.exit(0)
+		except Exception as e:
+			print "Encountered an error",e
 
 
 
@@ -299,7 +322,7 @@ def recurse_DNS_check(dest_ip,vbose):
 		while time.time() < start + 3:
 			myAnswers = myResolver.query("google.com", "A")
 			if myAnswers:
-				print dest_ip, "is a resolver"
+				print dest_ip, "is vulnerable to DNS AMP"
 			else:
 				print dest_ip, "is a nope"
 			break
@@ -309,34 +332,31 @@ def recurse_DNS_check(dest_ip,vbose):
 		print "Quitting"
 		sys.exit()
 	except:
-		print dest_ip, "is not a reflector"
+		print dest_ip, "is not vulnerable to DNS AMP"
 		pass
 
 
 def recurse_ssdp_check(dest_ip,vbose):
 	try:
-		start = time.time()
-		while time.time() < start + 3:
-			a = ssdp_info.get_ssdp_information(dest_ip)
-			if a is None:
-				pass
-			if vbose is not None and a:
-				print dest_ip, "is an SSDP reflector with result", a
-				break
-			elif a and vbose is None:
-				print dest_ip, "is an SSDP reflector"
-				break
-			break
-			pass
-		else:
-			print "Passing"
-			pass
+		a = ssdp_info.get_ssdp_information(dest_ip)
+		if a is None:
+			print dest_ip, "is not an SSDP reflector"
+		elif a is not None:
+			print dest_ip, "is an SSDP reflector"
+		elif vbose is not None and a is not None:
+			print dest_ip, "is an SSDP reflector with result", a
 	except KeyboardInterrupt:
-                print "Quitting"
-                sys.exit()
-        except Exception as e:
-                print "Nope",e
-                pass
+		print "Quitting"
+		sys.exit(0)
+	except Exception as e:
+		print "Encountered exception",e
+def ntp_monlist_check(dest_ip,vbose):
+	a = ntp_function.NTPscan().monlist_scan(dest_ip)
+	if a is None:
+		print "is not vulnerable to NTP monlist"
+		pass
+	elif a == 1:
+		print dest_ip, "is vulnerable to monlist"
 
 
 if __name__ == '__main__':
