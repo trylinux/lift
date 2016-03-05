@@ -21,6 +21,8 @@ def main():
 	parser.add_argument("-s","--subnet", help="A subnet!")
 	parser.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
 	parser.add_argument("-r","--recurse", help="Test Recursion", action="store_true")
+	parser.add_argument("-I","--info", help="Get more info about operations", action="store_true")
+	parser.add_argument("-S","--ssl",help="For doing SSL checks only", action="store_true")
 	args=parser.parse_args()
 	asndb=pyasn.pyasn('/opt/sectools/lift/lib/ipasn.dat')
 	if args.verbose is None:
@@ -31,18 +33,25 @@ def main():
 		dport = 443
 	else:
 		dport = int(args.port)
+	if args.ssl:
+		ssl_only=1
+	else:
+		ssl_only=0
 	if args.ip and not args.recurse:
 		dest_ip = args.ip
 		if dport is 80:
 			getheaders(args.ip,dport,verbose)
+
 		else:
-			testips(args.ip,dport,verbose)
+			testips(args.ip,dport,verbose,ssl_only)
 	elif args.ifile and not args.recurse:
 		ipfile = args.ifile
 		try:
 			with open(ipfile) as f:
 				for line in f:
-					testips(line,dport,verbose)
+					if args.info:
+						print "Trying: ",str(line).rstrip('\r\n)')
+					testips(line,dport,verbose,ssl_only)
 		except KeyboardInterrupt:
                 	#print "Quitting"
                 	sys.exit(0)
@@ -52,11 +61,11 @@ def main():
 			pass
 	elif args.subnet:
 		for ip in netaddr.IPNetwork(str(args.subnet)):
-			testips(str(ip),dport,verbose)
+			testips(str(ip),dport,verbose,ssl_only)
 	elif args.asn:
 		for subnet in asndb.get_as_prefixes(int(args.asn)):
 			for ip in netaddr.IPNetwork(str(subnet)):
-                        	testips(str(ip),dport,verbose)
+                        	testips(str(ip),dport,verbose,ssl_only)
 	elif args.ifile and args.recurse:
 		ipfile = args.ifile
 		try:
@@ -64,10 +73,10 @@ def main():
                                 for line in f:
 					try:
 						if dport == 53:
-	                                        	recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
+							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
 						elif dport == 1900:
 							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
-        					else:
+						else:
 							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
 							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
 					except KeyboardInterrupt:
@@ -103,14 +112,14 @@ def ishostup(dest_ip,dport,verbose):
 	else:
   		pass
 
-def testips(dest_ip,dport,verbose):
+def testips(dest_ip,dport,verbose,ssl_only):
 	device = None
 	ctx = ssl.create_default_context()
 	ctx.check_hostname = False
 	ctx.verify_mode = ssl.CERT_NONE
 	ctx.set_ciphers('ALL')
 	s = socket()
-	s.settimeout(7)
+	s.settimeout(5)
 	try:
 		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)
 		c.connect((dest_ip,dport))
@@ -192,7 +201,7 @@ def testips(dest_ip,dport,verbose):
 			elif "netgear_2" in devices:
 				print str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)"
 		elif a is not None and device is None:
-			getheaders_ssl(dest_ip,dport,a,verbose,ctx)
+			getheaders_ssl(dest_ip,dport,a,verbose,ctx,ssl_only)
 		else:
 			print "Something error happened"
 
@@ -202,22 +211,22 @@ def testips(dest_ip,dport,verbose):
                         sys.exit(0)
 	except Exception as e:
 		s.close()
-		if 111 in e:
+		if 111 in e and ssl_only==0:
 			getheaders(dest_ip,dport,verbose)
-		elif "timed out" or 'sslv3' in e:
+		elif ("timed out" or 'sslv3' in e) and ssl_only==0:
 			getheaders(dest_ip,dport,verbose)
 			pass
 			if verbose is not None:
 				print e
-		#if 'sslv3' in str(e):
-		#	getheaders(dest_ip,dport,verbose)
 		if verbose is not None:
 			print "Error Catch at line 133",e
-def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
+
+
+def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only):
 	hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 
 	try:
-		checkheaders = urllib2.urlopen(hostname,context=ctx)
+		checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=4)
 		server = checkheaders.info().get('Server')
 		if not server:
 			server = None
@@ -238,12 +247,13 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx):
 		elif 'RouterOS' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
-                        print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		else:
-			getheaders(dest_ip,80,vbose)
+			if ssl_only==0:
+				getheaders(dest_ip,80,vbose)
 		checkheaders.close()
 	except Exception as e:
-		if dport is 443:
+		if dport is 443 and ssl_only==0:
 			dport = 80
 			getheaders(dest_ip,dport,vbose)
 		if vbose is not None:
@@ -255,7 +265,7 @@ def getheaders(dest_ip,dport,vbose):
 		dport = 80
 	try:
 		hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-		checkheaders = urllib2.urlopen(hostname)
+		checkheaders = urllib2.urlopen(hostname,timeout=4)
 		try:
 			server = checkheaders.info().get('Server')
 		except:
@@ -269,7 +279,7 @@ def getheaders(dest_ip,dport,vbose):
 		if 'RouterOS' in str(a) and server is None:
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
-                        print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		elif 'Cambium' in server and 'ePMP' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
 		elif 'Wimax CPE Configuration' in str(a) and 'httpd' in server:
@@ -279,6 +289,8 @@ def getheaders(dest_ip,dport,vbose):
 		if vbose is not None:
 			print "Error in getheaders(): "
 		pass
+
+
 def recurse_DNS_check(dest_ip,vbose):
 	myResolver = dns.resolver.Resolver()
 	myResolver.nameservers = [str(dest_ip)]
@@ -299,6 +311,8 @@ def recurse_DNS_check(dest_ip,vbose):
 	except:
 		print dest_ip, "is not a reflector"
 		pass
+
+
 def recurse_ssdp_check(dest_ip,vbose):
 	try:
 		start = time.time()
@@ -312,9 +326,6 @@ def recurse_ssdp_check(dest_ip,vbose):
 			elif a and vbose is None:
 				print dest_ip, "is an SSDP reflector"
 				break
-			else:
-				print "Not a reflector"
-				pass
 			break
 			pass
 		else:

@@ -1,0 +1,1 @@
+{"website": "netgear.com", "company_name": "NetGear Inc.", "description": "A well-known manufacturer of networking products ranging from simple usb dongles to fully-managed campus level switches to home automation"}
