@@ -39,13 +39,18 @@ def main():
 		ssl_only=1
 	else:
 		ssl_only=0
+	if not args.info:
+		info = None
+	else:
+		info = 1
+
 	if args.ip and not args.recurse and not args.recon:
 		dest_ip = args.ip
 		if dport is 80:
-			getheaders(args.ip,dport,verbose)
+			getheaders(args.ip,dport,verbose,info)
 
 		else:
-			testips(args.ip,dport,verbose,ssl_only)
+			testips(args.ip,dport,verbose,ssl_only,info)
 	elif args.ifile and not args.recurse:
 		ipfile = args.ifile
 		try:
@@ -53,7 +58,10 @@ def main():
 				for line in f:
 					if args.info:
 						print "Trying: ",str(line).rstrip('\r\n)')
-					testips(line,dport,verbose,ssl_only)
+					if args.port == 80:
+						getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
+					else:
+						testips(line,dport,verbose,ssl_only,info)
 		except KeyboardInterrupt:
                 	#print "Quitting"
                 	sys.exit(0)
@@ -62,12 +70,34 @@ def main():
 			print "error in first try",e
 			pass
 	elif args.subnet:
-		for ip in netaddr.IPNetwork(str(args.subnet)):
-			testips(str(ip),dport,verbose,ssl_only)
+		try:
+			for ip in netaddr.IPNetwork(str(args.subnet)):
+				if dport == 80:
+					getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
+				elif args.recurse:
+					if dport == 53:
+						recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
+					elif dport == 1900:
+						recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
+					elif dport == 123:
+						ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
+					else:
+						recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
+						recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
+						ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
+				else:
+					testips(str(ip),dport,verbose,ssl_only,info)
+		except KeyboardInterrupt:
+			print "Quitting"
+			sys.exit(0)
+		except Exception as e:
+			if args.verbose is not None:
+				print "Error occured in Subnet",e
+			sys.exit(0)
 	elif args.asn:
 		for subnet in asndb.get_as_prefixes(int(args.asn)):
 			for ip in netaddr.IPNetwork(str(subnet)):
-                        	testips(str(ip),dport,verbose,ssl_only)
+                        	testips(str(ip),dport,verbose,ssl_only,info)
 	elif args.ifile and args.recurse:
 		ipfile = args.ifile
 		try:
@@ -116,7 +146,7 @@ def main():
 		print "Doing recon on ", args.ip
 		dest_ip = args.ip
 		try:
-			testips(dest_ip,dport,verbose,ssl_only)
+			testips(dest_ip,dport,verbose,ssl_only,info)
 			recurse_DNS_check(str(args.ip),verbose)
 			recurse_ssdp_check(str(args.ip),verbose)
 			ntp_monlist_check(str(args.ip).rstrip('\r\n'),verbose)
@@ -135,7 +165,7 @@ def ishostup(dest_ip,dport,verbose):
 	else:
   		pass
 
-def testips(dest_ip,dport,verbose,ssl_only):
+def testips(dest_ip,dport,verbose,ssl_only,info):
 	device = None
 	ctx = ssl.create_default_context()
 	ctx.check_hostname = False
@@ -241,9 +271,9 @@ def testips(dest_ip,dport,verbose,ssl_only):
 	except Exception as e:
 		s.close()
 		if 111 in e and ssl_only==0:
-			getheaders(dest_ip,dport,verbose)
+			getheaders(dest_ip,dport,verbose,info)
 		elif ("timed out" or 'sslv3' in e) and ssl_only==0:
-			getheaders(dest_ip,dport,verbose)
+			getheaders(dest_ip,dport,verbose,info)
 			pass
 			if verbose is not None:
 				print e
@@ -279,17 +309,17 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only):
 			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		else:
 			if ssl_only==0:
-				getheaders(dest_ip,80,vbose)
+				getheaders(dest_ip,80,vbose,info)
 		checkheaders.close()
 	except Exception as e:
 		if dport is 443 and ssl_only==0:
 			dport = 80
-			getheaders(dest_ip,dport,vbose)
+			getheaders(dest_ip,dport,vbose,info)
 		if vbose is not None:
 			print "Error in getsslheaders: ",e
 		pass
 	return
-def getheaders(dest_ip,dport,vbose):
+def getheaders(dest_ip,dport,vbose,info):
 	if dport == 443:
 		dport = 80
 	try:
@@ -337,7 +367,10 @@ def getheaders(dest_ip,dport,vbose):
 		elif 'Netgear' in a:
 			print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
 		else:
-			print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)')
+			if info is not None:
+				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)')
+			else:
+				pass
 		checkheaders.close()
 	except Exception as e:
 		if vbose is not None:
@@ -381,6 +414,8 @@ def recurse_ssdp_check(dest_ip,vbose):
 		sys.exit(0)
 	except Exception as e:
 		print "Encountered exception",e
+
+
 def ntp_monlist_check(dest_ip,vbose):
 	a = ntp_function.NTPscan().monlist_scan(dest_ip)
 	if a is None:
