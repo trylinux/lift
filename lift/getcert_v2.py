@@ -57,9 +57,9 @@ def main():
 		except KeyboardInterrupt:
                 	#print "Quitting"
                 	sys.exit(0)
-		except:
+		except Exception as e:
 			sys.exc_info()[0]
-			print "error in first try"
+			print "error in first try",e
 			pass
 	elif args.subnet:
 		for ip in netaddr.IPNetwork(str(args.subnet)):
@@ -221,8 +221,14 @@ def testips(dest_ip,dport,verbose,ssl_only):
 				print str(dest_ip).rstrip('\r\n)') + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)"
 			elif "intelbras_wom500" in device:
 				print str(dest_ip).rstrip('\r\n)') + ": IntelBras Wom500 (admin/admin) (SSL)"
-			elif "netgear_2" in devices:
+			elif "netgear_2" in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)"
+			elif "buffalo_1" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": Buffalo Default Cert (443/SSL)"
+			elif "digi_int_1" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": Digi Passport Default Cert (443/SSL)"
+			elif "matrix_sample_ssl_1":
+				print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx,ssl_only)
 		else:
@@ -304,16 +310,34 @@ def getheaders(dest_ip,dport,vbose):
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop())," (Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
-		elif 'Cambium' in server and 'ePMP' in str(a):
+		elif 'ePMP' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
-		elif 'Wimax CPE Configuration' in str(a) and 'httpd' in server:
-			print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc). with (guest/guest) (Server type + title)"
+		elif 'Wimax CPE Configuration' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)"
 		elif 'NXC2500' in str(a) and server is None:
 			print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
+		elif 'MiniServ/1.580' in server:
+			print str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)"
 		elif 'IIS' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()),"Server (Page Title)"
+		elif 'Vigor' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()), "Switch (Title)"
+		elif 'Aethra' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
+		elif 'Industrial Ethernet Switch' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
+		elif a.count(1) == 0 and 'lighttpd/1.4.23' in server:
+			print str(dest_ip).rstrip('\r\n)') + ": Unknown Greenpacket device (Empty title w/ server version)"
+		elif 'NUUO Network Video Recorder Login' in a:
+			print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
+		elif 'CDE-30364' in a:
+			print str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)"
+		elif 'BUFFALO' in a:
+			print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
+		elif 'Netgear' in a:
+			print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
 		else:
-			print "Title on IP ",str(dest_ip).rstrip('\r\n)'),"is", a
+			print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)')
 		checkheaders.close()
 	except Exception as e:
 		if vbose is not None:
