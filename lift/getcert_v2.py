@@ -1,8 +1,14 @@
+import sys
+if 'threading' in sys.modules:
+    del sys.modules['threading']
+import gevent
+import gevent.socket
+import gevent.monkey
+gevent.monkey.patch_all()
 from socket import socket
 import ssl
 import argparse
 import time
-import sys
 import urllib2
 sys.path.append("/opt/sectools/lift/lib/")
 import certs
@@ -56,8 +62,6 @@ def main():
 		try:
 			with open(ipfile) as f:
 				for line in f:
-					if args.info:
-						print "Trying: ",str(line).rstrip('\r\n)')
 					if args.port == 80:
 						getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
 					else:
@@ -72,63 +76,84 @@ def main():
 	elif args.subnet:
 		try:
 			for ip in netaddr.IPNetwork(str(args.subnet)):
-				if dport == 80:
-					getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
-				elif args.recurse:
-					if dport == 53:
-						recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
-					elif dport == 1900:
-						recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
-					elif dport == 123:
-						ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
+				try:
+					if dport == 80:
+						getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
+					elif args.recurse:
+						if dport == 53:
+							recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
+						elif dport == 1900:
+							recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
+						elif dport == 123:
+							ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
+						else:
+							recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
+							recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
+							ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
 					else:
-						recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
-						recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
-						ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
-				else:
-					testips(str(ip),dport,verbose,ssl_only,info)
+						testips(str(ip),dport,verbose,ssl_only,info)
+				except KeyboardInterrupt:
+					print "Quitting from Subnet"
+					sys.exit(0)
+					pass
+				except Exception as e:
+					if args.verbose is not None:
+						print "Error occured in Subnet",e
+					sys.exit(0)
 		except KeyboardInterrupt:
-			print "Quitting"
-			sys.exit(0)
+			sys.exit()
 		except Exception as e:
-			if args.verbose is not None:
-				print "Error occured in Subnet",e
-			sys.exit(0)
+			sys.exit()
 	elif args.asn:
 		for subnet in asndb.get_as_prefixes(int(args.asn)):
-			for ip in netaddr.IPNetwork(str(subnet)):
-                        	testips(str(ip),dport,verbose,ssl_only,info)
+			try:
+				for ip in netaddr.IPNetwork(str(subnet)):
+					if dport == 80:
+						getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
+					elif args.recurse:
+						if dport == 53:
+							recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
+						elif dport == 1900:
+							recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
+						elif dport == 123:
+							ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
+						else:
+							recurse_ssdp_check(str(ip).rstrip('\r\n'),verbose)
+							recurse_DNS_check(str(ip).rstrip('\r\n'),verbose)
+							ntp_monlist_check(str(ip).rstrip('\r\n'),verbose)
+					else:
+						testips(str(ip),dport,verbose,ssl_only,info)
+			except KeyboardInterrupt:
+				print "Quitting"
+				sys.exit(1)
+			except Exception as e:
+				if args.verbose is not None:
+					print "Error occured in Subnet",e
+					sys.exit(0)
+
+
 	elif args.ifile and args.recurse:
 		ipfile = args.ifile
 		try:
-                        with open(ipfile) as f:
-                                for line in f:
-					try:
-						if dport == 53:
-							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
-						elif dport == 1900:
-							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
-						elif dport == 123:
-							ntp_monlist_check(str(line).rstrip('\r\n'),verbose)
-						else:
-							recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
-							recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
-							ntp_monlist_check(str(line).rstrip('\r\n'),verbose)
-
-					except KeyboardInterrupt:
-		                        #print "Quitting"
-                		        	sys.exit(0)
-               				except Exception as e:
-		                        	sys.exc_info(0)
-                		        	print "error in recurse try",e
-                        			pass
+			with open(ipfile) as f:
+				for line in f:
+					if dport == 53:
+						recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
+					elif dport == 1900:
+						recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
+					elif dport == 123:
+						ntp_monlist_check(str(line).rstrip('\r\n'),verbose)
+					else:
+						recurse_ssdp_check(str(line).rstrip('\r\n'),verbose)
+						recurse_DNS_check(str(line).rstrip('\r\n'),verbose)
+						ntp_monlist_check(str(line).rstrip('\r\n'),verbose)
 		except KeyboardInterrupt:
+			print "Quitting from first try in ifile"
 			sys.exit(0)
-
-                except Exception as e:
-                        sys.exc_info()[0]
-                        print "error in recurse try",e
-			pass
+		except Exception as e:
+			sys.exit()
+			print "error in recurse try",e
+			raise
 	elif args.ip and args.recurse:
 		if dport == 53:
 			recurse_DNS_check(str(args.ip),verbose)
@@ -239,8 +264,8 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 				print str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)"
 			elif device is "audiocodecs_8443":
 				print str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)"
-			elif device is "supermicro_ipmi":
-				print str(dest_ip).rstrip('\r\n)') + ": Supermicro Nuvoton Chip IPMI Default Cert (SSL)"
+			elif "supermicro_ipmi" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": Supermicro IPMI Default Certs (SSL)"
 			elif device is "enco_player_1":
 				print str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)"
 			elif device is "ami_megarac":
@@ -337,7 +362,7 @@ def getheaders(dest_ip,dport,vbose,info):
 		a = title.contents
 		if 'RouterOS' in str(a) and server is None:
 			router_os_version = soup.find('body').h1.contents
-			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop())," (Login Page Title)"
+			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()),"(Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
 		elif 'ePMP' in str(a):
@@ -366,9 +391,15 @@ def getheaders(dest_ip,dport,vbose,info):
 			print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
 		elif 'Netgear' in a:
 			print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
+		elif 'IIS' in server:
+			print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Server (Server Version)"
+		elif ("CentOS" or "Ubuntu" or "Debian") in str(server):
+			print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Linux server (Server name)"
+		elif "SonicWALL" in str(server):
+			print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
 		else:
 			if info is not None:
-				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)')
+				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
 			else:
 				pass
 		checkheaders.close()
@@ -401,6 +432,7 @@ def recurse_DNS_check(dest_ip,vbose):
 
 
 def recurse_ssdp_check(dest_ip,vbose):
+	#try:
 	try:
 		a = ssdp_info.get_ssdp_information(dest_ip)
 		if a is None:
@@ -409,20 +441,31 @@ def recurse_ssdp_check(dest_ip,vbose):
 			print dest_ip, "is an SSDP reflector"
 		elif vbose is not None and a is not None:
 			print dest_ip, "is an SSDP reflector with result", a
+
 	except KeyboardInterrupt:
-		print "Quitting"
+		if KeyboardInterrupt:
+			sys.exit(1)
+		print "Quitting in here"
 		sys.exit(0)
 	except Exception as e:
 		print "Encountered exception",e
 
 
 def ntp_monlist_check(dest_ip,vbose):
-	a = ntp_function.NTPscan().monlist_scan(dest_ip)
-	if a is None:
-		print "is not vulnerable to NTP monlist"
+	try:
+		a = ntp_function.NTPscan().monlist_scan(dest_ip)
+		if a is None:
+			print dest_ip, "is not vulnerable to NTP monlist"
+			pass
+		elif a == 1:
+			print dest_ip, "is vulnerable to monlist"
+	except KeyboardInterrupt:
+		print "Quitting"
+		sys.exit(1)
+	except Exception as e:
+		if vbose is not None:
+			print "Error in ntp_monlist",e
 		pass
-	elif a == 1:
-		print dest_ip, "is vulnerable to monlist"
 
 
 if __name__ == '__main__':

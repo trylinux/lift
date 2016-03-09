@@ -1,8 +1,14 @@
+import sys
+if 'threading' in sys.modules:
+    del sys.modules['threading']
+import gevent
+import gevent.socket
+import gevent.monkey
+gevent.monkey.patch_all()
 import logging
 import time
 l=logging.getLogger("scapy.runtime")
 l.setLevel(49)
-import sys
 from scapy.all import IP,send,UDP,Raw,random,send,sr1
 
 class NTPscan:
