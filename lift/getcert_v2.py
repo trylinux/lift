@@ -282,8 +282,10 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 				print str(dest_ip).rstrip('\r\n)') + ": Buffalo Default Cert (443/SSL)"
 			elif "digi_int_1" in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Digi Passport Default Cert (443/SSL)"
-			elif "matrix_sample_ssl_1":
-				print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
+			elif "prtg_network_monitor_1" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": Paessler PTRG Monitoring Default Cert(443/SSL)"
+			#elif "matrix_sample_ssl_1":
+			#	print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
 		elif a is not None and device is None:
 			getheaders_ssl(dest_ip,dport,a,verbose,ctx,ssl_only)
 		else:
@@ -319,7 +321,7 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only):
 		title = soup.html.head.title
 		if title is None:
 			title = soup.html.title
-
+		a = title.contents
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
 		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
@@ -335,6 +337,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only):
 		else:
 			if ssl_only==0:
 				getheaders(dest_ip,80,vbose,info)
+			else:
+				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
 		checkheaders.close()
 	except Exception as e:
 		if dport is 443 and ssl_only==0:
@@ -381,8 +385,8 @@ def getheaders(dest_ip,dport,vbose,info):
 			print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
 		elif 'Industrial Ethernet Switch' in str(a):
 			print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
-		elif a.count(1) == 0 and 'lighttpd/1.4.23' in server:
-			print str(dest_ip).rstrip('\r\n)') + ": Unknown Greenpacket device (Empty title w/ server version)"
+		elif a.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
+			print str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)"
 		elif 'NUUO Network Video Recorder Login' in a:
 			print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
 		elif 'CDE-30364' in a:
@@ -393,10 +397,18 @@ def getheaders(dest_ip,dport,vbose,info):
 			print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
 		elif 'IIS' in server:
 			print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Server (Server Version)"
-		elif ("CentOS" or "Ubuntu" or "Debian") in str(server):
+		elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Linux server (Server name)"
 		elif "SonicWALL" in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
+		elif "iGate" in a:
+			print str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)"
+		elif 'LG ACSmart Premium' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)"
+		elif 'IFQ360' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)"
+		elif 'Tank Sentinel AnyWare' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
 		else:
 			if info is not None:
 				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
