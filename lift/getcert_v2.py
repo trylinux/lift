@@ -351,90 +351,95 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 		pass
 	return
 def getheaders(dest_ip,dport,vbose,info):
-	if dport == 443:
-		dport = 80
-	try:
-		hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-		checkheaders = urllib2.urlopen(hostname,timeout=4)
-		try:
-			server = checkheaders.info().get('Server')
-		except:
-			server = None
-		html = checkheaders.read()
-		soup = BeautifulSoup.BeautifulSoup(html)
-		title = soup.html.head.title
-		if title is None:
-			title = soup.html.title
-		a = title.contents
-		if 'RouterOS' in str(a) and server is None:
-			router_os_version = soup.find('body').h1.contents
-			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()),"(Login Page Title)"
-		elif 'axhttpd/1.4.0' in str(server):
-			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
-		elif 'ePMP' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
-		elif 'Wimax CPE Configuration' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)"
-		elif 'NXC2500' in str(a) and server is None:
-			print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
-		elif 'MiniServ/1.580' in server:
-			print str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)"
-		elif 'IIS' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()),"Server (Page Title)"
-		elif 'Vigor' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()), "Switch (Title)"
-		elif 'Aethra' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
-		elif 'Industrial Ethernet Switch' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
-		elif a.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
-			print str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)"
-		elif 'NUUO Network Video Recorder Login' in a:
-			print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
-		elif 'CDE-30364' in a:
-			print str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)"
-		elif 'BUFFALO' in a:
-			print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
-		elif 'Netgear' in a:
-			print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
-		elif 'IIS' in server:
-			print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Server (Server Version)"
-		elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
-			print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Linux server (Server name)"
-		elif "SonicWALL" in str(server):
-			print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
-		elif "iGate" in a:
-			print str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)"
-		elif 'LG ACSmart Premium' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)"
-		elif 'IFQ360' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)"
-		elif 'Tank Sentinel AnyWare' in str(a):
-			print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
-		else:
-			if info is not None:
-				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
-			else:
-				pass
-		checkheaders.close()
-	except Exception as e:
-		if vbose is not None:
-			print "Error in getheaders(): ",e
-		pass
+    if dport == 443:
+        dport = 80
+    try:
+        hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
+        checkheaders = urllib2.urlopen(hostname,timeout=4)
+        try:
+            server = checkheaders.info().get('Server')
+        except:
+            server = None
+        html = checkheaders.read()
+        soup = BeautifulSoup.BeautifulSoup(html)
+        title = soup.html.head.title
+        if title is None:
+            title = soup.html.title
+        a = title.contents
+        if 'RouterOS' in str(a) and server is None:
+            router_os_version = soup.find('body').h1.contents
+            print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()),"(Login Page Title)"
+        elif 'axhttpd/1.4.0' in str(server):
+            print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+        elif 'ePMP' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
+        elif 'Wimax CPE Configuration' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)"
+        elif 'NXC2500' in str(a) and server is None:
+            print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
+        elif 'MiniServ/1.580' in server:
+            print str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)"
+        elif 'IIS' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()),"Server (Page Title)"
+        elif 'Vigor' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ":",str(a.pop()), "Switch (Title)"
+        elif 'Aethra' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
+        elif 'Industrial Ethernet Switch' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
+        elif a.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
+            print str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)"
+        elif 'NUUO Network Video Recorder Login' in a:
+            print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
+        elif 'CDE-30364' in a:
+            print str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)"
+        elif 'BUFFALO' in a:
+            print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
+        elif 'Netgear' in a:
+            print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
+        elif 'IIS' in server:
+            print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Server (Server Version)"
+        elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
+            print str(dest_ip).rstrip('\r\n)') + ":",str(server),"Linux server (Server name)"
+        elif "SonicWALL" in str(server):
+            print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
+        elif "iGate" in a:
+            print str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)"
+        elif 'LG ACSmart Premium' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)"
+        elif 'IFQ360' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)"
+        elif 'Tank Sentinel AnyWare' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
+        elif 'Z-World Rabbit' in str(server):
+            print str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)"
+        else:
+            if info is not None:
+                print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
+            else:
+                pass
+        checkheaders.close()
+    except Exception as e:
+        if vbose is not None:
+            print "Error in getheaders(): ",e
+        pass
 
 
 def recurse_DNS_check(dest_ip,vbose):
 	myResolver = dns.resolver.Resolver()
 	myResolver.nameservers = [str(dest_ip)]
 	try:
+		if vbose is not None:
+			print "Trying: ",dest_ip
 		start = time.time()
 		while time.time() < start + 3:
 			myAnswers = myResolver.query("google.com", "A")
 			if myAnswers:
 				print dest_ip, "is vulnerable to DNS AMP"
+				break
 			else:
 				print dest_ip, "is a nope"
-			break
+				break
 		else:
 			print dest_ip, "is a nope"
 	except KeyboardInterrupt:
