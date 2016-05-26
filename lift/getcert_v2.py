@@ -286,6 +286,8 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 				print str(dest_ip).rstrip('\r\n)') + ": Paessler PTRG Monitoring Default Cert(443/SSL)"
 			elif 'axentra_1' in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)"
+			elif 'ironport_device' in device:
+				print str(dest_ip).rstrip('\r\n)') + ": Cisco IronPort Device Default SSL (443/SSL)"
 			#elif "matrix_sample_ssl_1":
 			#	print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
 		elif a is not None and device is None:
