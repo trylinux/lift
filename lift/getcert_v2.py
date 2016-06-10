@@ -328,6 +328,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 		a = title.contents
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
+		if 'ubnt.com' in cert:
+			print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
 		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
 		elif 'Cyberoam' in cert:
