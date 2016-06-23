@@ -1,3 +1,4 @@
+import os
 import sys
 if 'threading' in sys.modules:
     del sys.modules['threading']
@@ -10,7 +11,7 @@ import ssl
 import argparse
 import time
 import urllib2
-sys.path.append("/opt/lift/lift/lib/")
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
 import certs
 import BeautifulSoup
 import netaddr
@@ -32,7 +33,7 @@ def main():
 	parser.add_argument("-S","--ssl",help="For doing SSL checks only", action="store_true")
 	parser.add_argument("-R","--recon",help="Gather information about a given device", action="store_true")
 	args=parser.parse_args()
-	asndb=pyasn.pyasn('/opt/lift/lift/lib/ipasn.dat')
+	asndb=pyasn.pyasn('lib/ipasn.dat')
 	if args.verbose is None:
 		verbose = None
 	else:
