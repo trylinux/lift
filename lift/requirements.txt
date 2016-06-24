@@ -5,4 +5,5 @@ BeautifulSoup
 netaddr
 pyasn
 dns
-
+dnspython
+scapy
