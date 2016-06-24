@@ -21,13 +21,14 @@ import dns.resolver
 import ssdp_info, ntp_function
 
 def main():
-	parser = argparse.ArgumentParser()
-	parser.add_argument("-i","--ip", help="An Ip address")
-	parser.add_argument("-f","--ifile", help="A file of IPs")
-	parser.add_argument("-p","--port", help="A port")
-	parser.add_argument("-v","--verbose", help="Verbosity On")
+	parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
+	argroup = parser.add_mutually_exclusive_group(required=True)
+	argroup.add_argument("-i","--ip", help="An Ip address")
+	argroup.add_argument("-f","--ifile", help="A file of IPs")
+	argroup.add_argument("-p","--port", help="A port")
+	parser.add_argument("-v","--verbose", help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION")
 	parser.add_argument("-s","--subnet", help="A subnet!")
-	parser.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
+	argroup.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
 	parser.add_argument("-r","--recurse", help="Test Recursion", action="store_true")
 	parser.add_argument("-I","--info", help="Get more info about operations", action="store_true")
 	parser.add_argument("-S","--ssl",help="For doing SSL checks only", action="store_true")
