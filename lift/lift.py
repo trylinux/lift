@@ -34,7 +34,8 @@ def main():
 	parser.add_argument("-S","--ssl",help="For doing SSL checks only", action="store_true")
 	parser.add_argument("-R","--recon",help="Gather information about a given device", action="store_true")
 	args=parser.parse_args()
-	asndb=pyasn.pyasn('lib/ipasn.dat')
+	libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
+	asndb=pyasn.pyasn(libpath + '/ipasn.dat')
 	if args.verbose is None:
 		verbose = None
 	else:
