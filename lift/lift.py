@@ -27,7 +27,7 @@ def main():
 	argroup.add_argument("-f","--ifile", help="A file of IPs")
 	argroup.add_argument("-p","--port", help="A port")
 	parser.add_argument("-v","--verbose", help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION")
-	parser.add_argument("-s","--subnet", help="A subnet!")
+	argroup.add_argument("-s","--subnet", help="A subnet!")
 	argroup.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
 	parser.add_argument("-r","--recurse", help="Test Recursion", action="store_true")
 	parser.add_argument("-I","--info", help="Get more info about operations", action="store_true")
