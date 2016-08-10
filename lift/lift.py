@@ -25,7 +25,7 @@ def main():
 	argroup = parser.add_mutually_exclusive_group(required=True)
 	argroup.add_argument("-i","--ip", help="An Ip address")
 	argroup.add_argument("-f","--ifile", help="A file of IPs")
-	argroup.add_argument("-p","--port", help="A port")
+	parser.add_argument("-p","--port", help="A port")
 	parser.add_argument("-v","--verbose", help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION")
 	argroup.add_argument("-s","--subnet", help="A subnet!")
 	argroup.add_argument("-a","--asn", help="ASN number. WARNING: This will take a while")
@@ -422,6 +422,8 @@ def getheaders(dest_ip,dport,vbose,info):
             print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
         elif 'Z-World Rabbit' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)"
+	elif 'Intellian Aptus Web' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)"
         else:
             if info is not None:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
