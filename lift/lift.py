@@ -426,7 +426,7 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)"
 	elif 'SECURUS' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)"
-	elif 'NETSurveillance WEB' or 'NETSuveillance' in str(a):
+	elif ('NETSurveillance WEB' or  'NETSuveillance WEB') is str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": NetSurveillance-Based DVR (Title)"
 	elif '::: Login :::' in str(a) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
 	    print str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)"
