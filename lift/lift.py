@@ -378,6 +378,11 @@ def getheaders(dest_ip,dport,vbose,info):
         if 'RouterOS' in str(a) and server is None:
             router_os_version = soup.find('body').h1.contents
             print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()),"(Login Page Title)"
+	    soup = BeautifulSoup.BeautifulSoup(html)
+	if 'D-LINK' in str(a) and 'siyou server' in server:
+	    dlink_model = str(soup.find("div",{"class": "modelname"}).contents.pop())
+	    print str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model
+	    soup = BeautifulSoup.BeautifulSoup(html)
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
         elif 'ePMP' in str(a):
@@ -434,6 +439,8 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)"
 	elif 'Open Webif' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
+        elif 'IVSweb 2.0' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Title)"
 	else:
             if info is not None:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
