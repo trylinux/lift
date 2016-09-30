@@ -364,7 +364,7 @@ def getheaders(dest_ip,dport,vbose,info):
         dport = 80
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-        checkheaders = urllib2.urlopen(hostname,timeout=4)
+        checkheaders = urllib2.urlopen(hostname,timeout=3)
         try:
             server = checkheaders.info().get('Server')
         except:
@@ -431,16 +431,18 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)"
 	elif 'SECURUS' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)"
-	elif 'WEB' in str(a) and 'uc-httpd' in str(server):
-	    print str(dest_ip).rstrip('\r\n)') + ": NetSurveillance-Based DVR (Title and Server)"
+	elif 'uc-httpd' in str(server):
+	    print str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera (Server)"
 	elif '::: Login :::' in str(a) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
 	    print str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)"
         elif 'NetDvrV3' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)"
 	elif 'Open Webif' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
-        elif 'IVSweb 2.0' in str(a):
+        elif 'IVSWeb' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Title)"
+        elif 'Router Webserver' in str(server):
+	    print str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(a.pop()), "(Title)"
 	else:
             if info is not None:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
