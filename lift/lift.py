@@ -432,7 +432,7 @@ def getheaders(dest_ip,dport,vbose,info):
 	elif 'SECURUS' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)"
 	elif 'uc-httpd' in str(server):
-	    print str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera (Server)"
+	    print str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(a.pop()), "(Server)"
 	elif '::: Login :::' in str(a) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
 	    print str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)"
         elif 'NetDvrV3' in str(a):
