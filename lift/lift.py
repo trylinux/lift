@@ -213,6 +213,8 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 		if device is not None:
 			if device is "ubiquiti":
 				print str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)"
+			if "UBNT" in device:
+				print str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)"
 			elif "samsung" in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Unknown Samsung Device (SSL)"
 			elif "qnap" in device:
@@ -322,6 +324,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 
 	try:
 		checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=4)
+		if ('ubnt.com','UBNT') in cert:
+                        print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
 		server = checkheaders.info().get('Server')
 		if not server:
 			server = None
@@ -333,7 +337,7 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 		a = title.contents
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
-		if 'ubnt.com' in cert:
+		if ('ubnt.com','UBNT') in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
 		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
@@ -440,9 +444,13 @@ def getheaders(dest_ip,dport,vbose,info):
 	elif 'Open Webif' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
         elif 'IVSWeb' in str(a):
-	    print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Title)"
+	    print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)"
+	elif 'DVRDVS-Webs' in server or 'Hikvision-Webs' in server:
+            print str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)"
         elif 'Router Webserver' in str(server):
 	    print str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(a.pop()), "(Title)"
+        elif 'DD-WRT' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ":", str(a.pop()), "Router (Title)"
 	else:
             if info is not None:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
