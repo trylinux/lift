@@ -445,12 +445,14 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
         elif 'IVSWeb' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)"
-	elif 'DVRDVS-Webs' in server or 'Hikvision-Webs' in server:
+	elif 'DVRDVS-Webs' in server or 'Hikvision-Webs' in server or 'App-webs/' in server:
             print str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)"
         elif 'Router Webserver' in str(server):
 	    print str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(a.pop()), "(Title)"
         elif 'DD-WRT' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ":", str(a.pop()), "Router (Title)"
+	elif 'Samsung DVR' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)"
 	else:
             if info is not None:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
