@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 if 'threading' in sys.modules:
     del sys.modules['threading']
@@ -460,8 +461,23 @@ def getheaders(dest_ip,dport,vbose,info):
                 pass
         checkheaders.close()
     except Exception as e:
+	try:
+		if 'NoneType' in str(e):
+			new_ip = str(dest_ip).rstrip('\r\n)')
+			bashcommand='curl --silent rtsp://'+new_ip+' -I | grep Server'
+			#print bashcommand
+			proc = subprocess.Popen(['bash','-c', bashcommand],stdout=subprocess.PIPE)
+			output = proc.stdout.read()
+			rtsp_server = str(output).rstrip('\r\n)')
+			#print rtsp_server
+			if 'Dahua' in str(rtsp_server):
+				print str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)"
+	except Exception as t:
+		print "This didn't work", t
+		pass
+		
         if vbose is not None:
-            print "Error in getheaders(): ",e
+            print "Error in getheaders(): ",e, dest_ip
         pass
 
 
