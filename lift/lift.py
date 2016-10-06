@@ -457,8 +457,8 @@ def getheaders(dest_ip,dport,vbose,info):
 	else:
             if info is not None:
 		try:
-                	a="Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
-			print a
+                	a="Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(a.pop()).rstrip('\r\n)') + " and server is " + server
+			print str(a)
 		except:
 			print "Title on IP",str(dest_ip).rstrip('\r\n)'),"does not exists and server is",server
             else:
