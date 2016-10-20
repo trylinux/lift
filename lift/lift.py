@@ -456,6 +456,8 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)"
 	elif 'HtmlAnvView' in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)"
+	elif 'ZTE corp' in str(server):
+	    print str(dest_ip).rstrip('\r\n)') + ": ZTE", str(a.pop()),"Router (Title and Server)"
 	else:
             if info is not None:
 		try:
