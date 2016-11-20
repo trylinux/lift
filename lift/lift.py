@@ -458,6 +458,10 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)"
 	elif 'ZTE corp' in str(server):
 	    print str(dest_ip).rstrip('\r\n)') + ": ZTE", str(a.pop()),"Router (Title and Server)"
+	elif 'Haier Q7' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)"
+	elif 'Cross Web Server' in str(server):
+	    print str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)"
 	else:
             if info is not None:
 		try:
