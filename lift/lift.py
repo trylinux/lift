@@ -56,6 +56,7 @@ def main():
 
 	if args.ip and not args.recurse and not args.recon:
 		dest_ip = args.ip
+		print dport
 		if dport is 80:
 			getheaders(args.ip,dport,verbose,info)
 
@@ -63,11 +64,12 @@ def main():
 			testips(args.ip,dport,verbose,ssl_only,info)
 	elif args.ifile and not args.recurse:
 		ipfile = args.ifile
+		dest_ip = args.ip
 		try:
 			with open(ipfile) as f:
 				for line in f:
-					if args.port == 80:
-						getheaders(str(ip).rstrip('\r\n)'),dport,verbose,info)
+					if dport == 80:
+						getheaders(str(line).rstrip('\r\n)'),dport,verbose,info)
 					else:
 						testips(line,dport,verbose,ssl_only,info)
 		except KeyboardInterrupt:
@@ -369,7 +371,7 @@ def getheaders(dest_ip,dport,vbose,info):
         dport = 80
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-        checkheaders = urllib2.urlopen(hostname,timeout=3)
+        checkheaders = urllib2.urlopen(hostname,timeout=10)
         try:
             server = checkheaders.info().get('Server')
         except:
