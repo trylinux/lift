@@ -56,7 +56,6 @@ def main():
 
 	if args.ip and not args.recurse and not args.recon:
 		dest_ip = args.ip
-		print dport
 		if dport is 80:
 			getheaders(args.ip,dport,verbose,info)
 
@@ -326,7 +325,7 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 	hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 
 	try:
-		checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=4)
+		checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=10)
 		if ('ubnt.com','UBNT') in cert:
                         print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
 		server = checkheaders.info().get('Server')
