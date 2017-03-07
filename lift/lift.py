@@ -297,6 +297,8 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 				print str(dest_ip).rstrip('\r\n)') + ": Cisco IronPort Device Default SSL (443/SSL)"
 			elif 'meru_net_1' in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Meru Network Management Device  (443/SSL)"
+			elif 'bticino_1' in device:
+				print str(dest_ip).rstrip('\r\n)') + ": BTcinino My Home Device w/ Default Cert  (443/SSL)"
 			#elif "matrix_sample_ssl_1":
 			#	print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
 		elif a is not None and device is None:
@@ -470,6 +472,8 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)"
 	elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": ", str(a.pop()), "(Title and server)"
+	elif 'SunGuard' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)"
 	else:
             if info is not None:
 		try:
