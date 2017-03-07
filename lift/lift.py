@@ -316,9 +316,9 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 			getheaders(dest_ip,dport,verbose,info)
 			pass
 			if verbose is not None:
-				print e
+				print str(dest_ip).rstrip('\r\n)') + ": had error" + str(e).rstrip('\r\n)')
 		if verbose is not None:
-			print "Error Catch at line 133",e
+			print "Error Catch at line 133:" + str(e) + " " + str(dest_ip).rstrip('\r\n)')
 
 
 def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
@@ -367,7 +367,7 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 			dport = 80
 			getheaders(dest_ip,dport,vbose,info)
 		if vbose is not None:
-			print "Error in getsslheaders: ",e
+			print "Error in getsslheaders: "+ str(e) + str(dest_ip)
 		pass
 	return
 def getheaders(dest_ip,dport,vbose,info):
