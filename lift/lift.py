@@ -326,9 +326,12 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 
 	try:
 		checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=10)
-		if ('ubnt.com','UBNT') in cert:
+		try:
+                    if ('ubnt.com','UBNT') in cert:
                         print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
-		server = checkheaders.info().get('Server')
+		except:
+                    pass
+                server = checkheaders.info().get('Server')
 		if not server:
 			server = None
 		html = checkheaders.read()
@@ -339,8 +342,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 		a = title.contents
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
-		if ('ubnt.com','UBNT') in cert:
-			print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
+		#if ('ubnt.com','UBNT') in cert:
+		#	print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
 		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
 		elif 'Cyberoam' in cert:
@@ -351,6 +354,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+		elif 'ZeroShell' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": ZeroShell Firewall"
 		else:
 			if ssl_only==0:
 				getheaders(dest_ip,80,vbose,info)
@@ -376,6 +381,7 @@ def getheaders(dest_ip,dport,vbose,info):
         except:
             server = None
         html = checkheaders.read()
+        print server
         soup = BeautifulSoup.BeautifulSoup(html)
         title = soup.html.head.title
         if title is None:
