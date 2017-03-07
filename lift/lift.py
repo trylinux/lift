@@ -381,7 +381,6 @@ def getheaders(dest_ip,dport,vbose,info):
         except:
             server = None
         html = checkheaders.read()
-        print server
         soup = BeautifulSoup.BeautifulSoup(html)
         title = soup.html.head.title
         if title is None:
