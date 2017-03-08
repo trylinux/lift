@@ -384,10 +384,19 @@ def getheaders(dest_ip,dport,vbose,info):
             server = None
         html = checkheaders.read()
         soup = BeautifulSoup.BeautifulSoup(html)
-        title = soup.html.head.title
+        try:
+            title = soup.html.head.title
+            a = title.contents
+        except:
+            title = None
         if title is None:
-            title = soup.html.title
-        a = title.contents
+            try:
+                title = soup.html.title
+                a = title.contents
+            except:
+                a = None
+        
+       # a = title.contents
         if 'RouterOS' in str(a) and server is None:
             router_os_version = soup.find('body').h1.contents
             print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()),"(Login Page Title)"
@@ -396,6 +405,11 @@ def getheaders(dest_ip,dport,vbose,info):
 	    dlink_model = str(soup.find("div",{"class": "modelname"}).contents.pop())
 	    print str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model
 	    soup = BeautifulSoup.BeautifulSoup(html)
+        if a is None:
+            answer = soup.find("meta",  {"content":"0; url=/js/.js_check.html"})
+            if "js_check" in str(answer):                    
+                print str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found"
+             
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
         elif 'ePMP' in str(a):
@@ -501,7 +515,7 @@ def getheaders(dest_ip,dport,vbose,info):
 		pass
 		
         if vbose is not None:
-            print "Error in getheaders(): ",e, dest_ip
+            print "Error in getheaders(): ", str(dest_ip), str(e)
         pass
 
 
