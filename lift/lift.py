@@ -317,10 +317,10 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 		elif ("timed out" or 'sslv3' in e) and ssl_only==0:
 			getheaders(dest_ip,dport,verbose,info)
 			pass
-			if verbose is not None:
-				print str(dest_ip).rstrip('\r\n)') + ": had error" + str(e).rstrip('\r\n)')
+			#if verbose is not None:
+			#	print str(dest_ip).rstrip('\r\n)') + ": had error " + str(e).rstrip('\r\n)')
 		if verbose is not None:
-			print "Error Catch at line 133:" + str(e) + " " + str(dest_ip).rstrip('\r\n)')
+			print "Error in testip: " + str(e) + " " + str(dest_ip).rstrip('\r\n)')
 
 
 def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
@@ -409,6 +409,8 @@ def getheaders(dest_ip,dport,vbose,info):
             answer = soup.find("meta",  {"content":"0; url=/js/.js_check.html"})
             if "js_check" in str(answer):                    
                 print str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found"
+            else:
+                print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
              
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
@@ -515,7 +517,7 @@ def getheaders(dest_ip,dport,vbose,info):
 		pass
 		
         if vbose is not None:
-            print "Error in getheaders(): ", str(dest_ip), str(e)
+            print "Error in getheaders(): ",str(dest_ip).rstrip('\r\n)'), ":", str(e)
         pass
 
 
