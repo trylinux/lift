@@ -1,9 +1,7 @@
 gevent
 argparse
-urllib2
 BeautifulSoup
 netaddr
 pyasn
-dns
 dnspython
 scapy

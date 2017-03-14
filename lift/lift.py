@@ -297,6 +297,8 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 				print str(dest_ip).rstrip('\r\n)') + ": Cisco IronPort Device Default SSL (443/SSL)"
 			elif 'meru_net_1' in device:
 				print str(dest_ip).rstrip('\r\n)') + ": Meru Network Management Device  (443/SSL)"
+			elif 'bticino_1' in device:
+				print str(dest_ip).rstrip('\r\n)') + ": BTcinino My Home Device w/ Default Cert  (443/SSL)"
 			#elif "matrix_sample_ssl_1":
 			#	print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
 		elif a is not None and device is None:
@@ -315,10 +317,10 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 		elif ("timed out" or 'sslv3' in e) and ssl_only==0:
 			getheaders(dest_ip,dport,verbose,info)
 			pass
-			if verbose is not None:
-				print e
+			#if verbose is not None:
+			#	print str(dest_ip).rstrip('\r\n)') + ": had error " + str(e).rstrip('\r\n)')
 		if verbose is not None:
-			print "Error Catch at line 133",e
+			print "Error in testip: " + str(e) + " " + str(dest_ip).rstrip('\r\n)')
 
 
 def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
@@ -326,9 +328,12 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 
 	try:
 		checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=10)
-		if ('ubnt.com','UBNT') in cert:
+		try:
+                    if ('ubnt.com','UBNT') in cert:
                         print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
-		server = checkheaders.info().get('Server')
+		except:
+                    pass
+                server = checkheaders.info().get('Server')
 		if not server:
 			server = None
 		html = checkheaders.read()
@@ -339,8 +344,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 		a = title.contents
 		if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
 			print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
-		if ('ubnt.com','UBNT') in cert:
-			print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
+		#if ('ubnt.com','UBNT') in cert:
+		#	print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
 		elif 'iR-ADV' in cert and 'Catwalk' in title.contents:
 			print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
 		elif 'Cyberoam' in cert:
@@ -351,6 +356,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 			print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
 		elif 'axhttpd/1.4.0' in str(server):
 			print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+		elif 'ZeroShell' in str(a):
+			print str(dest_ip).rstrip('\r\n)') + ": ZeroShell Firewall"
 		else:
 			if ssl_only==0:
 				getheaders(dest_ip,80,vbose,info)
@@ -362,7 +369,7 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 			dport = 80
 			getheaders(dest_ip,dport,vbose,info)
 		if vbose is not None:
-			print "Error in getsslheaders: ",e
+			print "Error in getsslheaders: "+ str(e) + str(dest_ip)
 		pass
 	return
 def getheaders(dest_ip,dport,vbose,info):
@@ -377,10 +384,19 @@ def getheaders(dest_ip,dport,vbose,info):
             server = None
         html = checkheaders.read()
         soup = BeautifulSoup.BeautifulSoup(html)
-        title = soup.html.head.title
+        try:
+            title = soup.html.head.title
+            a = title.contents
+        except:
+            title = None
         if title is None:
-            title = soup.html.title
-        a = title.contents
+            try:
+                title = soup.html.title
+                a = title.contents
+            except:
+                a = None
+        
+       # a = title.contents
         if 'RouterOS' in str(a) and server is None:
             router_os_version = soup.find('body').h1.contents
             print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()),"(Login Page Title)"
@@ -389,6 +405,13 @@ def getheaders(dest_ip,dport,vbose,info):
 	    dlink_model = str(soup.find("div",{"class": "modelname"}).contents.pop())
 	    print str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model
 	    soup = BeautifulSoup.BeautifulSoup(html)
+        if a is None:
+            answer = soup.find("meta",  {"content":"0; url=/js/.js_check.html"})
+            if "js_check" in str(answer):                    
+                print str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found"
+            else:
+                print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
+             
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
         elif 'ePMP' in str(a):
@@ -465,6 +488,8 @@ def getheaders(dest_ip,dport,vbose,info):
 	    print str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)"
 	elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(a):
 	    print str(dest_ip).rstrip('\r\n)') + ": ", str(a.pop()), "(Title and server)"
+	elif 'SunGuard' in str(a):
+	    print str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)"
 	else:
             if info is not None:
 		try:
@@ -492,7 +517,7 @@ def getheaders(dest_ip,dport,vbose,info):
 		pass
 		
         if vbose is not None:
-            print "Error in getheaders(): ",e, dest_ip
+            print "Error in getheaders(): ",str(dest_ip).rstrip('\r\n)'), ":", str(e)
         pass
 
 
