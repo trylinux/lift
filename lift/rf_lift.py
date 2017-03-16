@@ -25,65 +25,67 @@ import itertools
 
 
 def parse_args():
+	'''Parse the command line attributes and return them as the dict `options`.
+	'''
 	parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
-	argroup = parser.add_mutually_exclusive_group(required=True)
-	argroup.add_argument("-i","--ip", help="An Ip address")
-	argroup.add_argument("-f","--ifile", help="A file of IPs")
-	parser.add_argument("-p","--port", help="A port")
-	parser.add_argument("-v","--verbose", help=("Not your usual verbosity. "
+	parser.add_argument("-i","--ip", dest='ip', help="An IP address")
+	parser.add_argument("-f","--ifile", dest='ifile', help="A file of IPs")
+	parser.add_argument("-p","--port", dest='port', type=int, default=443, help="A port")
+	parser.add_argument("-v","--verbose", dest='verbose', help=("Not your usual verbosity. "
 		"This is for debugging why specific outputs aren't working! "
 		"USE WITH CAUTION"))
-	argroup.add_argument("-s","--subnet", help="A subnet!")
-	argroup.add_argument("-a","--asn", help=("ASN number. WARNING: This will "
+	parser.add_argument("-s","--subnet", dest='subnet', help="A subnet!")
+	parser.add_argument("-a","--asn", dest='asn', type=int, help=("ASN number. WARNING: This will "
 		"take a while"))
-	parser.add_argument("-r","--recurse", help="Test Recursion", 
-		action="store_true")
-	parser.add_argument("-I","--info", help="Get more info about operations", 
-		action="store_true")
-	parser.add_argument("-S","--ssl",help="For doing SSL checks only", 
-		action="store_true")
-	parser.add_argument("-R","--recon",help="Gather info about a given device", 
-		action="store_true")
+	parser.add_argument("-r","--recurse", dest='recurse', action="store_true", 
+		default=False,help="Test Recursion")
+	parser.add_argument("-I","--info", dest='info', action="store_true", 
+		default=False, help="Get more info about operations")
+	parser.add_argument("-S","--ssl", dest='ssl_only', action="store_true", 
+		default=False, help="For doing SSL checks only", )
+	parser.add_argument("-R","--recon",dest='recon', action="store_true", 
+		default=False, help="Gather info about a given device")
 	args = parser.parse_args()
-	return args
+	options = vars(args)
+	return options
 
 
-def get_ips_from_ip(args):
+def get_ips_from_ip(options):
 	'''Return a list with the IP address supplied to the command line.
 	'''
-	return list(args.ip)
+	return list(options.ip)
 
 
-def get_ips_from_file(args):
+def get_ips_from_file(options):
 	'''Read each line of the IP file and return a list of IP addresses.
 	'''
 	ip_list = []
 
-	with open(args.ifile) as f:
+	with open(options.ifile) as f:
 		ip_list = f.readlines()
 	
 	return ip_list
 
 
-def get_ips_from_subnet(args):
+def get_ips_from_subnet(options):
 	'''Return a list of IP addresses in the given subnet.
 	'''
 	ip_list = []
-	
+
 	try:
-		ip_list = [ip for ip in netaddr.IPNetwork(str(args.subnet))]
+		ip_list = [ip for ip in netaddr.IPNetwork(str(options['subnet']))]
 	except Exception as e:
 		sys.exit()
 
 	return ip_list
 
 
-def get_ips_from_asn(args):
+def get_ips_from_asn(options):
 	'''Lookup and return a list of IP addresses associated with the 
-	given Autonomous System Number.
+	subnets in the given Autonomous System Number.
 	'''
 	ip_list = []
-	subnets = [subnet for subnet in asndb.get_as_prefixes(int(args.asn))]
+	subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
 	
 	# creates a nested list of lists
 	nested_ip_list = [get_ips_from_subnet(subnet) for subnet in subnets]
@@ -94,76 +96,65 @@ def get_ips_from_asn(args):
 	return ip_list
 
 
-def dispatch_by_input_type(args):
-	'''Return the appropriate method for converting the command line argument
-	into a list of ip addresses
-	'''
-	return {
-		args.ip: 'get_ips_from_ip',
-		args.ifile: 'get_ips_from_file',
-		args.subnet: 'get_ips_from_subnet',
-		args.asn: 'get_ips_from_asn',
-	}[True]
-
-
-def convert_input_to_ips(args):
-	'''Call the method to convert the command line argument and returns the
-	resultant list of IP addresses.
+def convert_input_to_ips(options):
+	'''Call the correct method to normalize the `options` dict, containing all 
+	command line arguments, into a list of ip addresses.
 	'''
 	try:
-		method_to_call = dispatch_by_input_type(args)
-		ip_list = locals()[method_to_call](args)
+		dispatch = {
+			'ip': get_ips_from_ip,
+			'ifile': get_ips_from_file,
+			'subnet': get_ips_from_subnet,
+			'asn': get_ips_from_asn,
+		}
+
+		method_to_call = next(v for k, v in dispatch.items() if options[k])
+		ip_list = method_to_call(options)
 		return ip_list
 	except KeyError:
-		raise ValueError('None of the cli args contained IP addresses.')
+		raise ValueError('None of the cli arguments contained IP addresses.')
 
 
-def dispatch_by_port(args):
-	'''Return the appropriate method for processing the IP address based on the
-	given port number and whether the recurse flag is True.
-	'''
-	return	
-	dispatch_by_port = {
-		args.port == 80: ('getheaders'),  # (dest_ip,dport,vbose,info)
-		args.port != 80 and not args.recurse: ('testips'),  # (dest_ip,dport,verbose,ssl_only,info)
-		args.recurse and args.port == 53: ('recurse_DNS_check'),  # (dest_ip,vbose)
-		args.recurse and args.port == 123: ('ntp_monlist_check'),  # (dest_ip,vbose)
-		args.recurse and args.port == 1900: ('recurse_ssdp_check'),  # (dest_ip,vbose) 
-		args.recurse and args.port not in (53, 123, 1900): (
-			'recurse_DNS_check', 'ntp_monlist_check', 'recurse_ssdp_check'),    # (dest_ip,vbose)
-	}[True]
-
-
-def process_ip(ip, args):
+def process_ip(ip, options):
 	'''Call the appropriate function to process the IP address based on the
-	given destination port.
+	port and recurse options passed into the command line..
 	'''
+	dispatch_by_port = {
+		options['port'] == 80: (getheaders),  # (dest_ip,dport,vbose,info)
+		options['port'] != 80 and not options['recurse']: (testips),  # (dest_ip,dport,verbose,ssl_only,info)
+		options['port'] == 53 and options['recurse']: (recurse_DNS_check),  # (dest_ip,vbose)
+		options['port'] == 123 and options['recurse']: (ntp_monlist_check),  # (dest_ip,vbose)
+		options['port'] == 1900 and options['recurse']: (recurse_ssdp_check),  # (dest_ip,vbose) 
+		options['port'] != 80 and options['recurse']: (
+			recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check),    # (dest_ip,vbose)
+	}
+
 	try:
-		methods_to_call = dispatch_by_port(args)
-		[locals()[method](ip) for method in methods_to_call] # TODO: add other params besides `ip`
+		methods_to_call = dispatch_by_port[True]
+		[method(ip, **options) for method in methods_to_call] 
 	except KeyError:
 		raise ValueError('Invalid port number was supplied by the user.')
 
 
 def main():
-	args = parse_args()
+	options = parse_args()
 	libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
 	asndb=pyasn.pyasn(libpath + '/ipasn.dat')
 
-	verbose = getattr(args, 'verbose', None)
-	dport = int(getattr(args, 'port', 443))
-	info = 1 if hasattr(args, 'info') else None
-	ssl_only = 1 if hasattr(args, 'ssl') else 0
+	# verbose = getattr(options, 'verbose', None)
+	# dport = int(options.port) if hasattr(options, 'port') and options.port else 443
+	# info = 1 if hasattr(options, 'info') else None
+	# ssl_only = 1 if hasattr(options, 'ssl') else 0
 
 	try:
-		ip_list = convert_input_to_ips(args)
+		ip_list = convert_input_to_ips(options)
 		for ip in ip_list:
-			process_ip()
-		except KeyboardInterrupt:
-			print "Quitting"
-			sys.exit(0)
-		except Exception as e:
-			print "Encountered an errorm ",e
+			process_ip(ip, options)
+	except KeyboardInterrupt:
+		print "Quitting"
+		sys.exit(0)
+	except Exception as e:
+		print "Encountered an error ",e
 
 
 def ishostup(dest_ip,dport,verbose):
@@ -342,7 +333,11 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 			print "Error in getsslheaders: ",e
 		pass
 	return
-def getheaders(dest_ip,dport,vbose,info):
+def getheaders(dest_ip, **kwargs):
+    dport = kwargs['port']
+    vbose = kwargs['verbose']
+    info = kwargs['info']
+    
     if dport == 443:
         dport = 80
     try:
@@ -473,7 +468,8 @@ def getheaders(dest_ip,dport,vbose,info):
         pass
 
 
-def recurse_DNS_check(dest_ip,vbose):
+def recurse_DNS_check(dest_ip, **kwargs):
+	vbose = kwargs['verbose']
 	myResolver = dns.resolver.Resolver()
 	myResolver.nameservers = [str(dest_ip)]
 	try:
@@ -498,8 +494,8 @@ def recurse_DNS_check(dest_ip,vbose):
 		pass
 
 
-def recurse_ssdp_check(dest_ip,vbose):
-	#try:
+def recurse_ssdp_check(dest_ip, **kwargs):
+	vbose = kwargs['verbose']
 	try:
 		a = ssdp_info.get_ssdp_information(dest_ip)
 		if a is None:
@@ -518,7 +514,8 @@ def recurse_ssdp_check(dest_ip,vbose):
 		print "Encountered exception",e
 
 
-def ntp_monlist_check(dest_ip,vbose):
+def ntp_monlist_check(dest_ip, **kwargs):
+	vbose = kwargs['verbose']
 	try:
 		a = ntp_function.NTPscan().monlist_scan(dest_ip)
 		if a is None:
