@@ -23,20 +23,34 @@ import ssdp_info
 import ntp_function
 import itertools
 
+class UsageError(Exception):
+    '''Exception raised for errors in the usage of this module.
+
+    Attributes:
+        expr -- input expression in which the error occurred
+        msg  -- explanation of the error
+    '''
+
+    def __init__(self, expr, msg):
+        self.expr = expr
+        self.msg = msg
+
 
 def parse_args():
 	'''Parse the command line attributes and return them as the dict `options`.
 	'''
 	parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
-	parser.add_argument("-i","--ip", dest='ip', help="An IP address")
-	parser.add_argument("-f","--ifile", dest='ifile', help="A file of IPs")
-	parser.add_argument("-p","--port", dest='port', type=int, default=443, help="A port")
-	parser.add_argument("-v","--verbose", dest='verbose', help=("Not your usual verbosity. "
-		"This is for debugging why specific outputs aren't working! "
-		"USE WITH CAUTION"))
-	parser.add_argument("-s","--subnet", dest='subnet', help="A subnet!")
-	parser.add_argument("-a","--asn", dest='asn', type=int, help=("ASN number. WARNING: This will "
-		"take a while"))
+	argroup = parser.add_mutually_exclusive_group(required=True)
+	argroup.add_argument("-i","--ip", dest='ip', help="An IP address")
+	argroup.add_argument("-f","--ifile", dest='ifile', help="A file of IPs")
+	parser.add_argument("-p","--port", dest='port', type=int, default=443, 
+		help="A port")
+	parser.add_argument("-v","--verbose", dest='verbose', 
+		help=("Not your usual verbosity. This is for debugging why specific "
+			  "outputs aren't working! USE WITH CAUTION"))
+	argroup.add_argument("-s","--subnet", dest='subnet', help="A subnet!")
+	argroup.add_argument("-a","--asn", dest='asn', type=int, 
+		help=("ASN number. WARNING: This will take a while"))
 	parser.add_argument("-r","--recurse", dest='recurse', action="store_true", 
 		default=False,help="Test Recursion")
 	parser.add_argument("-I","--info", dest='info', action="store_true", 
@@ -53,7 +67,7 @@ def parse_args():
 def get_ips_from_ip(options):
 	'''Return a list with the IP address supplied to the command line.
 	'''
-	return list(options.ip)
+	return list(options['ip'])
 
 
 def get_ips_from_file(options):
@@ -61,9 +75,11 @@ def get_ips_from_file(options):
 	'''
 	ip_list = []
 
-	with open(options.ifile) as f:
+	with open(options['ifile']) as f:
 		ip_list = f.readlines()
 	
+	# TODO add a more specific exception, like IOError
+	# https://www.python.org/dev/peps/pep-0343/
 	return ip_list
 
 
@@ -73,8 +89,10 @@ def get_ips_from_subnet(options):
 	ip_list = []
 
 	try:
-		ip_list = [ip for ip in netaddr.IPNetwork(str(options['subnet']))]
-	except Exception as e:
+		ip_list = [ip for ip in netaddr.IPNetwork(options['subnet'])]
+	except Exception as e:  
+	# TODO replace with more specific exception:
+	# http://netaddr.readthedocs.io/en/latest/_modules/netaddr/core.html#AddrFormatError 
 		sys.exit()
 
 	return ip_list
@@ -136,50 +154,95 @@ def process_ip(ip, options):
 		raise ValueError('Invalid port number was supplied by the user.')
 
 
+def is_valid_ip(ip):
+	'''Try to create an IP object using the given ip.
+	Return True if an instance is successfully created, otherwise return False.
+	'''
+	# TODO install & import IPy
+	return True
+
+
 def main():
 	options = parse_args()
 	libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
 	asndb=pyasn.pyasn(libpath + '/ipasn.dat')
-
-	# verbose = getattr(options, 'verbose', None)
-	# dport = int(options.port) if hasattr(options, 'port') and options.port else 443
-	# info = 1 if hasattr(options, 'info') else None
-	# ssl_only = 1 if hasattr(options, 'ssl') else 0
-
+	results = []
 	try:
 		ip_list = convert_input_to_ips(options)
 		for ip in ip_list:
-			process_ip(ip, options)
+			if is_valid_ip(ip):
+				process_ip(ip, options)
+				msg = '\n%s : success' % ip
+			else:
+				msg = '\n%s : fail' % ip
+
+			results.append(msg) 
+		return results
 	except KeyboardInterrupt:
 		print "Quitting"
 		sys.exit(0)
-	except Exception as e:
+	except Exception as e:  # TODO remove or replace with more specific exception
 		print "Encountered an error ",e
 
 
-def ishostup(dest_ip,dport,verbose):
+def ishostup(dest_ip, **kwargs):
+	dport = kwargs['port']
+	verbose = kwargs['verbose']
 	response = os.system("ping -c 1 " + dest_ip)
 	if response == 0:
-  		testips(dest_ip,dport,verbose)
+  		testips(dest_ip, **kwargs)
+	# TODO think about a relevant exception
 
-
-def testips(dest_ip,dport,verbose,ssl_only,info):
+def testips(dest_ip, **kwargs):
+	dport = kwargs['port']
+	verbose = kwargs['verbose']
+	ssl_only = kwargs['ssl_only']
+	info = kwargs['info']
+	
 	device = None
+
+	# Return a new SSLContext object with default settings for the given purpose
 	ctx = ssl.create_default_context()
+	
+	# Do not match the peer cert’s hostname with match_hostname() in 
+	# SSLSocket.do_handshake().
 	ctx.check_hostname = False
+
+	# The verify_mode attribute is about whether to try to verify other peers’ 
+	# certificates and how to behave if verification fails.
+	# In the CERT_NONE mode, no certificates will be required from the other 
+	# side of the socket connection. If a certificate is received from the other
+	# end, no attempt to validate it is made.
 	ctx.verify_mode = ssl.CERT_NONE
+
+	# Set the available ciphers for sockets created with this context.
 	ctx.set_ciphers('ALL')
+	
+	# Create an instance s of socket.socket
 	s = socket()
+
+	# Set a timeout on blocking socket operations. Raise a timeout exception 
+	# if the timeout period value has elapsed before the operation has completed.
 	s.settimeout(5)
+
 	try:
-		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)
+		# Takes an instance sock of socket.socket, and returns an instance 
+		# of ssl.SSLSocket
+		c = ssl.wrap_socket(s,cert_reqs=ssl.CERT_NONE)  
+
+		# Connect to a remote socket at the given IP address on the given port
 		c.connect((dest_ip,dport))
-		a = c.getpeercert(True)
-		b = str(ssl.DER_cert_to_PEM_cert(a))
-		device = (certs.getcertinfo(b))
-		#if verbose is not None:
-			#print "Trying: ",str(dest_ip).rstrip('\r\n)')
-			#print "device: ",device
+
+		# a is an ssl certificate, provided as DER-encoded blob of bytes
+		a = c.getpeercert(True)  
+
+		# b is a PEM-encoded string version of the ssl certificate
+		b = str(ssl.DER_cert_to_PEM_cert(a))  
+
+		# device is the name of the device corresponding to the cert.
+		# lookup the cert in a dict of containing 54 key-pairs {cert:device} 
+		device = (certs.getcertinfo(b))  
+
 		if device is not None:
 			if device is "ubiquiti":
 				print str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)"
@@ -272,11 +335,14 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 		else:
 			print "Something error happened"
 
+		# Close the socket. All future operations on the socket object will fail
 		s.close()
 	except KeyboardInterrupt:
                         print "Quitting"
                         sys.exit(0)
-	except Exception as e:
+	except Exception as e:  
+	# TODO replace with more specific exceptions: 
+	# SSLError (a subtype of socket.error), a more specific SSLError, socket time out, socket.error
 		s.close()
 		if 111 in e and ssl_only==0:
 			getheaders(dest_ip,dport,verbose,info)
@@ -289,7 +355,13 @@ def testips(dest_ip,dport,verbose,ssl_only,info):
 			print "Error Catch at line 133",e
 
 
-def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
+def getheaders_ssl(dest_ip, **kwargs):
+	dport = kwargs['port']
+	vbose = kwargs['verbose']
+	ssl_only = kwargs['ssl_only']
+	info = kwargs['info']
+	cert = kwargs['']  # TODO how to pass this into kwargs??
+	ctx = kwargs['']  # TODO how to pass this into kwargs??
 	hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 
 	try:
@@ -324,8 +396,8 @@ def getheaders_ssl(dest_ip,dport,cert,vbose,ctx,ssl_only,info):
 				getheaders(dest_ip,80,vbose,info)
 			else:
 				print "Title on IP",str(dest_ip).rstrip('\r\n)'),"is", str(a.pop()).rstrip('\r\n)'),"and server is",server
-		checkheaders.close()
-	except Exception as e:
+		checkheaders.close() 
+	except Exception as e:  # TODO replace with more specific exceptions:
 		if dport is 443 and ssl_only==0:
 			dport = 80
 			getheaders(dest_ip,dport,vbose,info)
@@ -337,7 +409,7 @@ def getheaders(dest_ip, **kwargs):
     dport = kwargs['port']
     vbose = kwargs['verbose']
     info = kwargs['info']
-    
+
     if dport == 443:
         dport = 80
     try:
@@ -345,7 +417,7 @@ def getheaders(dest_ip, **kwargs):
         checkheaders = urllib2.urlopen(hostname,timeout=10)
         try:
             server = checkheaders.info().get('Server')
-        except:
+        except:  # TODO replace with more specific exception
             server = None
         html = checkheaders.read()
         soup = BeautifulSoup.BeautifulSoup(html)
@@ -442,12 +514,12 @@ def getheaders(dest_ip, **kwargs):
 		try:
                 	a="Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(a.pop()).rstrip('\r\n)') + " and server is " + server
 			print str(a)
-		except:
+		except:  # TODO replace with more specific exception
 			print "Title on IP",str(dest_ip).rstrip('\r\n)'),"does not exists and server is",server
             else:
                 pass
         checkheaders.close()
-    except Exception as e:
+    except Exception as e:  # TODO replace with more specific exception
 	try:
 		if 'NoneType' in str(e):
 			new_ip = str(dest_ip).rstrip('\r\n)')
@@ -459,7 +531,7 @@ def getheaders(dest_ip, **kwargs):
 			#print rtsp_server
 			if 'Dahua' in str(rtsp_server):
 				print str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)"
-	except Exception as t:
+	except Exception as t:  # TODO replace with more specific exceptions:
 		print "This didn't work", t
 		pass
 		
@@ -489,7 +561,7 @@ def recurse_DNS_check(dest_ip, **kwargs):
 	except KeyboardInterrupt:
 		print "Quitting"
 		sys.exit()
-	except:
+	except:  # TODO replace with more specific exception
 		print dest_ip, "is not vulnerable to DNS AMP"
 		pass
 
@@ -510,7 +582,7 @@ def recurse_ssdp_check(dest_ip, **kwargs):
 			sys.exit(1)
 		print "Quitting in here"
 		sys.exit(0)
-	except Exception as e:
+	except Exception as e:  # TODO replace with more specific exception
 		print "Encountered exception",e
 
 
@@ -526,7 +598,7 @@ def ntp_monlist_check(dest_ip, **kwargs):
 	except KeyboardInterrupt:
 		print "Quitting"
 		sys.exit(1)
-	except Exception as e:
+	except Exception as e:  # TODO replace with more specific exception
 		if vbose is not None:
 			print "Error in ntp_monlist",e
 		pass
