@@ -207,13 +207,17 @@ def get_device_description(device_name):
     return device_description
 
 
-def testips(dest_ip, **kwargs):
+def get_certs_from_handshake(dest_ip, **kwargs):
+    '''Perform a SSL handshake with the given IP address, and
+    return the SSL certificate in two formats, a DER-encoded 
+    blob of bytes and a PEM-encoded string.  
+    '''
     dport = kwargs['port']
     verbose = kwargs['verbose']
     ssl_only = kwargs['ssl_only']
     info = kwargs['info']
     
-    device = None
+    PEM_cert = ''
 
     # Create a new SSLContext object `ctx` with default settings
     ctx = ssl.create_default_context()
@@ -257,10 +261,41 @@ def testips(dest_ip, **kwargs):
         # DER_cert_to_PEM_cert() raises TypeError.
         PEM_cert = str(ssl.DER_cert_to_PEM_cert(DER_cert))
 
+    except KeyboardInterrupt:
+        print "Quitting"
+        sys.exit(0)
+
+    except Exception as e:
+        # TODO replace with more specific exceptions:
+        # SSLError (a subtype of socket.error), a more specific SSLError, 
+        # socket time out, socket.error
+        # If the SSL handshake hasn't been done yet, getpeercert() raises ValueError.
+        if verbose:
+            print "Error Catch at line 133 ", e
+    
+    # Close the socket. All future operations on the socket object will fail
+    sock.close()
+
+    return DER_cert, PEM_cert, ctx
+
+
+def testips(dest_ip, **kwargs):
+    '''Attempt to identify the device using its SSL certificate. If our certs
+    dictionary has no matches for its certificate, call getheaders_ssl() to
+    try fingerprinting the device using its HTTP headers.
+    If the device does not provide a certificate, call the getheaders() method.
+    '''
+    dport = kwargs['port']
+    verbose = kwargs['verbose']
+    ssl_only = kwargs['ssl_only']
+    info = kwargs['info']
+
+    try:
+        DER_cert, PEM_cert, ctx = get_certs_from_handshake(dest_ip, **kwargs)
+
         # device is the name of the device corresponding to the cert.
         # lookup the cert in a dict containing 54 key-pairs {cert:device,...}
         device = (certs.getcertinfo(PEM_cert))
-
 
         if DER_cert and not device:
         
@@ -274,31 +309,22 @@ def testips(dest_ip, **kwargs):
                 msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
                 print msg
         else:
-            print "Something error happened"
+            try_headers = ((111 in e) or ("timed out" in e) or ('sslv3' in e) 
+                                  and not ssl_only)
+            if try_headers:
+                getheaders(dest_ip, dest_ip, **kwargs)
 
-        # Close the socket. All future operations on the socket object will fail
-        sock.close()
     except KeyboardInterrupt:
         print "Quitting"
-        sys.exit(0)
-    except Exception as e:
-    # TODO replace with more specific exceptions:
-    # SSLError (a subtype of socket.error), a more specific SSLError, socket time out, socket.error
-    # If the SSL handshake hasn't been done yet, getpeercert() raises ValueError.
-
-        sock.close()
-        if 111 in e and ssl_only == 0:
-            getheaders(dest_ip,dport,verbose,info)
-        elif ("timed out" or 'sslv3' in e) and ssl_only == 0:
-            getheaders(dest_ip, dport, verbose, info)
-            pass
-            if verbose is not None:
-                print e
-        if verbose is not None:
-            print "Error Catch at line 133 ",e
-
+        sys.exit(0)    
+        
 
 def getheaders_ssl(dest_ip, **kwargs):
+    '''Make a HTTPS GET request to the given IP, parse the response's
+    headers and resource, then compare the extracted entities against
+    our list of commonly used server versions and page titles to identify
+    the given IP's device name.
+    '''
     dport = kwargs['port']
     vbose = kwargs['verbose']
     ssl_only = kwargs['ssl_only']
@@ -335,14 +361,14 @@ def getheaders_ssl(dest_ip, **kwargs):
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
         else:
-            if ssl_only==0:
+            if not ssl_only:
                 kwargs['port'] = 80
                 getheaders(dest_ip, **kwargs)
             else:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip('\r\n)'), "and server is",server
         checkheaders.close()
     except Exception as e:  # TODO replace with more specific exceptions:
-        if dport is 443 and ssl_only==0:
+        if dport is 443 and not ssl_only:
             dport = 80
             getheaders(dest_ip,dport,vbose,info)
         if vbose is not None:
@@ -351,6 +377,11 @@ def getheaders_ssl(dest_ip, **kwargs):
 
 
 def getheaders(dest_ip, **kwargs):
+    '''Make a HTTP GET request to the given IP, parse the response's
+    headers and resource, then compare the extracted entities against
+    our list of commonly used server versions and page titles to identify
+    the given IP's device name.
+    '''
     dport = kwargs['port']
     vbose = kwargs['verbose']
     info = kwargs['info']
