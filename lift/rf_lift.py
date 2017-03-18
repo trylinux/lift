@@ -157,8 +157,8 @@ def process_ip(ip, options):
     port and recurse options passed into the command line..
     '''
     dispatch_by_port = {
-        options['port'] == 80: (getheaders),
-        options['port'] != 80 and not options['recurse']: (testips),
+        options['port'] == 80: (get_headers),
+        options['port'] != 80 and not options['recurse']: (test_ip),
         options['port'] == 53 and options['recurse']: (recurse_DNS_check),
         options['port'] == 123 and options['recurse']: (ntp_monlist_check),
         options['port'] == 1900 and options['recurse']: (recurse_ssdp_check),
@@ -181,19 +181,23 @@ def is_valid_ip(ip):
     return True
 
 
-def ishostup(dest_ip, **kwargs):
+def is_host_up(dest_ip, **kwargs):
+    '''Issue the ping (Packet INternet Groper) command to check if there is a 
+    network connection to the given IP address. If there is no connectivity,
+    call the testips() function. 
+    '''
     dport = kwargs['port']
     verbose = kwargs['verbose']
     response = os.system("ping -c 1 " + dest_ip)
     if response == 0:
-          testips(dest_ip, **kwargs)
+          test_ip(dest_ip, **kwargs)
     # TODO think about a relevant exception
 
 
 def get_device_description(device_name):
-    '''Search lift's collection of certificates, first for an exact name match.
-    If none are found, search for a partial name match. Return a string 
-    containing a description of device.
+    '''Lookup the given device name `device_name` in lift's collection of 
+    certificates for an exact name match. If none are found, search for a 
+    partial name match. Return a string containing a description of device.
     '''
     exact_match = devices.exact_names.get(device_name, '')
     partial_match = (v for k, v in devices.partial_names.items() 
@@ -279,11 +283,11 @@ def get_certs_from_handshake(dest_ip, **kwargs):
     return DER_cert, PEM_cert, ctx
 
 
-def testips(dest_ip, **kwargs):
+def test_ip(dest_ip, **kwargs):
     '''Attempt to identify the device using its SSL certificate. If our certs
-    dictionary has no matches for its certificate, call getheaders_ssl() to
+    dictionary has no matches for its certificate, call get_headers_ssl() to
     try fingerprinting the device using its HTTP headers.
-    If the device does not provide a certificate, call the getheaders() method.
+    If the device does not provide a certificate, call the get_headers() method.
     '''
     dport = kwargs['port']
     verbose = kwargs['verbose']
@@ -300,7 +304,7 @@ def testips(dest_ip, **kwargs):
         if DER_cert and not device:
         
             kwargs.update({'cert': DER_cert, 'ctx': ctx})
-            getheaders_ssl(dest_ip, **kwargs)
+            get_headers_ssl(dest_ip, **kwargs)
         
         elif device:
 
@@ -312,14 +316,14 @@ def testips(dest_ip, **kwargs):
             try_headers = ((111 in e) or ("timed out" in e) or ('sslv3' in e) 
                                   and not ssl_only)
             if try_headers:
-                getheaders(dest_ip, dest_ip, **kwargs)
+                get_headers(dest_ip, dest_ip, **kwargs)
 
     except KeyboardInterrupt:
         print "Quitting"
         sys.exit(0)    
         
 
-def getheaders_ssl(dest_ip, **kwargs):
+def get_headers_ssl(dest_ip, **kwargs):
     '''Make a HTTPS GET request to the given IP, parse the response's
     headers and resource, then compare the extracted entities against
     our list of commonly used server versions and page titles to identify
@@ -363,20 +367,20 @@ def getheaders_ssl(dest_ip, **kwargs):
         else:
             if not ssl_only:
                 kwargs['port'] = 80
-                getheaders(dest_ip, **kwargs)
+                get_headers(dest_ip, **kwargs)
             else:
                 print "Title on IP",str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip('\r\n)'), "and server is",server
         checkheaders.close()
     except Exception as e:  # TODO replace with more specific exceptions:
         if dport is 443 and not ssl_only:
             dport = 80
-            getheaders(dest_ip,dport,vbose,info)
+            get_headers(dest_ip,dport,vbose,info)
         if vbose is not None:
             print "Error in getsslheaders: ",e
     return
 
 
-def getheaders(dest_ip, **kwargs):
+def get_headers(dest_ip, **kwargs):
     '''Make a HTTP GET request to the given IP, parse the response's
     headers and resource, then compare the extracted entities against
     our list of commonly used server versions and page titles to identify
@@ -510,7 +514,7 @@ def getheaders(dest_ip, **kwargs):
             pass
             
             if vbose is not None:
-                print "Error in getheaders(): ",e, dest_ip
+                print "Error in get_headers(): ",e, dest_ip
             pass
 
 
@@ -576,6 +580,7 @@ def ntp_monlist_check(dest_ip, **kwargs):
         if vbose is not None:
             print "Error in ntp_monlist",e
         pass
+
 
 def main():
     configure_logging()
