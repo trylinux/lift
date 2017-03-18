@@ -5,7 +5,6 @@ import time
 import sys
 
 def getcertinfo(certreq):
-	device_info = None
 	certs = { """-----BEGIN CERTIFICATE-----
 MIICrTCCAhYCCQC6Ffdh27eytzANBgkqhkiG9w0BAQUFADCBmjELMAkGA1UEBhMC
 VVMxCzAJBgNVBAgTAkNBMREwDwYDVQQHEwhTYW4gSm9zZTEfMB0GA1UEChMWVWJp
@@ -1047,5 +1046,5 @@ khKMWD3ICGia7EJeg3YHKknSXg0Muu7B/YHA9pqa6iR6VAAHHEBhjD0VlfCpAc4q
 vrzfqyy7NhSM3VHVLQc3
 -----END CERTIFICATE-----
 """:'meru_net_1'}
-	device_info = certs.get(certreq)
+	device_info = certs.get(certreq, '')
 	return(device_info)
