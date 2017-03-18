@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-from socket import socket
+import socket
 import ssl
 import argparse
 import time
@@ -10,7 +10,6 @@ import logging
 import urllib2
 import BeautifulSoup
 import netaddr
-import os
 import pyasn
 import dns.resolver
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
@@ -19,26 +18,27 @@ import ntp_function
 import certs
 import device_list as devices
 
-# create logger
+
 logger = logging.getLogger('lift')
 
 
-def configure_logging():
-    logger.setLevel(logging.DEBUG)
+def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
+    '''Configure the logger by specifying the format for the log messages,
+    whether to write the messages to the console or a file, and by
+    setting the severity level of the messages to control the type
+    of messages displayed in the log.
+    '''
+    if write_to_file:
+        handler = logging.FileHandler(filename)
+    else:
+        handler = logging.StreamHandler()
 
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-
-    # create formatter
+    logger.setLevel(level)
+    handler.setLevel(level)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - '
                                   '%(message)s')
-
-    # add formatter to ch
-    ch.setFormatter(formatter)
-
-    # add ch to logger
-    logger.addHandler(ch)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
 
 class UsageError(Exception):
@@ -72,12 +72,12 @@ def parse_args():
     argroup.add_argument("-a", "--asn", dest='asn', type=int,
                          help=("ASN number. WARNING: This will take a while"))
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
-                        default=False,help="Test Recursion")
+                        default=False, help="Test Recursion")
     parser.add_argument("-I", "--info", dest='info', action="store_true",
                         default=False, help="Get more info about operations")
     parser.add_argument("-S", "--ssl", dest='ssl_only', action="store_true",
                         default=False, help="For doing SSL checks only", )
-    parser.add_argument("-R", "--recon",dest='recon', action="store_true",
+    parser.add_argument("-R", "--recon", dest='recon', action="store_true",
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
     options = vars(args)
@@ -124,7 +124,7 @@ def get_ips_from_asn(options):
     '''
     ip_list = []
     subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
-    
+
     # creates a nested list of lists
     nested_ip_list = [get_ips_from_subnet(subnet) for subnet in subnets]
 
@@ -192,19 +192,19 @@ def ishostup(dest_ip, **kwargs):
 
 
 def get_device_description(device_name):
-	'''Search the devices dict first for an exact name match,
-	then if none are found, search for a partial name match. 
-	'''
-	exact_match = devices.exact_names.get(device_name, '')
-	partial_match = (v for k, v in devices.partial_names.items() 
-					if k in device_name)
-	
-	searches = itertools.chain(
-		exact_match,
-		partial_match
-	)
-	device_description = next(searches, '')	
-	return device_description
+    '''Search the devices dict first for an exact name match,
+    then if none are found, search for a partial name match. 
+    '''
+    exact_match = devices.exact_names.get(device_name, '')
+    partial_match = (v for k, v in devices.partial_names.items() 
+                    if k in device_name)
+    
+    searches = itertools.chain(
+        exact_match,
+        partial_match
+    )
+    device_description = next(searches, '')    
+    return device_description
 
 
 def testips(dest_ip, **kwargs):
@@ -233,7 +233,7 @@ def testips(dest_ip, **kwargs):
     ctx.set_ciphers('ALL')
     
     # Create an instance `sock` of socket.socket
-    sock = socket()
+    sock = socket.socket()
 
     # Set a timeout on blocking socket operations. Raise a timeout exception
     # if the timeout period value has elapsed before the operation has completed.
@@ -242,10 +242,10 @@ def testips(dest_ip, **kwargs):
     try:
         # Takes an instance sock of socket.socket, and returns an instance
         # of ssl.SSLSocket
-        ssl_sock = ssl.wrap_socket(sock,cert_reqs=ssl.CERT_NONE)
+        ssl_sock = ssl.wrap_socket(sock, cert_reqs=ssl.CERT_NONE)
 
         # Connect to a remote socket at the given IP address on the given port
-        ssl_sock.connect((dest_ip,dport))
+        ssl_sock.connect((dest_ip, dport))
 
         # DER_cert is either an ssl certificate, provided as DER-encoded blob of
         # bytes, or None if the peer did not provide a certificate.
@@ -269,10 +269,10 @@ def testips(dest_ip, **kwargs):
         
         elif device:
 
-			device_description = get_device_description(device)
-	        if device_description:
-	            msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
-	            print msg
+            device_description = get_device_description(device)
+            if device_description:
+                msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
+                print msg
         else:
             print "Something error happened"
 
@@ -308,7 +308,7 @@ def getheaders_ssl(dest_ip, **kwargs):
     hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 
     try:
-        checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=10)
+        checkheaders = urllib2.urlopen(hostname, context=ctx, timeout=10)
         if ('ubnt.com','UBNT') in cert:
             print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
         server = checkheaders.info().get('Server')
