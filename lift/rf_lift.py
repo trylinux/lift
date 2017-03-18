@@ -57,7 +57,6 @@ class UsageError(Exception):
 def parse_args():
     '''Parse the command line attributes and return them as the dict `options`.
     '''
-    logger.debug('Starting parse_args')
     parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
     argroup = parser.add_mutually_exclusive_group(required=True)
     argroup.add_argument("-i", "--ip", dest='ip', help="An IP address")
@@ -192,8 +191,9 @@ def ishostup(dest_ip, **kwargs):
 
 
 def get_device_description(device_name):
-    '''Search the devices dict first for an exact name match,
-    then if none are found, search for a partial name match. 
+    '''Search lift's collection of certificates, first for an exact name match.
+    If none are found, search for a partial name match. Return a string 
+    containing a description of device.
     '''
     exact_match = devices.exact_names.get(device_name, '')
     partial_match = (v for k, v in devices.partial_names.items() 
@@ -271,7 +271,7 @@ def get_certs_from_handshake(dest_ip, **kwargs):
         # socket time out, socket.error
         # If the SSL handshake hasn't been done yet, getpeercert() raises ValueError.
         if verbose:
-            print "Error Catch at line 133 ", e
+            print "Error Catch at line 268 ", e
     
     # Close the socket. All future operations on the socket object will fail
     sock.close()
@@ -579,7 +579,6 @@ def ntp_monlist_check(dest_ip, **kwargs):
 
 def main():
     configure_logging()
-    logger.warning('Link, watch out :-)')
     options = parse_args()
     libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
     asndb=pyasn.pyasn(libpath + '/ipasn.dat')
