@@ -303,14 +303,14 @@ def getheaders_ssl(dest_ip, **kwargs):
     vbose = kwargs['verbose']
     ssl_only = kwargs['ssl_only']
     info = kwargs['info']
-    cert = kwargs['cert']  # TODO how to pass this into kwargs??
-    ctx = kwargs['ctx']  # TODO how to pass this into kwargs??
+    cert = kwargs['cert']  
+    ctx = kwargs['ctx']  
     hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
 
     try:
         checkheaders = urllib2.urlopen(hostname,context=ctx,timeout=10)
         if ('ubnt.com','UBNT') in cert:
-                        print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
+            print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
         server = checkheaders.info().get('Server')
         if not server:
             server = None
@@ -469,11 +469,9 @@ def getheaders(dest_ip, **kwargs):
             if 'NoneType' in str(e):
                 new_ip = str(dest_ip).rstrip('\r\n)')
                 bashcommand='curl --silent rtsp://'+new_ip+' -I -m 5| grep Server'
-                #print bashcommand
                 proc = subprocess.Popen(['bash','-c', bashcommand],stdout=subprocess.PIPE)
                 output = proc.stdout.read()
                 rtsp_server = str(output).rstrip('\r\n)')
-                #print rtsp_server
                 if 'Dahua' in str(rtsp_server):
                     print str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)"
         except Exception as t:  # TODO replace with more specific exceptions:

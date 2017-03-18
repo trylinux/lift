@@ -1,4 +1,4 @@
-'''This module provides dictionaries for looking up a device's description
+'''This module provides dictionaries for looking up a device's cert description
 given its full name or a part of its name.
 '''
 
