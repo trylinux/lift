@@ -17,7 +17,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
 import ssdp_info
 import ntp_function
 import certs
-import device_list
+import device_list as devices
 
 # create logger
 logger = logging.getLogger('lift')

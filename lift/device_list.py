@@ -1,3 +1,8 @@
+'''This module provides dictionaries for looking up a device's description
+given its full name or a part of its name.
+'''
+
+
 exact_names = {
     'ami_megarac':   'AMI MegaRac Remote Management Default Cert (SSL)',
     'audiocodecs_8443': 'AudioCodecs MP serices 443/8443 Default Cert (SSL)',
@@ -28,19 +33,19 @@ exact_names = {
 
 partial_names = {
     'axentra_1':     'Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)',
-    'buffalo_1':     'Buffalo Default Cert (443/SSL)',  
-    'colubris':      'HPE MSM Series Device (SSL)',  
-    'digi_int_1':    'Digi Passport Default Cert (443/SSL)',  
-    'filemaker':     'Filemaker Secure Database Website (SSL)',  
-    'intelbras_wom500': 'IntelBras Wom500 (admin/admin) (SSL)',  
+    'buffalo_1':     'Buffalo Default Cert (443/SSL)',
+    'colubris':      'HPE MSM Series Device (SSL)',
+    'digi_int_1':    'Digi Passport Default Cert (443/SSL)',
+    'filemaker':     'Filemaker Secure Database Website (SSL)',
+    'intelbras_wom500': 'IntelBras Wom500 (admin/admin) (SSL)',
     'ironport_device': 'Cisco IronPort Device Default SSL (443/SSL)',
     'meru_net_1':    'Meru Network Management Device  (443/SSL)',
-    'netgear_2':     'Netgear Default Cert Home Router (8443/SSL)',  
-    'netvanta':      'ADTRAN NetVanta Total Access Device (SSL)',  
-    'prtg_network_monitor_1': 'Paessler PTRG Monitoring Default Cert(443/SSL)',      
+    'netgear_2':     'Netgear Default Cert Home Router (8443/SSL)',
+    'netvanta':      'ADTRAN NetVanta Total Access Device (SSL)',
+    'prtg_network_monitor_1': 'Paessler PTRG Monitoring Default Cert(443/SSL)',
     'qnap':         'QNAP NAS TS series detected (SSL)',
     'samsung':      'Unknown Samsung Device (SSL)',
-    'supermicro_ipmi': 'Supermicro IPMI Default Certs (SSL)',  
+    'supermicro_ipmi': 'Supermicro IPMI Default Certs (SSL)',
     'UBNT':         'Ubiquiti AirMax or AirFiber Device (SSL)',
-    'Vigor':        'DrayTek Vigor Device (SSL)',  
+    'Vigor':        'DrayTek Vigor Device (SSL)',
 }
