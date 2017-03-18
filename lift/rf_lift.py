@@ -134,8 +134,8 @@ def get_ips_from_asn(options):
 
 
 def convert_input_to_ips(options):
-    '''Call the correct function to normalize the `options` dict, containing
-    all command line arguments, into a list of ip addresses.
+    '''Call the correct function to normalize the command line argument that
+    contains the IP addresses, and return a list of IP addresses.
     '''
     try:
         dispatch = {
@@ -179,19 +179,6 @@ def is_valid_ip(ip):
     '''
     # TODO install & import IPy
     return True
-
-
-def is_host_up(dest_ip, **kwargs):
-    '''Issue the ping (Packet INternet Groper) command to check if there is a 
-    network connection to the given IP address. If there is no connectivity,
-    call the testips() function. 
-    '''
-    dport = kwargs['port']
-    verbose = kwargs['verbose']
-    response = os.system("ping -c 1 " + dest_ip)
-    if response == 0:
-          test_ip(dest_ip, **kwargs)
-    # TODO think about a relevant exception
 
 
 def get_device_description(device_name):
@@ -519,6 +506,8 @@ def get_headers(dest_ip, **kwargs):
 
 
 def recurse_DNS_check(dest_ip, **kwargs):
+    '''
+    '''
     vbose = kwargs['verbose']
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [str(dest_ip)]
@@ -545,6 +534,8 @@ def recurse_DNS_check(dest_ip, **kwargs):
 
 
 def recurse_ssdp_check(dest_ip, **kwargs):
+    '''
+    '''
     vbose = kwargs['verbose']
     try:
         a = ssdp_info.get_ssdp_information(dest_ip)
@@ -565,6 +556,8 @@ def recurse_ssdp_check(dest_ip, **kwargs):
 
 
 def ntp_monlist_check(dest_ip, **kwargs):
+    '''
+    '''
     vbose = kwargs['verbose']
     try:
         a = ntp_function.NTPscan().monlist_scan(dest_ip)
@@ -582,7 +575,22 @@ def ntp_monlist_check(dest_ip, **kwargs):
         pass
 
 
+def is_host_up(dest_ip, **kwargs):
+    '''Issue the ping (Packet INternet Groper) command to check if there is a 
+    network connection to the given IP address. If there is no connectivity,
+    call the testips() function. 
+    '''
+    dport = kwargs['port']
+    verbose = kwargs['verbose']
+    response = os.system("ping -c 1 " + dest_ip)
+    if response == 0:
+          test_ip(dest_ip, **kwargs)
+    # TODO think about a relevant exception
+
+
 def main():
+    '''
+    '''
     configure_logging()
     options = parse_args()
     libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
