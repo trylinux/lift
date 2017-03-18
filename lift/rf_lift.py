@@ -17,6 +17,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
 import ssdp_info
 import ntp_function
 import certs
+import device_list
 
 # create logger
 logger = logging.getLogger('lift')
@@ -39,7 +40,6 @@ def configure_logging():
     # add ch to logger
     logger.addHandler(ch)
 
-    return logger
 
 class UsageError(Exception):
     '''Exception raised for errors in the usage of this module.
@@ -135,8 +135,8 @@ def get_ips_from_asn(options):
 
 
 def convert_input_to_ips(options):
-    '''Call the correct function to normalize the `options` dict, containing all
-    command line arguments, into a list of ip addresses.
+    '''Call the correct function to normalize the `options` dict, containing
+    all command line arguments, into a list of ip addresses.
     '''
     try:
         dispatch = {
@@ -189,6 +189,23 @@ def ishostup(dest_ip, **kwargs):
     if response == 0:
           testips(dest_ip, **kwargs)
     # TODO think about a relevant exception
+
+
+def get_device_description(device_name):
+	'''Search the devices dict first for an exact name match,
+	then if none are found, search for a partial name match. 
+	'''
+	exact_match = devices.exact_names.get(device_name, '')
+	partial_match = (v for k, v in devices.partial_names.items() 
+					if k in device_name)
+	
+	searches = itertools.chain(
+		exact_match,
+		partial_match
+	)
+	device_description = next(searches, '')	
+	return device_description
+
 
 def testips(dest_ip, **kwargs):
     dport = kwargs['port']
@@ -244,104 +261,26 @@ def testips(dest_ip, **kwargs):
         # lookup the cert in a dict containing 54 key-pairs {cert:device,...}
         device = (certs.getcertinfo(PEM_cert))
 
-        if device is not None:
-            if device is "ubiquiti":
-                print str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)"
-            if "UBNT" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)"
-            elif "samsung" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Unknown Samsung Device (SSL)"
-            elif "qnap" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": QNAP NAS TS series detected (SSL)"
-            elif device is "hikvision":
-                print str(dest_ip).rstrip('\r\n)') + ": Hikvision Default Cert"
-            elif device is "avigilon":
-                print str(dest_ip).rstrip('\r\n)') + ": Aviligon Gateway Default cert"
-            elif device is "netgear_1":
-                print str(dest_ip).rstrip('\r\n)') + ": NetGear Default cert UTM  (SSL)"
-            elif device is "verifone_sapphire":
-                print str(dest_ip).rstrip('\r\n)') + ": Verifone Sapphire Device (SSL)"
-            elif "Vigor" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": DrayTek Vigor Device (SSL)"
-            elif device is "lifesize_1":
-                print str(dest_ip).rstrip('\r\n)') + ": Lifesize Product (SSL)"
-            elif "filemaker" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Filemaker Secure Database Website (SSL)"
-            elif  device is "verizon_jungo":
-                print str(dest_ip).rstrip('\r\n)') + ": Verizon Jungo OpenRG product (SSL/8443)"
-            elif  device is "canon_iradv":
-                print str(dest_ip).rstrip('\r\n)') + ": Canon IR-ADV Login Page (SSL/8443)"
-            elif "colubris" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": HPE MSM Series Device (SSL)"
-            elif device is "ecessa":
-                print str(dest_ip).rstrip('\r\n)') + ": Ecessa PowerLink Wan Optimizer (SSL)"
-            elif device is "nomadix_ag_1":
-                print str(dest_ip).rstrip('\r\n)') + ": Nomadix AG series Gateway (SSL)"
-            elif "netvanta" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": ADTRAN NetVanta Total Access Device (SSL)"
-            elif "valuepoint_gwc_1" is device:
-                print str(dest_ip).rstrip('\r\n)') + ": ValuePoint Networks Gateway Controller Series (SSL)"
-            elif device is "broadcom_1":
-                print str(dest_ip).rstrip('\r\n)') + ": Broadcom Generic Modem (SSL)"
-            elif device is "lg_nas_1":
-                print str(dest_ip).rstrip('\r\n)') + ": LG NAS Device (SSL)"
-            elif device is "edgewater_1":
-                print str(dest_ip).rstrip('\r\n)') + ": EdgeWater Networks VOIP Solution (SSL)"
-            elif device is "foscam_cam":
-                print str(dest_ip).rstrip('\r\n)') + ": Foscam IPcam Client Login (SSL)"
-            elif device is "lacie_1":
-                print str(dest_ip).rstrip('\r\n)') + ": LaCie CloudBox (SSL)"
-            elif device is "huawei_hg658":
-                print str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway HG658d (SSL)"
-            elif device is "interpeak_device":
-                print str(dest_ip).rstrip('\r\n)') + ": Something made by interpeak (SSL)"
-            elif device is "fujistu_celvin":
-                print str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)"
-            elif device is "opengear_default_cert":
-                print str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)"
-            elif device is "zyxel_pk5001z":
-                print str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)"
-            elif device is "audiocodecs_8443":
-                print str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)"
-            elif "supermicro_ipmi" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Supermicro IPMI Default Certs (SSL)"
-            elif device is "enco_player_1":
-                print str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)"
-            elif device is "ami_megarac":
-                print str(dest_ip).rstrip('\r\n)') + ": AMI MegaRac Remote Management Default Cert (SSL)"
-            elif device is "avocent_1":
-                print str(dest_ip).rstrip('\r\n)') + ": Avocent Default cert (unknown device) (SSL)"
-            elif device is "ligowave_1":
-                print str(dest_ip).rstrip('\r\n)') + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)"
-            elif "intelbras_wom500" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": IntelBras Wom500 (admin/admin) (SSL)"
-            elif "netgear_2" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)"
-            elif "buffalo_1" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Buffalo Default Cert (443/SSL)"
-            elif "digi_int_1" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Digi Passport Default Cert (443/SSL)"
-            elif "prtg_network_monitor_1" in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Paessler PTRG Monitoring Default Cert(443/SSL)"
-            elif 'axentra_1' in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)"
-            elif 'ironport_device' in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Cisco IronPort Device Default SSL (443/SSL)"
-            elif 'meru_net_1' in device:
-                print str(dest_ip).rstrip('\r\n)') + ": Meru Network Management Device  (443/SSL)"
-            #elif "matrix_sample_ssl_1":
-            #    print str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)"
-        elif DER_cert is not None and device is None:
+
+        if DER_cert and not device:
+        
             kwargs.update({'cert': DER_cert, 'ctx': ctx})
             getheaders_ssl(dest_ip, **kwargs)
+        
+        elif device:
+
+			device_description = get_device_description(device)
+	        if device_description:
+	            msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
+	            print msg
         else:
             print "Something error happened"
 
         # Close the socket. All future operations on the socket object will fail
         sock.close()
     except KeyboardInterrupt:
-                        print "Quitting"
-                        sys.exit(0)
+        print "Quitting"
+        sys.exit(0)
     except Exception as e:
     # TODO replace with more specific exceptions:
     # SSLError (a subtype of socket.error), a more specific SSLError, socket time out, socket.error
@@ -350,8 +289,8 @@ def testips(dest_ip, **kwargs):
         sock.close()
         if 111 in e and ssl_only == 0:
             getheaders(dest_ip,dport,verbose,info)
-        elif ("timed out" or 'sslv3' in e) and ssl_only==0:
-            getheaders(dest_ip,dport,verbose,info)
+        elif ("timed out" or 'sslv3' in e) and ssl_only == 0:
+            getheaders(dest_ip, dport, verbose, info)
             pass
             if verbose is not None:
                 print e
