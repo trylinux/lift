@@ -209,8 +209,8 @@ def get_device_description(device_name):
 
 def get_certs_from_handshake(dest_ip, **kwargs):
     '''Perform a SSL handshake with the given IP address, and
-    return the SSL certificate in two formats, a DER-encoded 
-    blob of bytes and a PEM-encoded string.  
+    return the SSLContext object, as well as two formats of the SSL certificate,
+    a DER-encoded blob of bytes and a PEM-encoded string.  
     '''
     dport = kwargs['port']
     verbose = kwargs['verbose']
