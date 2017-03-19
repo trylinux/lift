@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDCjCCAnOgAwIBAgIJAIew6w6qiDJlMA0GCSqGSIb3DQEBBQUAMGIxCzAJBgNV\\nBAYTAkJSMQswCQYDVQQIEwJTQzERMA8GA1UEBxMIU2FvIEpvc2UxEjAQBgNVBAoT\\nCUludGVsYnJhczENMAsGA1UECxMESU5FVDEQMA4GA1UEAxMHd29tNTAwMDAeFw0x\\nMjA5MTExMzUzMTRaFw0yNjA1MjExMzUzMTRaMGIxCzAJBgNVBAYTAkJSMQswCQYD\\nVQQIEwJTQzERMA8GA1UEBxMIU2FvIEpvc2UxEjAQBgNVBAoTCUludGVsYnJhczEN\\nMAsGA1UECxMESU5FVDEQMA4GA1UEAxMHd29tNTAwMDCBnzANBgkqhkiG9w0BAQEF\\nAAOBjQAwgYkCgYEAyEjxYPZ8arh27oFOQ884dvZeub2wXEnRHjt2KsmYd56z5/+D\\nveKl7+PMcjkyFiMCVUxxsTAEjRItFiSOEfAJPRCbV+y1XQohnXOYetnWFjr98Lfe\\nxa0dUsj1zribhCGZPMvQ5IdUbkkRLi9k5Qu5sboqttBbOuOD+4TpWOFCS5sCAwEA\\nAaOBxzCBxDAdBgNVHQ4EFgQUK5TbPC70epHc2RWX78uVtoWug+4wgZQGA1UdIwSB\\njDCBiYAUK5TbPC70epHc2RWX78uVtoWug+6hZqRkMGIxCzAJBgNVBAYTAkJSMQsw\\nCQYDVQQIEwJTQzERMA8GA1UEBxMIU2FvIEpvc2UxEjAQBgNVBAoTCUludGVsYnJh\\nczENMAsGA1UECxMESU5FVDEQMA4GA1UEAxMHd29tNTAwMIIJAIew6w6qiDJlMAwG\\nA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAFJDndX/mg5ak84O5EmLtSuSq\\ndzlEPLv4Osx9JDvwZ+z+z+OGVafgEPnh9Ub2oAq2ayDMa0gHwycCkLL/8l1pPl+7\\nPbmMj0D08jyzBeMqMJPXJbhWKr1Tg6cFKcROyfAAB9xYvq6NOAcuUXGUntAPzm9S\\n03vDA0DsjZNbw7QtObc=\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "IntelBras Wom500 (admin/admin) (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "axhttpd/1.4.0",
+			"title_search_text": "",
+			"display_name": "IntelBras WOM500 (Probably admin/admin) (Server string)"	
+		}
+
+	]
+}

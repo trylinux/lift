@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICmjCCAgOgAwIBAgIBADANBgkqhkiG9w0BAQUFADBDMQswCQYDVQQGEwJVUzEK\\nMAgGA1UECBMBIDEKMAgGA1UEBxMBIDEcMBoGA1UEChMTQXZvY2VudCBDb3Jwb3Jh\\ndGlvbjAeFw0wNTA0MjgxODQyNDhaFw0xNTA0MjYxODQyNDhaMEMxCzAJBgNVBAYT\\nAlVTMQowCAYDVQQIEwEgMQowCAYDVQQHEwEgMRwwGgYDVQQKExNBdm9jZW50IENv\\ncnBvcmF0aW9uMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsuY4jwvovEFZE\\nj/1SdOgXAITDOZ8o/EJ8aY576pXQrsDZEJa7ah1UmFym2RwlzfSJ/qFzfyvU/902\\nRdFtVkGn6KvJFdhC8YXEssNYwcdU9w4KK3tiRNQ6iLOeM1LkeJBxXRKOiKXiJKVO\\nAK/k9B9LXslrNUEptgQrCCftlP0KqwIDAQABo4GdMIGaMB0GA1UdDgQWBBT3xX37\\nHcFMxUUAf82Fi47487x48jBrBgNVHSMEZDBigBT3xX37HcFMxUUAf82Fi47487x4\\n8qFHpEUwQzELMAkGA1UEBhMCVVMxCjAIBgNVBAgTASAxCjAIBgNVBAcTASAxHDAa\\nBgNVBAoTE0F2b2NlbnQgQ29ycG9yYXRpb26CAQAwDAYDVR0TBAUwAwEB/zANBgkq\\nhkiG9w0BAQUFAAOBgQB+yVHjXWnClwbVzO/b2cOve5AUI6qzI9JB8F+0ZgD3a8gW\\njTTWPSr3W0eJ5T1K/Xqic0zL4WvEtmYu+FUewAmPDKFb1D0V1QdKAs56gnWMlF7D\\nG25ej9sujSXqLofd9cEG4h3oDkPUGYB98lumXumte6Ty2Cv1pF3yzrArtijijA==\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "Avocent Default cert (unknown device) (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

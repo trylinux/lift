@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIFFDCCA/ygAwIBAgIQEMpzCCRnnDOkG7I+cxTlKTANBgkqhkiG9w0BAQUFADBP\\nMQswCQYDVQQGEwJDTjEaMBgGA1UEChMRV29TaWduIENBIExpbWl0ZWQxJDAiBgNV\\nBAMTG1dvU2lnbiBDbGFzcyAzIE9WIFNlcnZlciBDQTAeFw0xNTA0MDcwODIwMDda\\nFw0xNjEyMDcwOTIwMDdaMIGFMQswCQYDVQQGEwJDTjESMBAGA1UECAwJR3Vhbmdk\\nb25nMREwDwYDVQQHDAhTaGVuemhlbjE2MDQGA1UECgwtU2hlbnpoZW4gRm9zY2Ft\\nIEludGVsbGlnZW50IFRlY2hub2xvZ3kgQ28sTHRkMRcwFQYDVQQDDA4qLm15Zm9z\\nY2FtLm9yZzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK8H1eeluYBP\\n7x/7DLKPGneAnI9LWdMYbo+dIQKsyxQXRPOL+eWpQ/aWm/TAy0i4eDxmE0F7HmEn\\nY/m3Prl7TweSvFYcthDn77bJTXjbdKdLPFxc34j/KC2AdaJOJzGVJfmPuSVk2NW+\\nmQyZxFuMU0X8M88+HwPX7leADUAjNdNIGcw4BG9xCrTY/6N/tk9an5iOHc+WKRQm\\nP6S+2xCSHIUETpbPlpbRnk+FYDP8KLqdLwTgECIYEfsefNdasACyQ9EafWF1C683\\niuMAxtRe+mghklQoWYeslA6FhDcIZilPPkgnWjjqIkkAn+ik1q521aI3fUz/iGfM\\nugsGMuBmck0CAwEAAaOCAbMwggGvMAsGA1UdDwQEAwIFoDAdBgNVHSUEFjAUBggr\\nBgEFBQcDAgYIKwYBBQUHAwEwCQYDVR0TBAIwADAdBgNVHQ4EFgQUYf1ztHxahhue\\nDsBxwaJJhZHpTAIwHwYDVR0jBBgwFoAUYi6B2eNCeRSjzdlUim743pWqj5gwfwYI\\nKwYBBQUHAQEEczBxMDUGCCsGAQUFBzABhilodHRwOi8vb2NzcDEud29zaWduLmNv\\nbS9jbGFzczMvc2VydmVyL2NhMTA4BggrBgEFBQcwAoYsaHR0cDovL2FpYTEud29z\\naWduLmNvbS9jbGFzczMuc2VydmVyLmNhMS5jZXIwOQYDVR0fBDIwMDAuoCygKoYo\\naHR0cDovL2NybHMxLndvc2lnbi5jb20vY2ExLXNlcnZlci0zLmNybDAnBgNVHREE\\nIDAegg4qLm15Zm9zY2FtLm9yZ4IMbXlmb3NjYW0ub3JnMFEGA1UdIARKMEgwCAYG\\nZ4EMAQICMDwGDSsGAQQBgptRAQMCAQIwKzApBggrBgEFBQcCARYdaHR0cDovL3d3\\ndy53b3NpZ24uY29tL3BvbGljeS8wDQYJKoZIhvcNAQEFBQADggEBAFSLG5spzqWY\\nqzZmHTYvNPwFSF6AD1VXksIaqKvrj4x4tOR5JQz3JBpgHpchaxQlv0VxA12lmGRY\\nkkF7vK48yVwlZkV6+ScYiK2PAVxpyJqqA42cv0vbna+cgoSbw5zz6/VjWdiAlqbl\\nlS5Su2FsVuPJBEIbRXQshRJycmxG9JqKOWQRSNvxdO59EHyYSmo+avNLzGl218R4\\nFeF4fEP4/QHmOPNzrDMFzfXFdlsO3T3WeXcmgeSyNGev9d6EwhP+LRJsawpVdRAq\\nf1sqtSGbqN3iGQrEQeGMCDAE+U7nzTTCWBcFXg8O5077kiB/MZtx2kDpZf2p3qqt\\nOVAbevhaNsE=\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "Foscam IPcam Client Login (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

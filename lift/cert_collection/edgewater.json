@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIENTCCAx2gAwIBAgIJAP3maeWPigcoMA0GCSqGSIb3DQEBBQUAMIGwMQswCQYD\\nVQQGEwJ1czETMBEGA1UECAwKY2FsaWZvcm5pYTEUMBIGA1UEBwwLU2FudGEgQ2xh\\ncmExGjAYBgNVBAoMEWVkZ2V3YXRlcm5ldHdvcmtzMRAwDgYDVQQLDAdzdXBwb3J0\\nMRowGAYDVQQDDBFlZGdld2F0ZXJuZXR3b3JrczEsMCoGCSqGSIb3DQEJARYdc3Vw\\ncG9ydEBlZGdld2F0ZXJuZXR3b3Jrcy5jb20wHhcNMTMwMTA5MTc0NzI4WhcNMjMw\\nMTA3MTc0NzI4WjCBsDELMAkGA1UEBhMCdXMxEzARBgNVBAgMCmNhbGlmb3JuaWEx\\nFDASBgNVBAcMC1NhbnRhIENsYXJhMRowGAYDVQQKDBFlZGdld2F0ZXJuZXR3b3Jr\\nczEQMA4GA1UECwwHc3VwcG9ydDEaMBgGA1UEAwwRZWRnZXdhdGVybmV0d29ya3Mx\\nLDAqBgkqhkiG9w0BCQEWHXN1cHBvcnRAZWRnZXdhdGVybmV0d29ya3MuY29tMIIB\\nIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsNKt70RDZu3fx/jk8gTLCH6a\\n6Mrt8M5hMTZDua0C7DA7Gs8+elYW1aUrDzH764AzUiWi8QHEw8jxnwiaQeXWm+rh\\nxqHpQPr/kCZ40owO7C2luIja+G+qa0ZC5eiG5QieEO93FW2c3kCbjDy5h4f1ydVU\\nGGd0Nxz2NouIFA8aaSgKNfvXqFM8fV3AUIw9tL3YN2lugN+jKJS78Vwkp1fB3wgj\\nOp6kVnEG6WecXeCkRwnvU5HbMiOZdYKWDGx87oq4em7Vg60rXC14aRsZ0/NxwiHR\\nN7OFHj/9RhVORoKriR+uijb7yG1Fc2kjdYAfL0g3C7/i6vnFSo/L+oJfCUHjAwID\\nAQABo1AwTjAdBgNVHQ4EFgQUikTO20h+fG98ATJ9naA7kmvy69UwHwYDVR0jBBgw\\nFoAUikTO20h+fG98ATJ9naA7kmvy69UwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0B\\nAQUFAAOCAQEAizlcI4es517JGtQ41AviuP2N9mrxGIJe6Byp2ugnZ2+aFP8UHPUj\\nNvZgtFNJF3qgAUSSG+hk5Bp5qIEGIzLKGd6Hfc0eUEHyYHLKM0gPbPDyoaB6nd3W\\n9K+xiRi+f9NZpFZqzvv5zhKX1x0vTIB3STeWNJoIeoB5ShxUh64PfUPW03yGrdVk\\nhlYB5e49XrfmF3XeU7KqvYUzhERR2vXv5uNyR6KWUM3yeeIbM+2X3IVOezs5VEay\\n2qkExGsxJnDCptgDCT/GYgN0imNF3mr1fN1c8S5c0rQilpKgot1iOBm+qaC3F0nw\\nDdIUkLeOHatIIFZ7k17ntOwMvrtO/DDJGg==\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "EdgeWater Networks VOIP Solution (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

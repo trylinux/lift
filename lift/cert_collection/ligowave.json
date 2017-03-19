@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICwDCCAimgAwIBAgIBTTANBgkqhkiG9w0BAQUFADCBkjELMAkGA1UEBhMCTFQx\\nCjAIBgNVBAgTAS0xDzANBgNVBAcTBkthdW5hczEUMBIGA1UEChMLV0lMSUJPWCBV\\nQUIxDDAKBgNVBAsUA1ImRDEhMB8GA1UEAxMYV0lMSUJPWCBQcm9kdWN0cyBSb290\\nIENBMR8wHQYJKoZIhvcNAQkBFhBjZXJ0QHdpbGlib3guY29tMB4XDTEwMDkxNzA3\\nMDYwM1oXDTIwMDkxNDA3MDYwM1owgYwxCzAJBgNVBAYTAkxUMQowCAYDVQQIEwEt\\nMQ8wDQYDVQQHEwZLYXVuYXMxFDASBgNVBAoTC1dJTElCT1ggVUFCMQwwCgYDVQQL\\nFANSJkQxGzAZBgNVBAMTEmRldmljZS53aWxpYm94LmNvbTEfMB0GCSqGSIb3DQEJ\\nARYQY2VydEB3aWxpYm94LmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA\\npzW6qlNsPznOSvqb6AXAP2p3YxC/PO2imUw+TQCi9R0w2G27t76v1oCDgW3g0/wn\\nFd36h0S8njCE9vShCa890aUT3uvwgrma/AvIWRhiLJvtARKel96t+fliTtDTHpLH\\nggVjb97HJjfnuiYy1B8fete8UvQmcPQZMfCcJgC1bYUCAwEAAaMqMCgwEQYJYIZI\\nAYb4QgEBBAQDAgbAMBMGA1UdJQQMMAoGCCsGAQUFBwMBMA0GCSqGSIb3DQEBBQUA\\nA4GBADCkO8fPmu76yWra40iDyMO3APXJBafWfygf5B5R3lNtlC8qnW8fkmMc4ObP\\nA8IhT5Bt2tlWClj/9Q7iLqC9J7fcMClsvedQlDe5Wg7faP9gmPAi3qZ08fv644QU\\nkLwYt4vC8dmxCA/zlj03xbkZDP97mRLGZSezFDe7rcOEIALU\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "LigoWave Default Cert (probably APC Propeller 5) (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

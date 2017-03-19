@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDfzCCAmegAwIBAgIET7O/hzANBgkqhkiG9w0BAQsFADBwMQswCQYDVQQGEwJD\\nTjESMBAGA1UECBMJR3VhbmdEb25nMREwDwYDVQQHEwhTaGVuemhlbjEPMA0GA1UE\\nChMGaHVhd2VpMRQwEgYDVQQLEwtVUG9ydGFsMjgwMDETMBEGA1UEAxMKaHVhd2Vp\\nLmNvbTAeFw0xNDAzMTMwODQ4NTdaFw0yNDAzMTAwODQ4NTdaMHAxCzAJBgNVBAYT\\nAkNOMRIwEAYDVQQIEwlHdWFuZ0RvbmcxETAPBgNVBAcTCFNoZW56aGVuMQ8wDQYD\\nVQQKEwZodWF3ZWkxFDASBgNVBAsTC1VQb3J0YWwyODAwMRMwEQYDVQQDEwpodWF3\\nZWkuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgM692j9iRF6h\\nbtDyGZ2TwtbPbKc50hfvC3W4thtG7rCOUyH8aar9WEwFO1zUgstZTrmBIU7avIz4\\n+1wJjF8Xtc9aySEGtnoct1a/iU8ri5P5bI6kttjTFs0moPTEiXGYT/8X6uiIj5hg\\n8SPmooJiEGzpNyeYUAkEcjJ2+tVLkxkexrcpudrJsxPpqspBC84jn8fGmKPWxqpI\\np/PoP9zOxv0jRr9kIgtAlu2VTbLsZr+InPYkd94N/NzlwJheIF6e/mk1O2JkVlhu\\nEd4PupQMX4A9R5U0Jz4lWQqI7sbNOEQU5dEWmEdhlxZJyr4+imH30yJML9YGP/R1\\n6NBePqLT4QIDAQABoyEwHzAdBgNVHQ4EFgQUhGoXJmpPI2hQwgScIyM9r9TRhZ8w\\nDQYJKoZIhvcNAQELBQADggEBAEfarRObroWacaH4lUWMu2Y3oRrA4BKlfXagxVGj\\nMDxdDVRTgIaXGfnlQnwtr8nWmQR8cLF/PSCwKpRRddgEBmcbvK/P5qmcEre4Zy2d\\n6zA9zqk2VZZZVVbYQ+mnaZqUANIDskv0v31Bsva+DLYTxoxHQsFQMoV8aOJlr71c\\nO4Sj4DAJLxA9RBXE8/7OjHzNAC6Hma4Qqy/bgFB9Gp9fMdPtMfPZi7ghtSVVz3hl\\ngUi+uucKszznqlIpHOWPusvhDe/yl04W+tOytBG1salvFwUm1kl6AhCa3ijtluHX\\nG1G4BfiFgBLHy01saINaIBu6hN+y844MHUqX5RBQM10sz50=\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "pointred_1"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

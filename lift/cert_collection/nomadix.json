@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICBjCCAW+gAwIBAgIJAO+OwjVYHGwFMA0GCSqGSIb3DQEBBQUAMA0xCzAJBgNV\\nBAYTAlVTMB4XDTExMDExMzIxNTI0MloXDTMxMDEwODIxNTI0MlowDTELMAkGA1UE\\nBhMCVVMwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMjevB5HG8jRkUeX/Cmi\\nwq8KCiZ/Epo8I57hQ6KmPVI9JAU1hNt0SCqgSNyZw0J3KdLA159oaZ9clRdXZJEy\\n3hVHMb0iXrMf8RdycvDHyBAw2UjxiuAAhWU002FlbcgxZ1qpoWdFuBRMjhN8dTyo\\no6NdeZ4qgReKoI9o19OyWJeNAgMBAAGjbjBsMB0GA1UdDgQWBBR3+SYAA2DfWIGF\\nq0hzWoWx2ZVugzA9BgNVHSMENjA0gBR3+SYAA2DfWIGFq0hzWoWx2ZVug6ERpA8w\\nDTELMAkGA1UEBhMCVVOCCQDvjsI1WBxsBTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3\\nDQEBBQUAA4GBAI7lGVASSIpBKlVZXTmXJRLump03+XpMsSiG2XD9yvPAYU/QJJ3U\\nPKlOWOh8qGyAsJCBu2DWdNVDh/HVW3VMkDA4Bahse1VZU1hcjzE6FG5uRnFGNRIu\\nM42AWuc5dDopANIPUXPNFBTbh55y3+fGyqUhYg/c20ZXtjLibFCn8N21\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "Nomadix AG series Gateway (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

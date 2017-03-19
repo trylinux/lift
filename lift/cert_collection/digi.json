@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDoDCCAoigAwIBAgIBATANBgkqhkiG9w0BAQQFADBxMQswCQYDVQQGEwJVUzES\\nMBAGA1UECBMJTWlubmVzb3RhMRQwEgYDVQQHEwtNaW5uZWFwb2xpczEbMBkGA1UE\\nChMSRGlnaSBJbnRlcm5hdGlvbmFsMRswGQYDVQQDExJEaWdpIEludGVybmF0aW9u\\nYWwwHhcNMDYwNDI2MTMxODIzWhcNMTYwNDI2MTMxODIzWjBsMQswCQYDVQQGEwJV\\nUzESMBAGA1UECBMJTWlubmVzb3RhMRQwEgYDVQQHEwtNaW5uZWFwb2xpczEbMBkG\\nA1UEChMSRGlnaSBJbnRlcm5hdGlvbmFsMRYwFAYDVQQDEw1EaWdpIFBhc3Nwb3J0\\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXcgQsumj/viGkYs3I/s14J14A\\nVYaqhLRC5zQnQ5WbpeMRNKWqWKLgw4S0LH68vTKl1sjSJMiKdsoVtoyupvMtOBxf\\nxzobwzCGLGsvdAHk8CFzTieWYFcAsRI4Yw7u93opUdpygBQBXrv+yoL9e6c4z6G9\\nxaJyiDgTeXVASM9oZwIDAQABo4HLMIHIMAkGA1UdEwQCMAAwHQYDVR0OBBYEFGfT\\nT2s9uSQAcGBk2NHADn+3q4RsMIGbBgNVHSMEgZMwgZCAFDNUaagNoOgWYjLW80E2\\nPcdhZpx2oXWkczBxMQswCQYDVQQGEwJVUzESMBAGA1UECBMJTWlubmVzb3RhMRQw\\nEgYDVQQHEwtNaW5uZWFwb2xpczEbMBkGA1UEChMSRGlnaSBJbnRlcm5hdGlvbmFs\\nMRswGQYDVQQDExJEaWdpIEludGVybmF0aW9uYWyCAQAwDQYJKoZIhvcNAQEEBQAD\\nggEBAKo51xNSC5UePqpRXHcsnBPJSe1Bzx9EU/aN3YqpK2uIlPFM2tV0ZjQxCZMs\\nMYY/pavUEIaq/MnUu8D5I8EZ7qFonS/HrNvXZC4upr5HjYseaojudA1I6MCo4Qy+\\nuHUCf5i1/SYsFrTPRA7oNknUohnuNeifNKsQYYm8zX7dfeegOZiQ+ImCGU5xkoi0\\nW4SFULuXneGe4JjwQkAYXJv4iFaMb6acpvsWFN9DUeSbcJaU3jcryBHurMtJLy9A\\nu5ddMvaTH02dLiwz7oQk8SlMIkyGOZG9IIIxnBYRgDmthR/gvb9juZkN+6u8pS1M\\nJ3KFurvqpIH/xz0bMfa8a317r2M=\\n-----END CERTIFICATE-----\\n",
+			"display_name": "Digi Passport Default Cert (443/SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

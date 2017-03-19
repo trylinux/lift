@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICqzCCAhSgAwIBAgIBATANBgkqhkiG9w0BAQUFADCBiTEeMBwGA1UEAxMVbW1j\\nYS5tZXJ1bmV0d29ya3MuY29tMRMwEQYDVQQIEwpDYWxpZm9ybmlhMQswCQYDVQQG\\nEwJVUzEnMCUGCSqGSIb3DQEJARYYc3VwcG9ydEBtZXJ1bmV0d29ya3MuY29tMRww\\nGgYDVQQKExNNZXJ1IE5ldHdvcmtzLCBJbmMuMB4XDTA0MDgyNDAwMDYzMVoXDTE0\\nMDgyMjAwMDYzMVowgZ0xMjAwBgNVBAMTKU1lcnUgTmV0d29ya3MgTWFuYWdlbWVu\\ndCBJbnRlcmZhY2UgU2VydmVyMRMwEQYDVQQIEwpDYWxpZm9ybmlhMQswCQYDVQQG\\nEwJVUzEnMCUGCSqGSIb3DQEJARYYc3VwcG9ydEBtZXJ1bmV0d29ya3MuY29tMRww\\nGgYDVQQKExNNZXJ1IE5ldHdvcmtzLCBJbmMuMIGfMA0GCSqGSIb3DQEBAQUAA4GN\\nADCBiQKBgQDY+Ryi2W05jXrkzYbyKxYh/iuFuKoEHLErV6Jaq6dU7tsl9apiZKgl\\nk0A+mcQdT6h5IB8xm7QXoETsY4f4GCXPuIbn/KiIzOLoXItlPiMbuU52IdCPbVn8\\nm4PBuQCZP4qV0BZxc/97bjZZJqgwYSSvdwokimhBQgNIOGzoCr0vlwIDAQABow0w\\nCzAJBgNVHRMEAjAAMA0GCSqGSIb3DQEBBQUAA4GBAAwVQwxYizpzhWl2acQCqQ5j\\nX1vRewdkXIRY3/8SCBlLqLDYnNK5dhdJBHdsKv8plo0p0vD4w9Ii0rTwBGOUh4vG\\nkhKMWD3ICGia7EJeg3YHKknSXg0Muu7B/YHA9pqa6iR6VAAHHEBhjD0VlfCpAc4q\\nvrzfqyy7NhSM3VHVLQc3\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "Meru Network Management Device  (443/SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

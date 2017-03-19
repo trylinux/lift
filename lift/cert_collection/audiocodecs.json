@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICAjCCAWugAwIBAgIBADANBgkqhkiG9w0BAQQFADBHMQ4wDAYDVQQDEwVNUDIw\\nMjETMBEGA1UEChMKQXVkaW9Db2RlczELMAkGA1UEBhMCVVMxEzARBgNVBAMTCkF1\\nZGlvQ29kZXMwHhcNMDMwMTAxMDIyOTQ1WhcNMjIxMjI3MDIyOTQ1WjBHMQ4wDAYD\\nVQQDEwVNUDIwMjETMBEGA1UEChMKQXVkaW9Db2RlczELMAkGA1UEBhMCVVMxEzAR\\nBgNVBAMTCkF1ZGlvQ29kZXMwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAK8K\\nhWm7rL4zcVTD4gYY00e2hovt4kKQPIEDWPsEwRzRRZu60qv89QB4i0pd8fxZeoiA\\nI+7iuR5anGNGu/30ZGv8USW6O3z3r55wK1E3fBnRcMieU4320bkFTcHj6TC0E+uh\\n5job2oNVS58TBzNIQeZgmRn5GHWn7T304KAxiySRAgMBAAEwDQYJKoZIhvcNAQEE\\nBQADgYEArrb/vdoj9KLFNUsO81dnCkKS7xAWf37RyfaJMGY+1lcQP/ZYeGpa/WlE\\nz6n452wUiuPIlVBsATpxQ1zux2lb32ltgjoFL7cT8dt8VW3zPnHTifMnq41j6t90\\n11nnSFH0Xz8ETHkd4yYxVisp61EVLkPAy66ccrfJsCJWznMp5ew=\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "AudioCodecs MP serices 443/8443 Default Cert (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

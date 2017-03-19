@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDfTCCAuagAwIBAgIBATANBgkqhkiG9w0BAQQFADCBhTELMAkGA1UEBhMCVVMx\\nEzARBgNVBAgTCkNhbGlmb3JuaWExEjAQBgNVBAcTCVNhbiBCcnVubzEfMB0GA1UE\\nChMWSXJvblBvcnQgU3lzdGVtcywgSW5jLjEsMCoGA1UEAxMjSXJvblBvcnQgQXBw\\nbGlhbmNlIERlbW8gQ2VydGlmaWNhdGUwHhcNMDYwNTAxMjI1NzU4WhcNMTYwNTAx\\nMjI1NzU4WjCBhTELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExEjAQ\\nBgNVBAcTCVNhbiBCcnVubzEfMB0GA1UEChMWSXJvblBvcnQgU3lzdGVtcywgSW5j\\nLjEsMCoGA1UEAxMjSXJvblBvcnQgQXBwbGlhbmNlIERlbW8gQ2VydGlmaWNhdGUw\\ngZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALebxVos+JhWxNgAHKNZ7jtrtgsK\\ndx94/76c/316FW5nS2Y1M6ZvhOE2rblbs9riDcPMkiDrt6Cdd/GU4WdGYoG/SWxr\\n+0FqAiGLqyo45xUSmwg/hE/+LX3v1XM/bW0+SPUsyiXCFObafOFieHkaV+Rj9f3r\\n6f62Xsx6AlGyKQfjAgMBAAGjgfowgfcwCQYDVR0TBAIwADAsBglghkgBhvhCAQ0E\\nHxYdT3BlblNTTCBHZW5lcmF0ZWQgQ2VydGlmaWNhdGUwHQYDVR0OBBYEFNeVBunw\\no9Zl9hGQvMJMuuY0qg7IMIGcBgNVHSMEgZQwgZGhgYukgYgwgYUxCzAJBgNVBAYT\\nAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRIwEAYDVQQHEwlTYW4gQnJ1bm8xHzAd\\nBgNVBAoTFklyb25Qb3J0IFN5c3RlbXMsIEluYy4xLDAqBgNVBAMTI0lyb25Qb3J0\\nIEFwcGxpYW5jZSBEZW1vIENlcnRpZmljYXRlggEAMA0GCSqGSIb3DQEBBAUAA4GB\\nAKtUIDqKx1BnIB0cqRNcU4sPsy1gUhp2ieynoep2LEILGEiYTb08hmyvDUFzBn+P\\nUnv/RfHrD8XX4w/4ptV6e+jzwlqf63JBG3JZ4dGCp/jEX//SJtevmenctZRD4hyI\\nATAp5F6VvERCk7YfvFRmPUua15wLUyDMFFdr46IUMrxg\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "Cisco IronPort Device Default SSL (443/SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

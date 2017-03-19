@@ -1,0 +1,31 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDBjCCAm+gAwIBAgIJAJXnvRDyazyBMA0GCSqGSIb3DQEBBAUAMIGbMQswCQYD\\nVQQGEwJDTjERMA8GA1UECAwIWmhlSmlhbmcxETAPBgNVBAcMCEhhbmdaaG91MRIw\\nEAYDVQQKDAlISUtWSVNJT04xDzANBgNVBAsMBkRWUk5WUjEaMBgGA1UEAwwRd3d3\\nLmhpa3Zpc2lvbi5jb20xJTAjBgkqhkiG9w0BCQEWFm1lbmdob25nQGhpa3Zpc2lv\\nbi5jb20wHhcNMTIxMTIzMDU1NTE1WhcNMTUwODIwMDU1NTE1WjCBmzELMAkGA1UE\\nBhMCQ04xETAPBgNVBAgMCFpoZUppYW5nMREwDwYDVQQHDAhIYW5nWmhvdTESMBAG\\nA1UECgwJSElLVklTSU9OMQ8wDQYDVQQLDAZEVlJOVlIxGjAYBgNVBAMMEXd3dy5o\\naWt2aXNpb24uY29tMSUwIwYJKoZIhvcNAQkBFhZtZW5naG9uZ0BoaWt2aXNpb24u\\nY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDWDboSDAm2WPEBgt1wzDV\\nnDfELEPcvIdtLyHjae7VQNbcTM3n0xlB9S8ptWTOJzI2+eb3U97wMTAH3u24Stii\\nwU5bqKi3PlPNCHpwB6wz7jkcjP+/6ZTZ3rc2l99hKgmuxV7XTsrrKzExRY42YTWO\\naekgWMp9L1UU0aqkBroheQIDAQABo1AwTjAdBgNVHQ4EFgQUSWUSK752hniMZvoC\\njykG9jGdOegwHwYDVR0jBBgwFoAUSWUSK752hniMZvoCjykG9jGdOegwDAYDVR0T\\nBAUwAwEB/zANBgkqhkiG9w0BAQQFAAOBgQC1GHVqLN5mLN5lMxcjNG43MNlWHNtb\\nlvjQzw6h2iuRYxQRo8EdBC9l0J1tbVZZHUNXSYma6eZ3k/QMhCefiCfxQn4vIrGC\\ntNDihITTgAiH1HPlmiI9HUhZ+QFj7uUmhAz/3Se5DbfDup70BpsvxSJT/w5hEB+u\\ndd7a3UvS/6S3jw==\\n-----END CERTIFICATE----\\n", 
+			"display_name": "Hikvision Default Cert"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "DVRDVS-Webs",
+			"title_search_text": "",
+			"display_name": "Hikvision-Based DVR (Server)"
+		},
+		{
+			"server_search_text": "Hikvision-Webs",
+			"title_search_text": "",
+			"display_name": "Hikvision-Based DVR (Server)"
+		},
+		{
+			"server_search_text": "App-webs/",
+			"title_search_text": "",
+			"display_name": "Hikvision-Based DVR (Server)"
+		}
+
+	]
+}

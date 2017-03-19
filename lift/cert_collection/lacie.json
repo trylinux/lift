@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIC6zCCAlSgAwIBAgIJAKTLHg/rmCoPMA0GCSqGSIb3DQEBBQUAMFgxCzAJBgNV\\nBAYTAkZSMRMwEQYDVQQIEwpTb21lLVN0YXRlMQ4wDAYDVQQHEwVQYXJpczERMA8G\\nA1UEChMITGFDaWUgU0ExETAPBgNVBAMTCExhQ2llIFNBMB4XDTA4MDMxODE1NDkx\\nNFoXDTE4MDMxNjE1NDkxNFowWDELMAkGA1UEBhMCRlIxEzARBgNVBAgTClNvbWUt\\nU3RhdGUxDjAMBgNVBAcTBVBhcmlzMREwDwYDVQQKEwhMYUNpZSBTQTERMA8GA1UE\\nAxMITGFDaWUgU0EwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAODCCk7M8SXP\\nOz1V6voa9+gejcw8XBAKQrwZ7TryVBdiCLLMTjMfXzzQbFyV2/9YVMrF6wtw0dI7\\nx3Zah0c6yBnozyzlinbrxsfd3+cns0fiY9Cp2k4tsygLAM5PUoLSI033fOgYOvbZ\\nBmZleYNaK7QMHpLebp3JS2+ObW9PDwZxAgMBAAGjgbwwgbkwHQYDVR0OBBYEFInG\\n5znSN5zNGcdGaUbbRaXWtdnGMIGJBgNVHSMEgYEwf4AUicbnOdI3nM0Zx0ZpRttF\\npda12cahXKRaMFgxCzAJBgNVBAYTAkZSMRMwEQYDVQQIEwpTb21lLVN0YXRlMQ4w\\nDAYDVQQHEwVQYXJpczERMA8GA1UEChMITGFDaWUgU0ExETAPBgNVBAMTCExhQ2ll\\nIFNBggkApMseD+uYKg8wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQBZ\\nzgu95JmMxslEcLFnfGRgS0uI8TkJlppoLHsc/tN+NsnTx58WLn699WuV5qy88djV\\nv9ZliXvmr6KFpgYGMUXb4AOLPJkSOofoGTUgf16p9S1xcyLuDnv9cU8QIjPtJe1R\\nOAJJabSdn6UvnY7fwO8CHAPaM+efGWWxViOkAZJNIQ==\\n-----END CERTIFICATE-----\\n",  
+			"display_name": "LaCie CloudBox (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

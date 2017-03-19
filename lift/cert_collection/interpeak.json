@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDBzCCAnCgAwIBAgIBCzANBgkqhkiG9w0BAQQFADBxMQswCQYDVQQGEwJTRTES\\nMBAGA1UECBMJU3RvY2tob2xtMRIwEAYDVQQHEwlTdG9ja2hvbG0xEjAQBgNVBAoT\\nCUludGVycGVhazEUMBIGA1UECxMLRGV2ZWxvcG1lbnQxEDAOBgNVBAMTB1Rlc3Qg\\nQ0EwHhcNMDMwOTIyMTEzMzQzWhcNMDgwOTIwMTEzMzQzWjBUMQswCQYDVQQGEwJT\\nRTESMBAGA1UECBMJU3RvY2tob2xtMRIwEAYDVQQKEwlJbnRlcnBlYWsxHTAbBgNV\\nBAMTFGlwd2Vicy5pbnRlcnBlYWsuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB\\niQKBgQDcRErz2s+oJD1/FqeYXQc/FODeZk/LtrR6RkpwsYnTP+Wgi+TuqlWsIH93\\nbodh6g4bowTEz+Mi7rN5GSXVCMD21ty/edYg8QB6hyfyLqwAhdofippryrPUidnX\\naDKZwzRCsojKYPxq1OgHNeAKUVprihDxXfRmwaTZMad15xC5LQIDAQABo4HLMIHI\\nMAkGA1UdEwQCMAAwHQYDVR0OBBYEFOghcvw/2RAQaWyf+koKyRT00Ph0MIGbBgNV\\nHSMEgZMwgZCAFKz+iHi8ujH8Efr9gk121K5RXgB5oXWkczBxMQswCQYDVQQGEwJT\\nRTESMBAGA1UECBMJU3RvY2tob2xtMRIwEAYDVQQHEwlTdG9ja2hvbG0xEjAQBgNV\\nBAoTCUludGVycGVhazEUMBIGA1UECxMLRGV2ZWxvcG1lbnQxEDAOBgNVBAMTB1Rl\\nc3QgQ0GCAQAwDQYJKoZIhvcNAQEEBQADgYEA0UCtTFM5ZBMyB9BRtyYtxalEL/Bw\\nATPRaqAyCou1w2BZaz0HixE6mpyOsDMgK376N7X0O2FEr5MYbZcWgrlKJGeXPghT\\nQIrPM7ImesJyyu+9Qv41lVYOVAbpTBEjnIUm2QvSVjb5r++F3dWwH9S/bhM5Mn/s\\n3iGgfUthSvury/k=\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "Something made by interpeak (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICrTCCAhYCCQC6Ffdh27eytzANBgkqhkiG9w0BAQUFADCBmjELMAkGA1UEBhMC\\nVVMxCzAJBgNVBAgTAkNBMREwDwYDVQQHEwhTYW4gSm9zZTEfMB0GA1UEChMWVWJp\\ncXVpdGkgTmV0d29ya3MgSW5jLjEaMBgGA1UECxMRVGVjaG5pY2FsIFN1cHBvcnQx\\nDTALBgNVBAMTBFVCTlQxHzAdBgkqhkiG9w0BCQEWEHN1cHBvcnRAdWJudC5jb20w\\nHhcNMTEwNjAyMDgzNTAyWhcNMjAwMTAxMDgzNTAyWjCBmjELMAkGA1UEBhMCVVMx\\nCzAJBgNVBAgTAkNBMREwDwYDVQQHEwhTYW4gSm9zZTEfMB0GA1UEChMWVWJpcXVp\\ndGkgTmV0d29ya3MgSW5jLjEaMBgGA1UECxMRVGVjaG5pY2FsIFN1cHBvcnQxDTAL\\nBgNVBAMTBFVCTlQxHzAdBgkqhkiG9w0BCQEWEHN1cHBvcnRAdWJudC5jb20wgZ8w\\nDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAL4JnxQ69+7lisl2siYXAHsMhRyUjr1/\\n9aGlbQosZMx/eLwR7tzZ5irL4Z7YF6acNaraxcE6pUjcr7yZN1l+iDws07vnYG3j\\nGflOGExMOv1eNW+jULlQwI6L+qDuxJbFuk7t2PEYBTaJVMLcJ+t1dBy+mkzI5c7+\\nR0SWp68QB+sVAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAAFoxgToVbTCVjQORR6oj\\n4rTALtQBzdUha2lePHEnEBz1h9QoGRfCPew2/e6TB48LMGUOKDVsJZ7YJBaFZSna\\nR98wCYQzLLS0+vAkQLnuHvAcM8PhBnAua/6g0KqBb88bcGdDATKg2ryMqJHzy7GX\\nMATyxnfoiZcs0x/PA/H8Nvo=\\n-----END CERTIFICATE-----\\n",  
+			"display_name": "Ubiquiti AirMax or AirFiber Device (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "Ubiquiti",
+			"title_search_text": "EdgeOS",
+			"display_name": "EdgeOS Device (SSL + Server header)"
+		}
+
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICgDCCAekCAQMwDQYJKoZIhvcNAQEEBQAwgaIxJjAkBgNVBAoTHUxpZmVTaXpl\\nIENvbW11bmljYXRpb25zLCBJbmMuMQswCQYDVQQLEwJJVDEmMCQGCSqGSIb3DQEJ\\nARYXaG9zdG1hc3RlckBsaWZlc2l6ZS5jb20xDzANBgNVBAcTBkF1c3RpbjEOMAwG\\nA1UECBMFVGV4YXMxCzAJBgNVBAYTAlVTMRUwEwYDVQQDEwxsaWZlc2l6ZS5jb20w\\nHhcNMDYxMTIxMjAyNjM5WhcNMTYxMTE4MjAyNjM5WjBuMQswCQYDVQQGEwJVUzEO\\nMAwGA1UECBMFVGV4YXMxJjAkBgNVBAoTHUxpZmVTaXplIENvbW11bmljYXRpb25z\\nLCBJbmMuMQswCQYDVQQLEwJJVDEaMBgGA1UEAxQRQV9MaWZlU2l6ZV9TeXN0ZW0w\\ngZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAOTG/rVqWK6UDA9B/bFSXBx3Txwp\\n3caV31LfDzl4h1ZmOcoL7JFvWAG2OkBBDqmHYbseB/y9S83X6RCpyKUeP8A85Fmg\\n45DOuIGzNaInDOAkDNHNtRc6GkTJISe1Xh3bIsps8w4T51pFX99rtCEklMC/v0PN\\nrhkhhvikLH9fRH8nAgMBAAEwDQYJKoZIhvcNAQEEBQADgYEAaGCMOb3DmKVe79gn\\nGfLzTMowoNsbxxKgDAGtYaRa8iyDitOJBUka98yxYbWHXu0V0dZZImy4Rgez+1G7\\nl9M/CEaV86EUD5NhRFa5hqsqD5T9E4yRFlZZfKlBiePp62yCuUIbyNU8a64dsBCV\\nbHQeQfAiLVM+XGhriPvwCyJJNM8=\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "Lifesize Product (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

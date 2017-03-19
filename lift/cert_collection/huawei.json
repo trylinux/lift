@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDDDCCAnWgAwIBAgICAScwDQYJKoZIhvcNAQEFBQAwajELMAkGA1UEBhMCY24x\\nCzAJBgNVBAgTAmdkMQswCQYDVQQHEwJzejELMAkGA1UEChMCaHcxDDAKBgNVBAsT\\nA25zZDELMAkGA1UEAxMCengxGTAXBgkqhkiG9w0BCQEWCnp4QHRvbS5jb20wHhcN\\nMDcwNTI1MDE1NTI1WhcNMTcwNTIyMDE1NTI1WjBpMQswCQYDVQQGEwJjbjELMAkG\\nA1UECBMCZ2QxCzAJBgNVBAoTAmh3MQwwCgYDVQQLEwNuc2QxETAPBgNVBAMTCHp4\\nc2VydmVyMR8wHQYJKoZIhvcNAQkBFhB6eHNlcnZlckB0b20uY29tMIGfMA0GCSqG\\nSIb3DQEBAQUAA4GNADCBiQKBgQCdtX28w9zMSco1QTFrHsVvtYVY9OjKO3+a80yu\\niUV9kH3RciCDFOQI/2Qri+H+bfUS3DHPyiNaixk/J5EmlUBCqdxmMiQ1T5MB6deA\\nsSPdpAnj+7JjUtINnwLe3p0ZSXnp0m8KdS18oVwHdtLYYzg4MXLIOOO69LJWqKGR\\nqGVXBwIDAQABo4HBMIG+MB0GA1UdDgQWBBQUhNXir8oqJ0AWxB+DKiMxoXo6XTCB\\nnAYDVR0jBIGUMIGRgBQ1CjPqq7qryz38LQCGO/yFR8I82aFupGwwajELMAkGA1UE\\nBhMCY24xCzAJBgNVBAgTAmdkMQswCQYDVQQHEwJzejELMAkGA1UEChMCaHcxDDAK\\nBgNVBAsTA25zZDELMAkGA1UEAxMCengxGTAXBgkqhkiG9w0BCQEWCnp4QHRvbS5j\\nb22CCQCTp3Zqdnt76TANBgkqhkiG9w0BAQUFAAOBgQAlKRs/jPOeDblgjuWLgdcP\\nfYUL+WXednJkJMw3PKc6AUyCZIGpdBZMu0OHVMY0gxqoMj/EDLQCClHmX819s9Gu\\n3ik90z2dB+yjdzdlLYxYjPbaqMwfK+UUXKD9OHlbaDvtNjwvkN97UgeZSSI1BL1X\\nGuFbwRTnibA0E7BMoNA6Sg==\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "Huawei Home Gateway HG658d (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}
