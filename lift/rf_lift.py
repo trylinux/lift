@@ -556,9 +556,9 @@ def recurse_ssdp_check(dest_ip, **kwargs):
 
 
 def ntp_monlist_check(dest_ip, **kwargs):
+    '''Check whether the device, indicated by the given IP address, is
+    vulnerable to the NTP monlist command.
     '''
-    '''
-    vbose = kwargs['verbose']
     try:
         a = ntp_function.NTPscan().monlist_scan(dest_ip)
         if a is None:
@@ -569,10 +569,6 @@ def ntp_monlist_check(dest_ip, **kwargs):
     except KeyboardInterrupt:
         print "Quitting"
         sys.exit(1)
-    except Exception as e:  # TODO replace with more specific exception
-        if vbose is not None:
-            print "Error in ntp_monlist",e
-        pass
 
 
 def is_host_up(dest_ip, **kwargs):

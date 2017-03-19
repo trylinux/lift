@@ -23,60 +23,59 @@ class NTPscan:
     who have connected to that server.
     '''
 
+    MAX_RETRIES = 3
+
     def monlist_scan(self, target):
         '''Simulate the monlist command and return `results`, a boolean
-        indicating whether or not an answer was received.
+        indicating whether or not the device is vulnerable to this attack.
 
         If the `target` device is an NTP server that accepts the monlist
         request and that server is unpatched, it will return a lot of packets
         (each about 500 bytes) instead of returning one small packet.
         '''
-        #TODO figure out the relevant exceptions to add and/or handle
-
-        # `data` is the "get monlist" request
-        data = "\x17\x00\x03\x2a" + "\x00" * 4
-
-        # Create an IP layer for the packet, spoofing the target's address
-        ip = IP(dst=target)
-
-        # Create a UDP layer for the packet
-        udp = UDP(sport=random.randint(49152, 65536), dport=123)
-
-        # Create a Raw layer for the packet
-        a = Raw(load=data)
-
-        # A layer is a subclass of the Packet class.
-        # All the logic behind layer manipulation is held by the Packet class
-        # and will be inherited. A simple layer is compounded by a
-        # list of fields that will be either concatenated when assembling the
-        # layer or dissected one by one when disassembling a string.
-        # Assemble the packet comprised of the layers IP, UDP and Raw.
-        pck = ip/udp/a
+        results = None
 
         # number of attempts
         retries = 0
 
-        results = None
+        try:
+            # `data` is the "get monlist" request
+            data = "\x17\x00\x03\x2a" + "\x00" * 4
 
-        while (retries < 3):
+            # Create an IP layer for the packet, spoofing the target's address
+            ip = IP(dst=target)
 
-            # The sr() function is for  sending packets and receiving answers.
-            # The function returns a couple of packet and answers, and the
-            # unanswered packets. The function sr1() is a variant that only
-            # return one packet that answered the packet (or the packet set)
-            # sent. Send the single packet `pck` to `target`, the given
-            # IP address. Quit after receving a single response.
-            rep = sr1(pck, verbose=0, timeout=5)
+            # Create a UDP layer for the packet
+            udp = UDP(sport=random.randint(49152, 65536), dport=123)
 
-            if hasattr(rep, 'answers'):
-                results = 1
-                break
+            # Create a Raw layer for the packet
+            a = Raw(load=data)
 
-            elif not hasattr(rep, 'answers') and (retries < 3):
-                retries += 1
+            # Assemble a packet `pck` comprised of the layers IP, UDP and Raw.
+            pck = ip/udp/a
 
-            else:
-                results = None
-                break
+            while (retries < MAX_RETRIES):
 
-        return results
+                # Send the assembled packet `pck` to `target`, and the given
+                # IP address. Return one packet that answered the packet set we
+                # sent, not unanswered packets. Quit after receving a single
+                # response.
+                # The timeout parameter specifies the time to wait after the
+                # last packet has been sent.
+                rep = sr1(pck, verbose=0, timeout=5)
+
+                if hasattr(rep, 'answers'):
+                    results = 1
+                    break
+
+                elif not hasattr(rep, 'answers') and (retries < MAX_RETRIES):
+                    retries += 1
+
+                else:
+                    results = None
+                    break
+
+            return results
+        except Exception as e:  # TODO replace with more specific exception
+            if kwargs['verbose']:
+                print "Error in ntp_monlist ", e
