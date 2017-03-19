@@ -122,6 +122,9 @@ def get_ips_from_asn(options):
     subnets in the given Autonomous System Number.
     '''
     ip_list = []
+    libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
+    asndb = pyasn.pyasn(libpath + '/ipasn.dat')
+
     subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
 
     # creates a nested list of lists
@@ -589,8 +592,6 @@ def main():
     '''
     configure_logging()
     options = parse_args()
-    libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
-    asndb=pyasn.pyasn(libpath + '/ipasn.dat')
     results = []
     try:
         ip_list = convert_input_to_ips(options)
