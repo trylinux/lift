@@ -136,54 +136,6 @@ def get_ips_from_asn(options):
     return ip_list
 
 
-def convert_input_to_ips(options):
-    '''Call the correct function to normalize the command line argument that
-    contains the IP addresses, and return a list of IP addresses.
-    '''
-    try:
-        dispatch = {
-            'ip': get_ips_from_ip,
-            'ifile': get_ips_from_file,
-            'subnet': get_ips_from_subnet,
-            'asn': get_ips_from_asn,
-        }
-
-        correct_function = next(v for k, v in dispatch.items() if options[k])
-        ip_list = correct_function(options)
-        return ip_list
-    except KeyError:
-        raise ValueError('None of the cli arguments contained IP addresses.')
-
-
-def process_ip(ip, options):
-    '''Call the correct function(s) to process the IP address based on the
-    port and recurse options passed into the command line..
-    '''
-    dispatch_by_port = {
-        options['port'] == 80: (get_headers),
-        options['port'] != 80 and not options['recurse']: (test_ip),
-        options['port'] == 53 and options['recurse']: (recurse_DNS_check),
-        options['port'] == 123 and options['recurse']: (ntp_monlist_check),
-        options['port'] == 1900 and options['recurse']: (recurse_ssdp_check),
-        options['port'] != 80 and options['recurse']: (
-            recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check),
-    }
-
-    try:
-        correct_functions = dispatch_by_port[True]
-        [func(ip, **options) for func in correct_functions]
-    except KeyError:
-        raise ValueError('Invalid port number was supplied by the user.')
-
-
-def is_valid_ip(ip):
-    '''Try to create an IP object using the given ip.
-    Return True if an instance is successfully created, otherwise return False.
-    '''
-    # TODO install & import IPy
-    return True
-
-
 def get_device_description(device_name):
     '''Lookup the given device name `device_name` in lift's collection of 
     certificates for an exact name match. If none are found, search for a 
@@ -585,6 +537,54 @@ def is_host_up(dest_ip, **kwargs):
     if response == 0:
           test_ip(dest_ip, **kwargs)
     # TODO think about a relevant exception
+
+
+def is_valid_ip(ip):
+    '''Try to create an IP object using the given ip.
+    Return True if an instance is successfully created, otherwise return False.
+    '''
+    # TODO install & import IPy
+    return True
+
+
+def convert_input_to_ips(options):
+    '''Call the correct function to normalize the command line argument that
+    contains the IP addresses, and return a list of IP addresses.
+    '''
+    try:
+        dispatch = {
+            'ip': get_ips_from_ip,
+            'ifile': get_ips_from_file,
+            'subnet': get_ips_from_subnet,
+            'asn': get_ips_from_asn,
+        }
+
+        correct_function = next(v for k, v in dispatch.items() if options[k])
+        ip_list = correct_function(options)
+        return ip_list
+    except KeyError:
+        raise ValueError('None of the cli arguments contained IP addresses.')
+
+
+def process_ip(ip, options):
+    '''Call the correct function(s) to process the IP address based on the
+    port and recurse options passed into the command line..
+    '''
+    dispatch_by_port = {
+        options['port'] == 80: (get_headers),
+        options['port'] != 80 and not options['recurse']: (test_ip),
+        options['port'] == 53 and options['recurse']: (recurse_DNS_check),
+        options['port'] == 123 and options['recurse']: (ntp_monlist_check),
+        options['port'] == 1900 and options['recurse']: (recurse_ssdp_check),
+        options['port'] != 80 and options['recurse']: (
+            recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check),
+    }
+
+    try:
+        correct_functions = dispatch_by_port[True]
+        [func(ip, **options) for func in correct_functions]
+    except KeyError:
+        raise ValueError('Invalid port number was supplied by the user.')
 
 
 def main():
