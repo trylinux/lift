@@ -37,7 +37,7 @@ Lift is all about getting a slightly less fuzzy idea about what a device is base
 
 #### Identify the device using SSL Certificates
 
-1. Lift negotiates a SSL/TLS socket at the device's IP address, but never actually makes a request. In doing so, lift does not generate a log on the device that you are trying to detect. 
+1. Lift negotiates a SSL/TLS socket connection to the device's IP address, but never actually makes a request. In doing so, lift does not generate a log on the device that you are trying to detect. 
 
 
 2. It then compares the device's SSL certificate against lift's collection of certificates, and returns any device names that tend to match that certificate.
@@ -84,7 +84,7 @@ The best way to use this tool is to run
 $ python lift.py -f <file_with_one_ip_per_line> -I 
 ```
 
-Only of the required arguments can be supplied when running the lift tool.
+Only one of the required arguments can be supplied when running the lift tool.
 
 **Required Arguments**:
 
@@ -95,16 +95,17 @@ Only of the required arguments can be supplied when running the lift tool.
 
 **Optional Arguments**:
 - **--I** &nbsp;&nbsp; or &nbsp;&nbsp; **--info**  - Get more info about operations
+- **--p** &nbsp;&nbsp; or &nbsp;&nbsp; **--port**  `integer` - The port number at the supplied IP address that lift should connect to.
 - **--recurse** - Test Recursion
 - **--recon**   - Gather information about a given device.
-- **--verbose** - ****WARNING**** DO NOT USE `-v` UNLESS YOU WANT ALL THE REASONS WHY SOMETHING IS FAILING.
+- **--v** &nbsp;&nbsp; or  **--verbose** - ****WARNING**** DO NOT USE `-v` UNLESS YOU WANT ALL THE REASONS WHY SOMETHING IS FAILING.
 
 
 
 
 ## Documentation and Support
 
-If you want more signatures added to lift's collection of certificates, please note your request in this project's Issues tracker. The lift tool is still in under development and will be for some time. Keep your eyes open for changes!
+If you want more signatures added to lift's collection of certificates, please note your request in this project's [Issues tracker](https://github.com/trylinux/lift/issues). The lift tool is still in under development and will be for some time. Keep your eyes open for changes!
 
 -ZW
 
@@ -131,7 +132,7 @@ If you want more signatures added to lift's collection of certificates, please n
 
 #### Features
 
-- Apply asynchronous programming concepts and/or parallelization (multi-threading) to speed up the slow task of checking each IP address.
+- Apply asynchronous programming concepts and/or parallelization techniques (multi-threading) to speed up the slow task of checking each IP address.
 
 - Write a tool for adding signatures in a standard fashion. In doing so, users of lift can supply their own list of indicators against which lift will compare the devices that it checks.
 
