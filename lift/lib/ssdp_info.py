@@ -1,21 +1,15 @@
 import sys
-if 'threading' in sys.modules:
-    del sys.modules['threading']
-import gevent
-import gevent.socket
-import gevent.monkey
-gevent.monkey.patch_all()
-from ssdp_function import ssdp_scan
 import re
 import json
-
+from ssdp_function import ssdp_scan
 
 
 def get_ssdp_information(ipaddr):
+	
 	try:
 		string = (ssdp_scan().active_scan(str(ipaddr))).splitlines
 		if string is not None:
-			for index,item in enumerate(string()):
+			for index, item in enumerate(string()):
 				if "SERVER" in item:
 					server_information = re.sub('SERVER\: ', '', item)
 				elif "LOCATION" in item:
@@ -25,6 +19,8 @@ def get_ssdp_information(ipaddr):
 			b = json.dumps(a)
 		else:
 			b = None
+	
 	except Exception as e:
 		b = None
+	
 	return b
