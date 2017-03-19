@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "https://ami.com/en/", 
+		"company_name": "American Megatrends Inc.", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIICLDCCAdYCAQAwDQYJKoZIhvcNAQEEBQAwgaAxCzAJBgNVBAYTAlVTMRAwDgYD\\nVQQIEwdHZW9yZ2lhMREwDwYDVQQHEwhOb3Jjcm9zczEhMB8GA1UEChMYQW1lcmlj\\nYW4gTWVnYXRyZW5kcyBJbmMuMRswGQYDVQQLExJTZXJ2aWNlIFByb2Nlc3NvcnMx\\nDDAKBgNVBAMTA0FNSTEeMBwGCSqGSIb3DQEJARYPc3VwcG9ydEBhbWkuY29tMB4X\\nDTA2MDMwODIyMDEwN1oXDTA2MDQwNzIyMDEwN1owgaAxCzAJBgNVBAYTAlVTMRAw\\nDgYDVQQIEwdHZW9yZ2lhMREwDwYDVQQHEwhOb3Jjcm9zczEhMB8GA1UEChMYQW1l\\ncmljYW4gTWVnYXRyZW5kcyBJbmMuMRswGQYDVQQLExJTZXJ2aWNlIFByb2Nlc3Nv\\ncnMxDDAKBgNVBAMTA0FNSTEeMBwGCSqGSIb3DQEJARYPc3VwcG9ydEBhbWkuY29t\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALOWPs653sarkCEl+p8ilYlTFpsbkjPM\\nXBJXSW/ywspGpWRsA/4ZJ56mSZ3KoG2b8B3hTHa0x+OzsHMc4KjBAHUCAwEAATAN\\nBgkqhkiG9w0BAQQFAANBAFtIie0zLCtmudKPZtjVBf/lHxRfvx9VK1AMAGEROcX9\\nkCckKdN+wcdqIlkVy/Mq1Tqw2UA3fwry6uEneGjXMw4=\\n-----END CERTIFICATE-----\\n",  
+			"display_name": "AMI MegaRac Remote Management Default Cert (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

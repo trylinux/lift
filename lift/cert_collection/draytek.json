@@ -1,0 +1,25 @@
+{
+	"profile_info": {
+		"website": "draytek.com", 
+		"company_name": "DrayTek", 
+		"description": "A Taiwanese manufacturer of broadband-related equipment such as firewalls, VPN devices, switches, and routers. Their flagship product series is the Vigor product line"
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDaTCCAlGgAwIBAgIBATANBgkqhkiG9w0BAQsFADB4MQswCQYDVQQGEwJUVzEQ\\nMA4GA1UECBMHSHNpbkNodTEOMAwGA1UEBxMFSHVLb3UxFjAUBgNVBAoTDURyYXlU\\nZWsgQ29ycC4xGDAWBgNVBAsTD0RyYXlUZWsgU3VwcG9ydDEVMBMGA1UEAxMMVmln\\nb3IgUm91dGVyMB4XDTE0MDUxNDA2MDUwMFoXDTM5MDUxNDA2MDUwMFoweDELMAkG\\nA1UEBhMCVFcxEDAOBgNVBAgTB0hzaW5DaHUxDjAMBgNVBAcTBUh1S291MRYwFAYD\\nVQQKEw1EcmF5VGVrIENvcnAuMRgwFgYDVQQLEw9EcmF5VGVrIFN1cHBvcnQxFTAT\\nBgNVBAMTDFZpZ29yIFJvdXRlcjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC\\nggEBAJMUaTRB0d/DF4YwqS60XT9UOeZWaNsrZwprgRivBjX6e491Q/PUzVxVlGPH\\n5qJFIjXn0I19Vgi3dRHaicW3yxkevtQILa/yj3OtFVqLsvMXQoJ22vo39EHkDo5T\\nuyZZ75xJuvSMCWKshVE5KT/fwY6t7lwz1yYK8oo53l9aUEGNZxuZh0HLWDq7VJqk\\nTvF2NqysSmHuly1b/xMUUJWwoi0oAC4pzBX1v0VrWPxRgQ0kKQUJlzRjesjuJNcY\\nuRgif3vDGSsbRPSPOgai6CmSjrSrXOm/nRocjFfa60PbGbpOL0B4G+koPPV9rPko\\n53O6L7P7sc1uQuuEu8QvbQ3MHMcCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAEg4n\\nm/P7y+jkA9c2flwRJCAx9eCK6l4V/VK3ZKLHsyhFd9buLM1/P+69VDpXfYo51oxZ\\nwqUifoanbcvTD1nLQReHCEs25hEubJGT/M5oqiDr7ubBgdgSETQjczavxwkUIe8v\\nj6z7Ad5H355g4bkKrBSHCnOIrNRPm9i22NRyEurIv01Y5LdIXKEVw6gtdWGKDfOA\\ndJJyS2bUiD4u2jbl+0xBKQKOAtbsQryKrY+TeXBvjFEl1APBAzFZkC4jnu6fyG8g\\nHjaxcayxLxHNwjAphu4/nMNt/YCNmDrx95VikIn6W8LadtP1qfAD8YXCJ6uo1VuM\\ne+teFGQTJ0udsxQsTA==\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "DrayTek Vigor Device (SSL)"
+		},
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIDPDCCAqWgAwIBAgIBADANBgkqhkiG9w0BAQQFADB4MQswCQYDVQQGEwJUVzEQ\\nMA4GA1UECBMHSHNpbkNodTEOMAwGA1UEBxMFSHVLb3UxFjAUBgNVBAoTDURyYXlU\\nZWsgQ29ycC4xGDAWBgNVBAsTD0RyYXlUZWsgU3VwcG9ydDEVMBMGA1UEAxMMVmln\\nb3IgUm91dGVyMB4XDTA0MDcyNzA4MzAyOVoXDTI5MDMxODA4MzAyOVoweDELMAkG\\nA1UEBhMCVFcxEDAOBgNVBAgTB0hzaW5DaHUxDjAMBgNVBAcTBUh1S291MRYwFAYD\\nVQQKEw1EcmF5VGVrIENvcnAuMRgwFgYDVQQLEw9EcmF5VGVrIFN1cHBvcnQxFTAT\\nBgNVBAMTDFZpZ29yIFJvdXRlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA\\nv9mcIae/fk+xZVb3S76eEGtiuRiyEEPdf0piWurMr4QqWWYpBs1gocQ/uw1VNFbt\\nA32zJM0pblAHuy7J1rj6n/Y2xYDuGksp3C9xxYbzc1CUoUoyqH/6q5dlAxdEPCgi\\nRfgE4ZH7rYMWBOsxfsujApu/I7iCI6l8PcMUWatwGrkCAwEAAaOB1TCB0jAdBgNV\\nHQ4EFgQUm4k9jGeEtSEGKxixoaC25//QJTEwgaIGA1UdIwSBmjCBl4AUm4k9jGeE\\ntSEGKxixoaC25//QJTGhfKR6MHgxCzAJBgNVBAYTAlRXMRAwDgYDVQQIEwdIc2lu\\nQ2h1MQ4wDAYDVQQHEwVIdUtvdTEWMBQGA1UEChMNRHJheVRlayBDb3JwLjEYMBYG\\nA1UECxMPRHJheVRlayBTdXBwb3J0MRUwEwYDVQQDEwxWaWdvciBSb3V0ZXKCAQAw\\nDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQQFAAOBgQCl66hKfBd0jG6PRYjGcETc\\n5NmJ1oa/5xOAoO5EtH4aF+GNPC/zFTKowfAj5t9zaQf5LwvA4W0BshmixeKpzr+d\\ndA2kCvhT7TXT3KTDcfkw/0V6VPC4aGAvY3q9455OWynpxpqrjbuQO7G0650XeGkN\\n/N3J4VygwqqngAgE2hO/kg==\\n-----END CERTIFICATE-----\\n",   
+			"display_name": "DrayTek Vigor Device (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "Vigor",
+			"display_name": "%(title)s Switch (Title)"	
+		}
+
+	]
+}
