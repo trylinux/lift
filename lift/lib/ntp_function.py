@@ -2,11 +2,9 @@ import logging
 import sys
 import time
 from scapy.all import IP
-from scapy.all import send
 from scapy.all import UDP
 from scapy.all import Raw
 from scapy.all import random
-from scapy.all import send
 from scapy.all import sr1
 
 
