@@ -239,8 +239,8 @@ def test_ip(dest_ip, **kwargs):
     try:
         DER_cert, PEM_cert, ctx = get_certs_from_handshake(dest_ip, **kwargs)
 
-        # device is the name of the device corresponding to the cert.
-        # lookup the cert in a dict containing 54 key-pairs {cert:device,...}
+        # Lookup the device's PEM_cert in a dict containing 54 key-pairs
+        # {cert:device_name,...}
         device = (certs.getcertinfo(PEM_cert))
 
         if DER_cert and not device:
@@ -438,9 +438,9 @@ def get_headers(dest_ip, **kwargs):
                     print str(a)
                 except:  # TODO replace with more specific exception
                     print "Title on IP",str(dest_ip).rstrip('\r\n)'), "does not exists and server is",server
-            else:
-                pass
+
             checkheaders.close()
+
     except Exception as e:  # TODO replace with more specific exception
         try:
             if 'NoneType' in str(e):
@@ -452,16 +452,16 @@ def get_headers(dest_ip, **kwargs):
                 if 'Dahua' in str(rtsp_server):
                     print str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)"
         except Exception as t:  # TODO replace with more specific exceptions:
-            print "This didn't work", t
-            pass
+            print "This didn't work ", t
+
             
             if vbose is not None:
-                print "Error in get_headers(): ",e, dest_ip
-            pass
+                print "Error in get_headers(): ", e, dest_ip
 
 
 def recurse_DNS_check(dest_ip, **kwargs):
-    '''
+    '''Check whether the device, indicated by the given IP address, is
+    is vulnerable to DNS amplication.
     '''
     vbose = kwargs['verbose']
     myResolver = dns.resolver.Resolver()
@@ -485,11 +485,12 @@ def recurse_DNS_check(dest_ip, **kwargs):
         sys.exit()
     except:  # TODO replace with more specific exception
         print dest_ip, "is not vulnerable to DNS AMP"
-        pass
+        
 
 
 def recurse_ssdp_check(dest_ip, **kwargs):
-    '''
+    '''Check whether the device, indicated by the given IP address, is
+    is an SSDP reflector.
     '''
     vbose = kwargs['verbose']
     try:
@@ -518,7 +519,6 @@ def ntp_monlist_check(dest_ip, **kwargs):
         a = ntp_function.NTPscan().monlist_scan(dest_ip)
         if a is None:
             print dest_ip, "is not vulnerable to NTP monlist"
-            pass
         elif a == 1:
             print dest_ip, "is vulnerable to monlist"
     except KeyboardInterrupt:
@@ -588,8 +588,6 @@ def process_ip(ip, options):
 
 
 def main():
-    '''
-    '''
     configure_logging()
     options = parse_args()
     results = []
