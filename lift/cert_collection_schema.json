@@ -1,0 +1,45 @@
+// This file is a proposed schema for lift's certificate collection.
+
+// To add a new signature to lift, copy the example JSON object (below), 
+// replacing the default empty strings with relevant data. Then paste the
+// new JSON object as a new element at the bottom of array in the file 
+// cert_collection.json  
+
+// WARNING: 
+// Pasting invalid JSON data into the cert_collection.json file will break
+// the lift tool. To avoid unwanted stress, visit http://jsonlint.com/ 
+// and use their validator to confirm that this new signature you're adding
+// complies with JSON formatting rules.
+
+// QUESTIONS:
+// If there can be multiple PEM certs for the same manufacturer, 
+// perhaps the "PEM_cert" field should correspond an array of certs 
+// instead of a single string?
+
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": {
+		"PEM_cert": [""],  
+		"search_text":"",
+		"display_name": ""
+	},
+	"http_response_info": {
+		"headers": {
+			"server": {
+				"search_text": "",
+				"display_name": ""	
+			}
+		},
+		"resource": {
+			"title":{
+				"search_text": "",
+				"search_text_xpath": "",
+				"display_name": ""	
+			}
+		}	
+	}
+}
