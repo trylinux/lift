@@ -1,0 +1,25 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "",  
+			"display_name": ""
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "IIS",
+			"display_name": "%(title)s Server (Page Title)"
+		},
+		{
+			"server_search_text": "IIS",
+			"title_search_text": "",
+			"display_name": "%(server)s Server (Server Version)"
+		}
+	]
+}

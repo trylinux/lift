@@ -12,7 +12,7 @@
 	],
 	"http_response_info": [
 		{
-			"server_search_text": "Ubiquiti",
+			"server_search_text": "",
 			"title_search_text": "EdgeOS",
 			"display_name": "EdgeOS Device (SSL + Server header)"
 		}

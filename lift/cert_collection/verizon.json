@@ -1,0 +1,22 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "-----BEGIN CERTIFICATE-----\\nMIIClTCCAf6gAwIBAgIBADANBgkqhkiG9w0BAQQFADA7MQswCQYDVQQGEwJVUzEs\\nMCoGA1UEAxQjT1JuYW1lX0p1bmdvOiBPcGVuUkcgUHJvZHVjdHMgR3JvdXAwHhcN\\nMDQwNjAzMTExMTQzWhcNMjQwNTI5MTExMTQzWjA7MQswCQYDVQQGEwJVUzEsMCoG\\nA1UEAxQjT1JuYW1lX0p1bmdvOiBPcGVuUkcgUHJvZHVjdHMgR3JvdXAwgZ8wDQYJ\\nKoZIhvcNAQEBBQADgY0AMIGJAoGBAM49r7D/ajki5azd5XYxVcSnKoth9lJxvI+m\\nvaZjzORt0oLoMWrMbpwFjtLTqqhtWNeY6BAyShWg7yKFsPU0HpX/jHIOAzAkny5J\\n+loH8nLN596g3P0ZyD6z7Ckqgbzg9MfJ9XLrExMLBn6oLboksY+q67+5zASWMfLR\\nZVg+Zv1VAgMBAAGjgagwgaUwDwYDVR0TBAgwBgEB/wIBBTALBgNVHQ8EBAMCAvQw\\nMQYDVR0lBCowKAYIKwYBBQUHAwIGCCsGAQUFBwMDBggrBgEFBQcDBAYIKwYBBQUH\\nAwEwPwYJYIZIAYb4QgENBDIWMEp1bmdvIE9wZW5SRyBQcm9kdWN0cyBHcm91cCBz\\ndGFuZGFyZCBjZXJ0aWZpY2F0ZTARBglghkgBhvhCAQEEBAMCAsQwDQYJKoZIhvcN\\nAQEEBQADgYEAntbWzY/kUhqtd5lN+ZEY2gYSkt9fWoiLZod9hgMs14I+JGRWuRD1\\nre93wvlF1FFvxJOkz2MLc0dkR0z0/W36z7Tw7ypJU/81dynta9yIWLSywdn1/Y6A\\n7V6BwyQFRuJlg2/nDP+tUltc6cXbUe8GdTm2IATAzER8OKGRbBMtXqs=\\n-----END CERTIFICATE-----\\n", 
+			"display_name": "Verizon Jungo OpenRG product (SSL/8443)",
+    "zyxel_pk5001z": "Zyxel PK5001Z default cert (SSL)"
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "",
+			"title_search_text": "",
+			"display_name": ""	
+		}
+
+	]
+}

@@ -1,0 +1,31 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "",  
+			"display_name": ""
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "CentOS",
+			"title_search_text": "",
+			"display_name": "%(server)s Linux server (Server name)"	
+		},
+		{
+			"server_search_text": "Ubuntu",
+			"title_search_text": "",
+			"display_name": "%(server)s Linux server (Server name)"	
+		},
+		{
+			"server_search_text": "Debian",
+			"title_search_text": "",
+			"display_name": "%(server)s Linux server (Server name)"	
+		}
+
+	]
+}

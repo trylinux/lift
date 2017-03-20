@@ -1,0 +1,21 @@
+{
+	"profile_info": {
+		"website": "", 
+		"company_name": "", 
+		"description": ""
+	},
+	"ssl_cert_info": [
+		{
+			"PEM_cert": "",  
+			"display_name": ""
+		}
+	],
+	"http_response_info": [
+		{
+			"server_search_text": "Linux/2.x UPnP/1.0 Avtech/1.0",
+			"title_search_text": "::: Login :::",
+			"display_name": "AvTech IP Camera (admin/admin) (Title and Server)"	
+		}
+
+	]
+}
