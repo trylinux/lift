@@ -640,6 +640,34 @@ def identify_using_ssl_cert(pem_cert, cert_lookup_dict):
     return device_description
 
 
+def identify_using_http_response(title, server, cert_lookup_dict):
+    '''Lookup the given title and server in a dictionary containing all the
+    HTTP response data in the cert_collection directory. Return the device 
+    description if there's a match.
+    '''
+    c = cert_lookup_dict
+
+    server_search_terms =  [c[x]['http_response_info'][y]['server_search_text'] 
+                            for x in range(len(c)) 
+                            for y in range(len(c[x]['http_response_info']))
+                            ]
+    
+    title_search_terms =  [c[x]['http_response_info'][y]['title_search_text'] 
+                           for x in range(len(c)) 
+                           for y in range(len(c[x]['http_response_info']))
+                           ]
+
+    display_names = [c[x]['http_response_info'][0]['display_name'] 
+              for x in range(len(c))
+              for y in range(len(c[x]['http_response_info']))
+              ]   
+
+    lookup_list = zip(server_search_terms, title_search_terms, display_names)
+    
+    device_description = next((n[2] for n in lookup_list 
+                               if n[0] in server and n[1] in title), '')
+    return device_description
+
 
 def main():
     configure_logging()
