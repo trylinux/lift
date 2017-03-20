@@ -603,21 +603,42 @@ def setup_cert_collection():
     and return this object.
     '''
     json_file = '['
-    cert_collection_path = os.path.dirname(os.path.realpath(__file__)) + 
-                            '/cert_collection' 
+    cert_collection_path = (os.path.dirname(os.path.realpath(__file__)) + 
+                            '/cert_collection')
     cert_files = os.listdir(cert_collection_path)
     
-    for x in xrange(0, len(cert_files)):
-        cert_file = os.path.dirname(cert_collection_path + '/' + cert_files[x]
+    for x in range(len(cert_files)):
+        cert_file = cert_collection_path + '/' + cert_files[x]
+        
         with open(cert_file) as f:
-            # TODO validate JSON before agreeing to concatenate a file
             json_file += f.read() + ','  
 
     final = json_file.rstrip(',')
     final += ']'
-
     cert_lookup_dict = json.loads(final)
+
     return cert_lookup_dict
+
+
+def identify_using_ssl_cert(pem_cert, cert_lookup_dict):
+    '''Lookup the given PEM cert in a dictionary containing all the certs in
+    the cert_collection directory and return the device description if there's
+     a match.
+    '''
+    keys =  [cert_lookup_dict[x]['ssl_cert_info'][y]['PEM_cert'] 
+             for x in range(len(cert_lookup_dict)) 
+             for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
+            ]
+    
+    values = [cert_lookup_dict[x]['ssl_cert_info'][0]['display_name'] 
+              for x in range(len(cert_lookup_dict))
+              for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
+              ]   
+
+    pem_dict = dict(zip(keys, values))
+    device_description = pem_dict.get(pem_cert, '')   
+    return device_description
+
 
 
 def main():
