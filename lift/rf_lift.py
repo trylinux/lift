@@ -301,28 +301,21 @@ def get_headers_ssl(dest_ip, **kwargs):
 
         checkheaders.close()
 
-        if ('ubnt.com','UBNT') in cert:
-            print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
-        if 'EdgeOS' in title and 'Ubiquiti' in cert:
-            print str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)"
-        if ('ubnt.com','UBNT') in cert:
-            print str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)"
-        elif 'iR-ADV' in cert and 'Catwalk' in title:
-            print str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)"
-        elif 'Cyberoam' in cert:
-            print str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)"
-        elif 'TG582n' in cert:
-            print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)"
-        elif 'RouterOS' in title:
-            print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)"
-        elif 'axhttpd/1.4.0' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+        device_description = identify_using_http_response(title, server, 
+                                                          cert_lookup_dict)
+        if device_description:
+            msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
+            print_options = {'title': title, 'server': server}
+            print msg.format(**print_options)
+
         else:
             if not ssl_only:
                 kwargs['port'] = 80
                 get_headers(dest_ip, **kwargs)
             else:
-                print "Title on IP",str(dest_ip).rstrip('\r\n)'), "is", str(title.pop()).rstrip('\r\n)'), " and server is ",server
+                print ("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", 
+                       str(title.pop()).rstrip('\r\n)'), " and server is ", 
+                       server)
         
     except Exception as e:
     # TODO replace with more specific exceptions:
@@ -349,114 +342,40 @@ def get_headers(dest_ip, **kwargs):
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
         checkheaders = urllib2.urlopen(hostname,timeout=10)
-        server = checkheaders.info().get('Server', None)
+        server = checkheaders.info().get('Server', '')
         html = checkheaders.read()
         title = parse_title_from_html(html)
         checkheaders.close()
 
-        if 'RouterOS' in str(title) and server is None:
-            router_os_version = soup.find('body').h1.contents
-            print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version",str(soup.find('body').h1.contents.pop()), "(Login Page Title)"
-        # soup = BeautifulSoup.BeautifulSoup(html)
-        if 'D-LINK' in str(title) and 'siyou server' in server:
-            dlink_model = str(soup.find("div",{"class": "modelname"}).contents.pop())
-            print str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model
-        elif 'axhttpd/1.4.0' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
-        elif 'ePMP' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
-        elif 'Wimax CPE Configuration' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)"
-        elif 'NXC2500' in str(title) and server is None:
-            print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
-        elif 'MiniServ/1.580' in server:
-            print str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)"
-        elif 'IIS' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ":",str(title.pop()), "Server (Page Title)"
-        elif 'Vigor' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ":",str(title.pop()), "Switch (Title)"
-        elif 'Aethra' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
-        elif 'Industrial Ethernet Switch' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
-        elif a.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
-            print str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)"
-        elif 'NUUO Network Video Recorder Login' in a:
-            print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
-        elif 'CDE-30364' in a:
-            print str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)"
-        elif 'BUFFALO' in a:
-            print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
-        elif 'Netgear' in a:
-            print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
-        elif 'IIS' in server:
-            print str(dest_ip).rstrip('\r\n)') + ":",str(server), "Server (Server Version)"
-        elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ":",str(server), "Linux server (Server name)"
-        elif "SonicWALL" in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
-        elif "iGate" in a:
-            print str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)"
-        elif 'LG ACSmart Premium' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)"
-        elif 'IFQ360' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)"
-        elif 'Tank Sentinel AnyWare' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
-        elif 'Z-World Rabbit' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)"
-        elif 'Intellian Aptus Web' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)"
-        elif 'SECURUS' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)"
-        elif 'uc-httpd' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(title.pop()), "(Server)"
-        elif '::: Login :::' in str(title) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
-            print str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)"
-        elif 'NetDvrV3' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)"
-        elif 'Open Webif' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
-        elif 'IVSWeb' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)"
-        elif 'DVRDVS-Webs' in server or 'Hikvision-Webs' in server or 'App-webs/' in server:
-                print str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)"
-        elif 'Router Webserver' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title.pop()), "(Title)"
-        elif 'DD-WRT' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ":", str(title.pop()), "Router (Title)"
-        elif 'Samsung DVR' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)"
-        elif 'HtmlAnvView' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)"
-        elif 'ZTE corp' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": ZTE", str(title.pop()), "Router (Title and Server)"
-        elif 'Haier Q7' in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)"
-        elif 'Cross Web Server' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)"
-        elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(title):
-            print str(dest_ip).rstrip('\r\n)') + ": ", str(title.pop()), "(Title and server)"
+
+        device_description = identify_using_http_response(title, server, 
+                                                          cert_lookup_dict)
+        if device_description:
+            msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
+            print_options = {'title': title, 'server': server}
+            print msg.format(**print_options)
+
         else:
-            if info is not None:
-                try:
-                    a="Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title.pop()).rstrip('\r\n)') + " and server is " + server
-                    print str(title)
-                except:  # TODO replace with more specific exception
-                    print "Title on IP",str(dest_ip).rstrip('\r\n)'), "does not exists and server is",server
+            if info:
+                print ("Title on IP",str(dest_ip).rstrip('\r\n)'), 
+                       "does not exists and server is",server)
 
-
-    except Exception as e:  # TODO replace with more specific exception
+    except Exception as e:  
+    # TODO replace with more specific exception
         try:
             if 'NoneType' in str(e):
                 new_ip = str(dest_ip).rstrip('\r\n)')
-                bashcommand='curl --silent rtsp://'+new_ip+' -I -m 5| grep Server'
-                proc = subprocess.Popen(['bash','-c', bashcommand],stdout=subprocess.PIPE)
+                bashcommand = ('curl --silent rtsp://'+ new_ip +
+                               ' -I -m 5| grep Server')
+                proc = subprocess.Popen(['bash','-c', bashcommand], 
+                                        stdout=subprocess.PIPE)
                 output = proc.stdout.read()
                 rtsp_server = str(output).rstrip('\r\n)')
                 if 'Dahua' in str(rtsp_server):
-                    print str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)"
-        except Exception as t:  # TODO replace with more specific exceptions:
+                    print (str(dest_ip).rstrip('\r\n)') + 
+                           ": Dahua RTSP Server Detected (RTSP Server)")
+        except Exception as t:  
+        # TODO replace with more specific exceptions:
             print "This didn't work ", t
 
             
