@@ -4,14 +4,15 @@ import sys
 import socket
 import ssl
 import argparse
+import json
 import time
 import itertools
 import logging
 import urllib2
-import BeautifulSoup
 import netaddr
 import pyasn
 import dns.resolver
+from BeautifulSoup import BeautifulSoup
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
 import ssdp_info
 import ntp_function
@@ -270,11 +271,11 @@ def parse_title_from_html(html):
     HTML page.
     '''
     # TODO figure out relevant exception from parsing to catch/react to
-    title_text = ''
-    soup = BeautifulSoup.BeautifulSoup(html)
-    title = soup.html.head.title or soup.html.title
-    title_text = title.contents
-    return title_text
+    soup = BeautifulSoup(html)
+    title_tag = soup.find('title')
+    title = str(title_tag.contents[0]) if title_tag else ''
+    
+    return title
 
 
 def get_headers_ssl(dest_ip, **kwargs):
@@ -591,9 +592,38 @@ def process_ip(ip, options):
         raise ValueError('Invalid port number was supplied by the user.')
 
 
+def setup_cert_collection():
+    '''Returns the cert_lookup_dict against which the user-supplied IP
+    address will be compared for matching SSL certificates or HTTP
+    response data.
+
+    Open all the JSON files in the directory `cert_collection`, and
+    concatenate the data to form one massive JSON string.
+    Convert this JSON string into a Python object, using json.loads()
+    and return this object.
+    '''
+    json_file = '['
+    cert_collection_path = os.path.dirname(os.path.realpath(__file__)) + 
+                            '/cert_collection' 
+    cert_files = os.listdir(cert_collection_path)
+    
+    for x in xrange(0, len(cert_files)):
+        cert_file = os.path.dirname(cert_collection_path + '/' + cert_files[x]
+        with open(cert_file) as f:
+            # TODO validate JSON before agreeing to concatenate a file
+            json_file += f.read() + ','  
+
+    final = json_file.rstrip(',')
+    final += ']'
+
+    cert_lookup_dict = json.loads(final)
+    return cert_lookup_dict
+
+
 def main():
     configure_logging()
     options = parse_args()
+    cert_lookup_dict = setup_cert_collection()
     results = []
     try:
         ip_list = convert_input_to_ips(options)
