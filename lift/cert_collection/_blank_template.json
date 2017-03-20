@@ -1,3 +1,18 @@
+// This file is a proposed schema for lift's certificate collection.
+
+// To add a new signature to lift, copy the example JSON object (below), 
+// replacing the default empty strings with relevant data. Then save the 
+// new JSON file, named after the company, into the cert_collection directory.
+
+// To prepare the PEM_cert value for JSON formatting, you can escape the 
+// newline characters by running PEM_cert.encode('string_escape') in the 
+// Python interactive shell
+
+// WARNING: 
+// If your newly added file is invalid JSON, it will not be used by the 
+// lift tool. To validate the JSON file, feel free to visit http://jsonlint.com/ 
+// and paste your object into their validator.
+
 {
 	"profile_info": {
 		"website": "", 
