@@ -1,4 +1,4 @@
-# Low-Impact Fingerprint Tool
+# :mute: Low-Impact Fingerprint Tool 
 
 Quietly **"lift"** fingerprints from devices by using their SSL certificates, HTTP headers or other characteristics.
 
