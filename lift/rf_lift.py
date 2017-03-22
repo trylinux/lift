@@ -33,21 +33,14 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
     setting the severity level of the messages to control the type
     of messages displayed in the log.
     '''
+    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     if write_to_file:
         handler = logging.FileHandler(filename)
-        logger.setLevel(level)
-        handler.setLevel(level)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - '
-                                      '%(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-
+        formatter = logging.Formatter(format)
     else:
-        handler = logging.StreamHandler()
-        logger.setLevel(level)
         handler = colorlog.StreamHandler()
         formatter = ColoredFormatter(
-            '%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            '%(log_color)s' + format,
             datefmt=None,
             reset=True,
             log_colors={
@@ -60,8 +53,11 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
             secondary_log_colors={},
             style='%'
         )
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+
+    logger.setLevel(level)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
 
 class UsageError(Exception):
     '''Exception raised for errors in the usage of this module.
@@ -103,7 +99,6 @@ def parse_args():
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
     options = vars(args)
-    exit()
     return options
 
 
