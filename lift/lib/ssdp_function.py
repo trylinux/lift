@@ -15,8 +15,8 @@ class ssdp_scan:
     '''
     SSDP (Simple Service Discovery Protocol) is often used for discovery of
     Plug & Play (UPnP) devices. Attackers have found that Simple Object Access
-    Protocol (SOAP) – used to deliver control messages to UPnP devices and pass
-    information – requests “can be crafted to elicit a response that reflects
+    Protocol (SOAP), used to deliver control messages to UPnP devices and pass
+    information, requests can be crafted to elicit a response that reflects
     and amplifies a packet, which can be redirected towards a target.
     SSDP is being abused to carry out reflection and amplification distributed
     denial-of-service (DDoS) attacks.

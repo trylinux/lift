@@ -9,18 +9,22 @@ import time
 import itertools
 import logging
 import urllib2
+
 import netaddr
+import colorlog
+from colorlog import ColoredFormatter
 import pyasn
 import dns.resolver
 from BeautifulSoup import BeautifulSoup
+
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
 import ssdp_info
 import ntp_function
 import certs
-import device_list as devices
 
 
-logger = logging.getLogger('lift')
+# logger = logging.getLogger('lift') # need this if writing logs to file?
+logger = colorlog.getLogger('lift')
 
 
 def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
@@ -31,16 +35,33 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
     '''
     if write_to_file:
         handler = logging.FileHandler(filename)
+        logger.setLevel(level)
+        handler.setLevel(level)
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - '
+                                      '%(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
     else:
         handler = logging.StreamHandler()
-
-    logger.setLevel(level)
-    handler.setLevel(level)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - '
-                                  '%(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
+        logger.setLevel(level)
+        handler = colorlog.StreamHandler()
+        formatter = ColoredFormatter(
+            '%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            datefmt=None,
+            reset=True,
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'red,bg_white',
+            },
+            secondary_log_colors={},
+            style='%'
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
 
 class UsageError(Exception):
     '''Exception raised for errors in the usage of this module.
@@ -58,6 +79,7 @@ class UsageError(Exception):
 def parse_args():
     '''Parse the command line attributes and return them as the dict `options`.
     '''
+    logger.info('Sup. Parse or nah? ')
     parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
     argroup = parser.add_mutually_exclusive_group(required=True)
     argroup.add_argument("-i", "--ip", dest='ip', help="An IP address")
@@ -81,6 +103,7 @@ def parse_args():
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
     options = vars(args)
+    exit()
     return options
 
 
@@ -590,6 +613,13 @@ def identify_using_http_response(title, server, cert_lookup_dict):
 
 def main():
     configure_logging()
+
+    logger.debug('debuggin or nah?')
+    logger.info('FYI colorlog is beautiful')
+    logger.warning('WARNING. THIS IS ABOUT TO BLOW UP')
+    logger.error('you messed up! bigly')
+    logger.critical('CRITICAL critiCAL CRITical')
+
     options = parse_args()
     cert_lookup_dict = setup_cert_collection()
     results = []
