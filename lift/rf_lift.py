@@ -23,7 +23,6 @@ import ntp_function
 import certs
 
 
-# logger = logging.getLogger('lift') # need this if writing logs to file?
 logger = colorlog.getLogger('lift')
 
 
@@ -75,7 +74,6 @@ class UsageError(Exception):
 def parse_args():
     '''Parse the command line attributes and return them as the dict `options`.
     '''
-    logger.info('Sup. Parse or nah? ')
     parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
     argroup = parser.add_mutually_exclusive_group(required=True)
     argroup.add_argument("-i", "--ip", dest='ip', help="An IP address")
@@ -155,23 +153,6 @@ def get_ips_from_asn(options):
     return ip_list
 
 
-def get_device_description(device_name):
-    '''Lookup the given device name `device_name` in lift's collection of 
-    certificates for an exact name match. If none are found, search for a 
-    partial name match. Return a string containing a description of device.
-    '''
-    exact_match = devices.exact_names.get(device_name, '')
-    partial_match = (v for k, v in devices.partial_names.items() 
-                    if k in device_name)
-    
-    searches = itertools.chain(
-        exact_match,
-        partial_match
-    )
-    device_description = next(searches, '')    
-    return device_description
-
-
 def get_certs_from_handshake(dest_ip, **kwargs):
     '''Perform a SSL handshake with the given IP address, and
     return the SSLContext object, as well as two formats of the SSL certificate,
@@ -242,164 +223,7 @@ def get_certs_from_handshake(dest_ip, **kwargs):
     sock.close()
 
     return DER_cert, PEM_cert, ctx
-
-
-def test_ip(dest_ip, **kwargs):
-    '''Attempt to identify the device using its SSL certificate. If our certs
-    dictionary has no matches for its certificate, call get_headers_ssl() to
-    try fingerprinting the device using its HTTP headers.
-    If the device does not provide a certificate, call the get_headers() method.
-    '''
-    dport = kwargs['port']
-    verbose = kwargs['verbose']
-    ssl_only = kwargs['ssl_only']
-    info = kwargs['info']
-
-    try:
-        DER_cert, PEM_cert, ctx = get_certs_from_handshake(dest_ip, **kwargs)
-
-        # Lookup the device's PEM_cert in a dict containing 54 key-pairs
-        # {cert:device_name,...}
-        device = (certs.getcertinfo(PEM_cert))
-
-        if DER_cert and not device:
         
-            kwargs.update({'cert': DER_cert, 'ctx': ctx})
-            get_headers_ssl(dest_ip, **kwargs)
-        
-        elif device:
-
-            device_description = get_device_description(device)
-            if device_description:
-                msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
-                print msg
-        else:
-            try_headers = ((111 in e) or ("timed out" in e) or ('sslv3' in e) 
-                                  and not ssl_only)
-            if try_headers:
-                get_headers(dest_ip, dest_ip, **kwargs)
-
-    except KeyboardInterrupt:
-        print "Quitting"
-        sys.exit(0)    
-        
-
-def parse_title_from_html(html):
-    '''Parse and return a string `title_text` containing the title from the
-    HTML page.
-    '''
-    # TODO figure out relevant exception from parsing to catch/react to
-    soup = BeautifulSoup(html)
-    title_tag = soup.find('title')
-    title = str(title_tag.contents[0]) if title_tag else ''
-    
-    return title
-
-
-def get_headers_ssl(dest_ip, **kwargs):
-    '''Make a HTTPS GET request to the given IP, parse the response's
-    headers and resource, then compare the extracted entities against
-    our list of commonly used server versions and page titles to identify
-    the given IP's device name.
-    '''
-    dport = kwargs['port']
-    vbose = kwargs['verbose']
-    ssl_only = kwargs['ssl_only']
-    info = kwargs['info']
-    cert = kwargs['cert']  
-    ctx = kwargs['ctx']  
-    hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-
-    try:
-        checkheaders = urllib2.urlopen(hostname, context=ctx, timeout=10)
-
-        html = checkheaders.read()
-        title = parse_title_from_html(html)
-        server = checkheaders.info().get('Server') or None
-
-        checkheaders.close()
-
-        device_description = identify_using_http_response(title, server, 
-                                                          cert_lookup_dict)
-        if device_description:
-            msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
-            print_options = {'title': title, 'server': server}
-            print msg.format(**print_options)
-
-        else:
-            if not ssl_only:
-                kwargs['port'] = 80
-                get_headers(dest_ip, **kwargs)
-            else:
-                print ("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", 
-                       str(title.pop()).rstrip('\r\n)'), " and server is ", 
-                       server)
-        
-    except Exception as e:
-    # TODO replace with more specific exceptions:
-        if dport is 443 and not ssl_only:
-            dport = 80
-            get_headers(dest_ip, **kwargs)
-        if vbose is not None:
-            print "Error in getsslheaders: ",e
-    return
-
-
-def get_headers(dest_ip, **kwargs):
-    '''Make a HTTP GET request to the given IP, parse the response's
-    headers and resource, then compare the extracted entities against
-    our list of commonly used server versions and page titles to identify
-    the given IP's device name.
-    '''
-    dport = kwargs['port']
-    vbose = kwargs['verbose']
-    info = kwargs['info']
-
-    if dport == 443:
-        dport = 80
-    try:
-        hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'),dport)
-        checkheaders = urllib2.urlopen(hostname,timeout=10)
-        server = checkheaders.info().get('Server', '')
-        html = checkheaders.read()
-        title = parse_title_from_html(html)
-        checkheaders.close()
-
-
-        device_description = identify_using_http_response(title, server, 
-                                                          cert_lookup_dict)
-        if device_description:
-            msg = str(dest_ip).rstrip('\r\n)') + ": " + device_description
-            print_options = {'title': title, 'server': server}
-            print msg.format(**print_options)
-
-        else:
-            if info:
-                print ("Title on IP",str(dest_ip).rstrip('\r\n)'), 
-                       "does not exists and server is",server)
-
-    except Exception as e:  
-    # TODO replace with more specific exception
-        try:
-            if 'NoneType' in str(e):
-                new_ip = str(dest_ip).rstrip('\r\n)')
-                bashcommand = ('curl --silent rtsp://'+ new_ip +
-                               ' -I -m 5| grep Server')
-                proc = subprocess.Popen(['bash','-c', bashcommand], 
-                                        stdout=subprocess.PIPE)
-                output = proc.stdout.read()
-                rtsp_server = str(output).rstrip('\r\n)')
-                if 'Dahua' in str(rtsp_server):
-                    print (str(dest_ip).rstrip('\r\n)') + 
-                           ": Dahua RTSP Server Detected (RTSP Server)")
-        except Exception as t:  
-        # TODO replace with more specific exceptions:
-            print "This didn't work ", t
-
-            
-            if vbose is not None:
-                print "Error in get_headers(): ", e, dest_ip
-
 
 def recurse_DNS_check(dest_ip, **kwargs):
     '''Check whether the device, indicated by the given IP address, is
@@ -508,13 +332,96 @@ def convert_input_to_ips(options):
         raise ValueError('None of the cli arguments contained IP addresses.')
 
 
+def identify_using_http_response(ip, **kwargs):
+    '''Calls functions for each of the steps required to identify a device
+    based on data in the HTTP response headers or resource.
+    1. send request
+    2. parse response
+    3. lookup response data
+    4. print findings
+    '''
+    headers, html = send_http_request(ip, **kwargs)
+    title, server = parse_response(html, headers)
+    device = lookup_http_data(title, server, cert_lookup_dict)
+    if device:
+        print_findings(ip, device, title=title, server=server)
+    else:
+        logger.info('No matching certs were found for IP %s' % ip)        
+        # TODO add logic to try rtsp request if http doesn't provide info
+
+    return device
+
+
+def send_rstp_request(dest_ip):
+    new_ip = str(dest_ip).rstrip('\r\n)')
+    bashcommand = ('curl --silent rtsp://'+ new_ip +
+                   ' -I -m 5| grep Server')
+    proc = subprocess.Popen(['bash','-c', bashcommand], 
+                            stdout=subprocess.PIPE)
+    output = proc.stdout.read()
+    rtsp_server = str(output).rstrip('\r\n)')
+    if 'Dahua' in str(rtsp_server):
+        print (str(dest_ip).rstrip('\r\n)') + 
+               ": Dahua RTSP Server Detected (RTSP Server)")
+    return
+
+
+def send_http_request(ip, **kwargs):
+    #TODO add logic to try port 443, then port 80
+    url = "https://%s:%s" % (ip, kwargs['port'])
+    ctx = kwargs.get('ctx', None)
+    
+    f = urllib2.urlopen(url, context=ctx, timeout=10)
+    
+    html = f.read()
+    headers = f.info()
+    f.close()
+    
+    return headers, html
+
+
+def parse_response(html, headers):
+    '''Parse the HTML and headers from the HTTP response and return a dict with
+    all extracted data. 
+    '''
+    # TODO figure out relevant exception from parsing to catch/react to
+    soup = BeautifulSoup(html)
+    title_tag = soup.find('title')
+    title = str(title_tag.contents[0]) if title_tag else ''
+    server = headers.get('Server') or ''
+
+    return title, server
+
+
+def print_findings(ip, device, title='', server=''):
+    msg = str(ip).rstrip('\r\n)') + ": " + device
+    extra_params = {'title': title, 'server': server}
+    print msg.format(**extra_params)
+
+
+def identify_using_ssl_cert(ip, **kwargs):
+    '''Calls functions that correspond to steps involved in identifying a device
+    based on data in the HTTP response headers or resource.
+    1. get cert from handshake 
+    2. lookup cert
+    3. print findings
+    '''
+    DER_cert, PEM_cert, ctx = get_certs_from_handshake(ip, **kwargs)
+    device = lookup_cert(pem_cert, cert_lookup_dict)
+    if device:
+        print_findings(ip, device)
+    else:
+        logger.info('No matching certs were found for IP %s' % ip)
+    return device
+
+
 def process_ip(ip, options):
     '''Call the correct function(s) to process the IP address based on the
     port and recurse options passed into the command line..
     '''
     dispatch_by_port = {
-        options['port'] == 80: (get_headers),
-        options['port'] != 80 and not options['recurse']: (test_ip),
+        options['port'] == 80: (identify_using_http_response),
+        options['port'] != 80 and not options['recurse']: (identify_using_ssl_cert),
         options['port'] == 53 and options['recurse']: (recurse_DNS_check),
         options['port'] == 123 and options['recurse']: (ntp_monlist_check),
         options['port'] == 1900 and options['recurse']: (recurse_ssdp_check),
@@ -567,7 +474,7 @@ def setup_cert_collection():
     return cert_lookup_dict
 
 
-def identify_using_ssl_cert(pem_cert, cert_lookup_dict):
+def lookup_cert(pem_cert, cert_lookup_dict):
     '''Lookup the given PEM cert in a dictionary containing all the certs in
     the cert_collection directory and return the device description if there's
      a match.
@@ -583,11 +490,11 @@ def identify_using_ssl_cert(pem_cert, cert_lookup_dict):
               ]   
 
     pem_dict = dict(zip(keys, values))
-    device_description = pem_dict.get(pem_cert, '')   
-    return device_description
+    device = pem_dict.get(pem_cert, '')   
+    return device
 
 
-def identify_using_http_response(title, server, cert_lookup_dict):
+def lookup_http_data(title, server, cert_lookup_dict):
     '''Lookup the given title and server in a dictionary containing all the
     HTTP response data in the cert_collection directory. Return the device 
     description if there's a match.
@@ -604,7 +511,7 @@ def identify_using_http_response(title, server, cert_lookup_dict):
                            for y in range(len(c[x]['http_response_info']))
                            ]
 
-    display_names = [c[x]['http_response_info'][0]['display_name'] 
+    display_names = [c[x]['http_response_info'][y]['display_name'] 
               for x in range(len(c))
               for y in range(len(c[x]['http_response_info']))
               ]   
@@ -618,13 +525,6 @@ def identify_using_http_response(title, server, cert_lookup_dict):
 
 def main():
     configure_logging()
-
-    logger.debug('debuggin or nah?')
-    logger.info('FYI colorlog is beautiful')
-    logger.warning('WARNING. THIS IS ABOUT TO BLOW UP')
-    logger.error('you messed up! bigly')
-    logger.critical('CRITICAL critiCAL CRITical')
-
     options = parse_args()
     cert_lookup_dict = setup_cert_collection()
     results = []
