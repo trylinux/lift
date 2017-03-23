@@ -1,6 +1,7 @@
 import logging
 import sys
 import time
+
 from scapy.all import IP
 from scapy.all import UDP
 from scapy.all import Raw
@@ -10,6 +11,8 @@ from scapy.all import sr1
 
 logger = logging.getLogger("scapy.runtime")
 logger.setLevel(49)
+
+MAX_RETRIES = 3
 
 
 class NTPscan:
@@ -22,8 +25,6 @@ class NTPscan:
     unpatched NTP server sends the requester a list of the last 600 hosts
     who have connected to that server.
     '''
-
-    MAX_RETRIES = 3
 
     def monlist_scan(self, target):
         '''Simulate the monlist command and return `results`, a boolean
