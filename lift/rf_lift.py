@@ -544,15 +544,25 @@ def setup_cert_collection():
                             '/cert_collection')
     cert_files = os.listdir(cert_collection_path)
     
-    for x in range(len(cert_files)):
+    num_files = len(cert_files)
+    
+    for x in range(num_files):
         cert_file = cert_collection_path + '/' + cert_files[x]
         
         with open(cert_file) as f:
-            json_file += f.read() + ','  
+            try:
+                file_contents = f.read()
+                json.loads(file_contents)
+            except ValueError:
+                logger.error('File %s is an invalid JSON object' % cert_file)
+                num_files -= 1
+            else:
+                json_file += file_contents  + ','
 
-    final = json_file.rstrip(',')
-    final += ']'
+    final = json_file.rstrip(',') + ']'
     cert_lookup_dict = json.loads(final)
+    logger.debug('Created cert_lookup_dict using %d manufacturer JSON files' 
+                 % num_files)
 
     return cert_lookup_dict
 
@@ -567,7 +577,7 @@ def identify_using_ssl_cert(pem_cert, cert_lookup_dict):
              for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
             ]
     
-    values = [cert_lookup_dict[x]['ssl_cert_info'][0]['display_name'] 
+    values = [cert_lookup_dict[x]['ssl_cert_info'][y]['display_name'] 
               for x in range(len(cert_lookup_dict))
               for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
               ]   
