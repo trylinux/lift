@@ -45,7 +45,7 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
                 'INFO': 'green',
                 'WARNING': 'yellow',
                 'ERROR': 'red',
-                'CRITICAL': 'red,bg_white',
+                'CRITICAL': 'purple',
             },
             secondary_log_colors={},
             style='%'
@@ -94,7 +94,7 @@ def parse_args():
     parser.add_argument("-R", "--recon", dest='recon', action="store_true",
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
-    options = vars(args)
+    options = vars(args)    
     return options
 
 
