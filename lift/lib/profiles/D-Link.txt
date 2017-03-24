@@ -1,1 +1,0 @@
-{"website": "dlink.com", "company_name": "D-Link", "description": "A multinational Taiwanese networking equipment manufacturer, primarily focusing in SMB market. Historically has controlled large portions of the SMB and WiFi product markets"}

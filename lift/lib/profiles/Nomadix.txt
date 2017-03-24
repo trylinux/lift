@@ -1,1 +1,0 @@
-{"website": "nomadix.com", "company_name": "Nomadix", "description": "A US-based company that primarily focuses on public internet access gateways. Their AG series products are found in many hospitality venues around the world. "}
