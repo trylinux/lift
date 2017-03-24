@@ -7,18 +7,17 @@ import subprocess
 import sys
 import socket
 import ssl
-import time
 import urllib2
 
 import BeautifulSoup
 import colorlog
-import dns.resolver
 import netaddr
 import pyasn
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
-import ssdp_info
-import ntp_function
+from ssdp_functions import recurse_ssdp_check
+from ntp_functions import ntp_monlist_check
+from dns_functions import recurse_DNS_check
 
 
 logger = colorlog.getLogger('lift')
@@ -151,6 +150,33 @@ def get_ips_from_asn(options):
     return ip_list
 
 
+def convert_input_to_ips(options):
+    '''Call the correct function to normalize the command line argument that
+    contains the IP addresses, and return a list of IP addresses.
+    '''
+    try:
+        dispatch = {
+            'ip': get_ips_from_ip,
+            'ifile': get_ips_from_file,
+            'subnet': get_ips_from_subnet,
+            'asn': get_ips_from_asn,
+        }
+
+        correct_function = next(v for k, v in dispatch.items() if options[k])
+        ip_list = correct_function(options)
+        return ip_list
+    except KeyError:
+        raise UsageError('None of the cli arguments contained IP addresses.')
+
+
+def is_valid_ip(ip):
+    '''Try to create an IP object using the given ip.
+    Return True if an instance is successfully created, otherwise return False.
+    '''
+    # TODO install & import IPy
+    return True
+
+
 def get_certs_from_handshake(dest_ip, **kwargs):
     '''Perform a SSL handshake with the given IP address, and
     return the SSLContext object, as well as two formats of the SSL certificate,
@@ -221,113 +247,6 @@ def get_certs_from_handshake(dest_ip, **kwargs):
     sock.close()
 
     return DER_cert, PEM_cert, ctx
-        
-
-def recurse_DNS_check(dest_ip, **kwargs):
-    '''Check whether the device, indicated by the given IP address, is
-    is vulnerable to DNS amplication.
-    '''
-    vbose = kwargs['verbose']
-    myResolver = dns.resolver.Resolver()
-    myResolver.nameservers = [str(dest_ip)]
-    try:
-        if vbose is not None:
-            print "Trying: ",dest_ip
-        start = time.time()
-        while time.time() < start + 3:
-            myAnswers = myResolver.query("google.com", "A")
-            if myAnswers:
-                print dest_ip, "is vulnerable to DNS AMP"
-                break
-            else:
-                print dest_ip, "is a nope"
-                break
-        else:
-            print dest_ip, "is a nope"
-    except KeyboardInterrupt:
-        print "Quitting"
-        sys.exit()
-    except:  # TODO replace with more specific exception
-        print dest_ip, "is not vulnerable to DNS AMP"
-        
-
-
-def recurse_ssdp_check(dest_ip, **kwargs):
-    '''Check whether the device, indicated by the given IP address, is
-    is an SSDP reflector.
-    '''
-    vbose = kwargs['verbose']
-    try:
-        a = ssdp_info.get_ssdp_information(dest_ip)
-        if a is None:
-            print dest_ip, "is not an SSDP reflector"
-        elif a is not None:
-            print dest_ip, "is an SSDP reflector"
-        elif vbose is not None and a is not None:
-            print dest_ip, "is an SSDP reflector with result", a
-
-    except KeyboardInterrupt:
-        if KeyboardInterrupt:
-            sys.exit(1)
-        print "Quitting in here"
-        sys.exit(0)
-    except Exception as e:  # TODO replace with more specific exception
-        print "Encountered exception",e
-
-
-def ntp_monlist_check(dest_ip, **kwargs):
-    '''Check whether the device, indicated by the given IP address, is
-    vulnerable to the NTP monlist command.
-    '''
-    try:
-        a = ntp_function.NTPscan().monlist_scan(dest_ip)
-        if a is None:
-            print dest_ip, "is not vulnerable to NTP monlist"
-        elif a == 1:
-            print dest_ip, "is vulnerable to monlist"
-    except KeyboardInterrupt:
-        print "Quitting"
-        sys.exit(1)
-
-
-def is_host_up(dest_ip, **kwargs):
-    '''Issue the ping (Packet INternet Groper) command to check if there is a 
-    network connection to the given IP address. If there is no connectivity,
-    call the testips() function. 
-    '''
-    dport = kwargs['port']
-    verbose = kwargs['verbose']
-    response = os.system("ping -c 1 " + dest_ip)
-    if response == 0:
-          test_ip(dest_ip, **kwargs)
-    # TODO think about a relevant exception
-
-
-def is_valid_ip(ip):
-    '''Try to create an IP object using the given ip.
-    Return True if an instance is successfully created, otherwise return False.
-    '''
-    # TODO install & import IPy
-    return True
-
-
-def convert_input_to_ips(options):
-    '''Call the correct function to normalize the command line argument that
-    contains the IP addresses, and return a list of IP addresses.
-    '''
-    try:
-        dispatch = {
-            'ip': get_ips_from_ip,
-            'ifile': get_ips_from_file,
-            'subnet': get_ips_from_subnet,
-            'asn': get_ips_from_asn,
-        }
-
-        correct_function = next(v for k, v in dispatch.items() if options[k])
-        ip_list = correct_function(options)
-        return ip_list
-    except KeyError:
-        raise ValueError('None of the cli arguments contained IP addresses.')
 
 
 def identify_using_http_response(ip, **kwargs):
