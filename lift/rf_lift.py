@@ -1,26 +1,24 @@
+import argparse
+import itertools
+import json
+import logging
 import os
 import subprocess
 import sys
 import socket
 import ssl
-import argparse
-import json
 import time
-import itertools
-import logging
 import urllib2
 
-import netaddr
+import BeautifulSoup
 import colorlog
-from colorlog import ColoredFormatter
-import pyasn
 import dns.resolver
-from BeautifulSoup import BeautifulSoup
+import netaddr
+import pyasn
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
 import ssdp_info
 import ntp_function
-import certs
 
 
 logger = colorlog.getLogger('lift')
@@ -38,7 +36,7 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
         formatter = logging.Formatter(format)
     else:
         handler = colorlog.StreamHandler()
-        formatter = ColoredFormatter(
+        formatter = colorlog.ColoredFormatter(
             '%(log_color)s' + format,
             datefmt=None,
             reset=True,
@@ -385,7 +383,7 @@ def parse_response(html, headers):
     all extracted data. 
     '''
     # TODO figure out relevant exception from parsing to catch/react to
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup.BeautifulSoup(html)
     title_tag = soup.find('title')
     title = str(title_tag.contents[0]) if title_tag else ''
     server = headers.get('Server') or ''
