@@ -187,7 +187,7 @@ def get_certs_from_handshake(dest_ip, **kwargs):
     ssl_only = kwargs['ssl_only']
     info = kwargs['info']
     
-    PEM_cert = ''
+    pem_cert = ''
 
     # Create a new SSLContext object `ctx` with default settings
     ctx = ssl.create_default_context()
@@ -221,15 +221,15 @@ def get_certs_from_handshake(dest_ip, **kwargs):
         # Connect to a remote socket at the given IP address on the given port
         ssl_sock.connect((dest_ip, dport))
 
-        # DER_cert is either an ssl certificate, provided as DER-encoded blob of
+        # der_cert is either an ssl certificate, provided as DER-encoded blob of
         # bytes, or None if the peer did not provide a certificate.
         # If the SSL handshake hasn't been done yet, getpeercert() raises ValueError.
-        DER_cert = ssl_sock.getpeercert(True)
+        der_cert = ssl_sock.getpeercert(True)
 
-        # PEM_cert is a PEM-encoded string version of the ssl certificate
-        # If DER_cert is not a string or buffer,
+        # pem_cert is a PEM-encoded string version of the ssl certificate
+        # If der_cert is not a string or buffer,
         # DER_cert_to_PEM_cert() raises TypeError.
-        PEM_cert = str(ssl.DER_cert_to_PEM_cert(DER_cert))
+        pem_cert = str(ssl.DER_cert_to_PEM_cert(der_cert))
 
     except KeyboardInterrupt:
         print "Quitting"
@@ -246,7 +246,7 @@ def get_certs_from_handshake(dest_ip, **kwargs):
     # Close the socket. All future operations on the socket object will fail
     sock.close()
 
-    return DER_cert, PEM_cert, ctx
+    return der_cert, pem_cert, ctx
 
 
 def identify_using_http_response(ip, **kwargs):
@@ -323,7 +323,7 @@ def identify_using_ssl_cert(ip, **kwargs):
     2. lookup cert
     3. print findings
     '''
-    DER_cert, PEM_cert, ctx = get_certs_from_handshake(ip, **kwargs)
+    der_cert, pem_cert, ctx = get_certs_from_handshake(ip, **kwargs)
     device = lookup_cert(pem_cert, cert_lookup_dict)
     if device:
         print_findings(ip, device)
