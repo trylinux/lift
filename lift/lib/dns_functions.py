@@ -1,13 +1,4 @@
 '''This module contains functions that test for DNS-related vulnerabilities.
-
-Network Time Protocol (NTP) is used to synchronize the time
-between a client and server. It is a UDP protocol that is run on port 123.
-
-Monlist (the NTP Monitor List Scanner) is a remote command in older
-versions of NTP that allows administrators to query the server for traffic
-counts of connected clients. In response the the "get monlist" request, an
-unpatched NTP server sends the requester a list of the last 600 hosts
-who have connected to that server.
 '''
 import dns.resolver
 import time
