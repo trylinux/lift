@@ -88,19 +88,15 @@ Only one of the required arguments can be supplied when running the lift tool.
 
 **Required Arguments**:
 
-- **-f** &nbsp;&nbsp; or &nbsp;&nbsp; **--ifile** &nbsp;&nbsp;&nbsp;&nbsp; `filename` - file with one IP address per line
+- **-f** &nbsp;&nbsp; or &nbsp;&nbsp; **--ipfile** &nbsp;&nbsp;&nbsp;&nbsp; `filename` - file with one IP address per line
 - **-s** &nbsp;&nbsp; or &nbsp;&nbsp; **--subnet** &nbsp;&nbsp;&nbsp;&nbsp;`string` -  the IP address range of a subnet
 - **-i** &nbsp;&nbsp; or &nbsp;&nbsp; **--ip** &nbsp;&nbsp;&nbsp;&nbsp;`string` - a single IP address
 - **-a** &nbsp;&nbsp; or  &nbsp;&nbsp; **--asn** &nbsp;&nbsp;&nbsp;&nbsp; `integer` - The officially registered autonomous system number (ASN) of an internet service provider (ISP)
 
 **Optional Arguments**:
-- **--I** &nbsp;&nbsp; or &nbsp;&nbsp; **--info**  - Get more info about operations
-- **--p** &nbsp;&nbsp; or &nbsp;&nbsp; **--port**  `integer` - The port number at the supplied IP address that lift should connect to.
+- **-p** &nbsp;&nbsp; or &nbsp;&nbsp; **--port**  `integer` - The port number at the supplied IP address that lift should connect to.
 - **--recurse** - Test Recursion
 - **--recon**   - Gather information about a given device.
-- **--v** &nbsp;&nbsp; or  **--verbose** - ****WARNING**** DO NOT USE `-v` UNLESS YOU WANT ALL THE REASONS WHY SOMETHING IS FAILING.
-
-
 
 
 ## Documentation and Support

@@ -71,7 +71,8 @@ class UsageError(Exception):
 def parse_args():
     '''Parse the command line attributes and return them as the dict `options`.
     '''
-    parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
+    parser = argparse.ArgumentParser(description='Low Impact Identification'
+                                     ' Tool')
     argroup = parser.add_mutually_exclusive_group(required=True)
     argroup.add_argument("-i", "--ip", dest='ip', help="An IP address")
     argroup.add_argument("-f", "--ipfile", dest='ipfile', help="A file of IPs")
@@ -79,7 +80,8 @@ def parse_args():
     argroup.add_argument("-a", "--asn", dest='asn', type=int,
                          help="ASN number. WARNING: This will take a while")
     parser.add_argument("-p", "--port", dest='port', type=int, default=443,
-                        help="A port")
+                        help=" The port number at the supplied IP address that"
+                        " lift should connect to")
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
                         default=False, help="Test Recursion")
     parser.add_argument("-S", "--ssl", dest='ssl_only', action="store_true",
