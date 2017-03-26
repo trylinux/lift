@@ -14,6 +14,7 @@ import BeautifulSoup
 import colorlog
 import netaddr
 import pyasn
+import IPy
 
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
@@ -187,7 +188,12 @@ def is_valid_ip(ip):
     '''Try to create an IP object using the given ip.
     Return True if an instance is successfully created, otherwise return False.
     '''
-    # TODO install & import IPy
+    try:
+        validated_ip = IP(ip)
+    except ValueError, TypeError:
+        logger.error('%s is not a valid IP address' % ip)
+        return False
+
     return True
 
 
