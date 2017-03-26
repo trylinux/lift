@@ -22,9 +22,6 @@ from ntp_functions import ntp_monlist_check
 from dns_functions import recurse_DNS_check
 
 
-asndb = pyasn.pyasn(local_path + '/lib/ipasn.dat')
-
-
 logger = colorlog.getLogger('lift')
 
 
@@ -79,16 +76,14 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Low Impact Identification Tool')
     argroup = parser.add_mutually_exclusive_group(required=True)
     argroup.add_argument("-i", "--ip", dest='ip', help="An IP address")
-    argroup.add_argument("-f", "--ifile", dest='ifile', help="A file of IPs")
+    argroup.add_argument("-f", "--ipfile", dest='ipfile', help="A file of IPs")
     argroup.add_argument("-s", "--subnet", dest='subnet', help="A subnet!")
     argroup.add_argument("-a", "--asn", dest='asn', type=int,
                          help=("ASN number. WARNING: This will take a while"))
     parser.add_argument("-p", "--port", dest='port', type=int, default=443,
                         help="A port")
     parser.add_argument("-v", "--verbose", dest='verbose',
-                        help=("Not your usual verbosity. This is for debugging "
-                              "why specific outputs aren't working! USE WITH "
-                              "CAUTION"))
+                        help=("Not your usual verbosity."))
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
                         default=False, help="Test Recursion")
     parser.add_argument("-I", "--info", dest='info', action="store_true",
@@ -126,10 +121,10 @@ def get_ips_from_file(options):
     '''Read each line of the IP file and return a list of IP addresses.
     '''
     ip_list = []
-    
-    with opened_w_error(options['ifile']) as (f, err):
+
+    with opened_w_error(options['ipfile']) as (f, err):
         if err:
-            logger.error(err)        
+            logger.error(err)
         else:
             ip_list = f.readlines()
 
@@ -155,14 +150,21 @@ def get_ips_from_asn(options):
     '''
     ip_list = []
 
-    subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
+    try:
+        ipasn_file = local_path + '/lib/ipasn.dat'
+        asndb = pyasn.pyasn(ipasn_file)
+        subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
+        logger.debug("Found %d prefixes advertised by given ASN: %s" %
+                    (len(subnets), options['asn']))
 
-    # creates a nested list of lists
-    nested_ip_list = [get_ips_from_subnet(subnet) for subnet in subnets]
+        # creates a nested list of lists
+        nested_ip_list = [get_ips_from_subnet(subnet) for subnet in subnets]
 
-    # flattens the nested list to a shallow list
-    ip_list = itertools.chain.from_iterable(nested_ip_list)
-    
+        # flattens the nested list to a shallow list
+        ip_list = itertools.chain.from_iterable(nested_ip_list)
+
+    except Exception, err:
+        logger.error("AsnError: %s" % err)
     return ip_list
 
 
@@ -173,7 +175,7 @@ def convert_input_to_ips(options):
     try:
         dispatch = {
             'ip': get_ips_from_ip,
-            'ifile': get_ips_from_file,
+            'ipfile': get_ips_from_file,
             'subnet': get_ips_from_subnet,
             'asn': get_ips_from_asn,
         }
