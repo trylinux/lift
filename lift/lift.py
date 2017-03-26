@@ -61,12 +61,9 @@ class UsageError(Exception):
     '''Exception raised for errors in the usage of this module.
 
     Attributes:
-        expr -- input expression in which the error occurred
         msg  -- explanation of the error
     '''
-
-    def __init__(self, expr, msg):
-        self.expr = expr
+    def __init__(self, msg):
         self.msg = msg
 
 
@@ -185,7 +182,7 @@ def convert_input_to_ips(options):
         correct_function = next(v for k, v in dispatch.items() if options[k])
         ip_list = correct_function(options)
         return ip_list
-    except KeyError:
+    except StopIteration, KeyError:
         raise UsageError('None of the cli arguments contained IP addresses.')
 
 
@@ -249,10 +246,6 @@ def get_certs_from_handshake(dest_ip, **kwargs):
         # If der_cert is not a string or buffer,
         # DER_cert_to_PEM_cert() raises TypeError.
         pem_cert = str(ssl.DER_cert_to_PEM_cert(der_cert))
-
-    except KeyboardInterrupt:
-        print "Quitting"
-        sys.exit(0)
 
     except Exception as e:
         # TODO replace with more specific exceptions:
@@ -465,21 +458,18 @@ def main():
     options = parse_args()
     cert_lookup_dict = setup_cert_collection()
     results = []
-    try:
-        ip_list = convert_input_to_ips(options)
-        exit()
-        for ip in ip_list:
-            if is_valid_ip(ip):
-                process_ip(ip, options)
-                msg = '%s : success' % ip
-            else:
-                msg = '%s : fail' % ip
 
-            results.append(msg)
-        return results
-    except KeyboardInterrupt:
-        print "Quitting"
-        sys.exit(0)
+    ip_list = convert_input_to_ips(options)
+    exit()
+    for ip in ip_list:
+        if is_valid_ip(ip):
+            process_ip(ip, options)
+            msg = '%s : success' % ip
+        else:
+            msg = '%s : fail' % ip
+
+        results.append(msg)
+    return results
 
 
 if __name__ == '__main__':
