@@ -76,17 +76,14 @@ def parse_args():
     argroup.add_argument("-f", "--ipfile", dest='ipfile', help="A file of IPs")
     argroup.add_argument("-s", "--subnet", dest='subnet', help="A subnet!")
     argroup.add_argument("-a", "--asn", dest='asn', type=int,
-                         help=("ASN number. WARNING: This will take a while"))
+                         help="ASN number. WARNING: This will take a while")
     parser.add_argument("-p", "--port", dest='port', type=int, default=443,
                         help="A port")
-    parser.add_argument("-v", "--verbose", dest='verbose',
-                        help=("Not your usual verbosity."))
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
                         default=False, help="Test Recursion")
-    parser.add_argument("-I", "--info", dest='info', action="store_true",
-                        default=False, help="Get more info about operations")
     parser.add_argument("-S", "--ssl", dest='ssl_only', action="store_true",
                         default=False, help="For doing SSL checks only", )
+    # TODO Is --ssl flag still needed?
     parser.add_argument("-R", "--recon", dest='recon', action="store_true",
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
@@ -464,6 +461,7 @@ def main():
             msg = '%s : fail' % ip
 
         results.append(msg)
+    print results
     return results
 
 
