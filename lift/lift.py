@@ -96,7 +96,7 @@ def parse_args():
 def get_ips_from_ip(options):
     '''Return a list with the IP address supplied to the command line.
     '''
-    return list(options['ip']) if options['ip'] else []
+    return [options['ip']] if options['ip'] else []
 
 
 @contextmanager
@@ -151,15 +151,13 @@ def get_ips_from_asn(options):
         subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
         logger.debug("Found %d prefixes advertised by the given ASN: %s" %
                     (len(subnets), options['asn']))
-
     except Exception, err:
         logger.error("AsnError: %s" % err)
-
     else:
         # creates a nested list of lists
         nested_ip_list = [get_ips_from_subnet(subnet) for subnet in subnets]
 
-        # flattens the nested list to a shallow list
+        # flattens the nested list into a shallow list
         ip_list = itertools.chain.from_iterable(nested_ip_list)
 
     return ip_list
@@ -189,7 +187,7 @@ def is_valid_ip(ip):
     Return True if an instance is successfully created, otherwise return False.
     '''
     try:
-        validated_ip = IP(ip)
+        validated_ip = IPy.IP(ip)
     except ValueError, TypeError:
         logger.error('%s is not a valid IP address' % ip)
         return False
@@ -356,8 +354,9 @@ def process_ip(ip, options):
     try:
         correct_functions = dispatch_by_port[True]
         logger.debug('Calling the function %s to process IP %s' %
-                    (' and '.join(correct_functions), ip))
+                    (correct_functions, ip))
         [func(ip, **options) for func in correct_functions]
+        # TODO ^^ fix TypeError: 'function' object is not iterable caused by
     except KeyError:
         raise ValueError('Unsure how to handle the given port number (%d) with'
                          ' the other cli arguments' % options['port'])
@@ -455,7 +454,7 @@ def lookup_http_data(title, server, cert_lookup_dict):
 def main():
     configure_logging()
     options = parse_args()
-    cert_lookup_dict = setup_cert_collection()
+    # cert_lookup_dict = setup_cert_collection()
     results = []
 
     ip_list = convert_input_to_ips(options)
