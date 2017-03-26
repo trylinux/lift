@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import argparse
 import itertools
 import json
@@ -75,15 +76,15 @@ def parse_args():
     argroup = parser.add_mutually_exclusive_group(required=True)
     argroup.add_argument("-i", "--ip", dest='ip', help="An IP address")
     argroup.add_argument("-f", "--ifile", dest='ifile', help="A file of IPs")
+    argroup.add_argument("-s", "--subnet", dest='subnet', help="A subnet!")
+    argroup.add_argument("-a", "--asn", dest='asn', type=int,
+                         help=("ASN number. WARNING: This will take a while"))
     parser.add_argument("-p", "--port", dest='port', type=int, default=443,
                         help="A port")
     parser.add_argument("-v", "--verbose", dest='verbose',
                         help=("Not your usual verbosity. This is for debugging "
                               "why specific outputs aren't working! USE WITH "
                               "CAUTION"))
-    argroup.add_argument("-s", "--subnet", dest='subnet', help="A subnet!")
-    argroup.add_argument("-a", "--asn", dest='asn', type=int,
-                         help=("ASN number. WARNING: This will take a while"))
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
                         default=False, help="Test Recursion")
     parser.add_argument("-I", "--info", dest='info', action="store_true",
@@ -93,7 +94,8 @@ def parse_args():
     parser.add_argument("-R", "--recon", dest='recon', action="store_true",
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
-    options = vars(args)    
+    options = vars(args)
+    logger.debug('Parsed the cli args: %s' % options)    
     return options
 
 
@@ -103,16 +105,30 @@ def get_ips_from_ip(options):
     return list(options['ip'])
 
 
+@contextmanager
+def opened_w_error(filename, mode="r"):
+    try:
+        f = open(filename, mode)
+    except IOError, err:
+        yield None, err
+    else:
+        try:
+            yield f, None
+        finally:
+            f.close()
+
+
 def get_ips_from_file(options):
     '''Read each line of the IP file and return a list of IP addresses.
     '''
     ip_list = []
-
-    with open(options['ifile']) as f:
-        ip_list = f.readlines()
     
-    # TODO add a more specific exception, like IOError
-    # https://www.python.org/dev/peps/pep-0343/
+    with opened_w_error(options['ifile']) as (f, err):
+        if err:
+            logger.error(err)        
+        else:
+            ip_list = f.readlines()
+
     return ip_list
 
 
@@ -126,7 +142,6 @@ def get_ips_from_subnet(options):
     except Exception as e:
     # TODO replace with more specific exception:
     # http://netaddr.readthedocs.io/en/latest/_modules/netaddr/core.html#AddrFormatError
-        sys.exit()
 
     return ip_list
 
@@ -447,6 +462,7 @@ def main():
     results = []
     try:
         ip_list = convert_input_to_ips(options)
+        exit()
         for ip in ip_list:
             if is_valid_ip(ip):
                 process_ip(ip, options)
