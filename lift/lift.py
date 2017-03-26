@@ -27,10 +27,19 @@ logger = colorlog.getLogger('lift')
 
 
 def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
-    '''Configure the logger by specifying the format for the log messages,
-    whether to write the messages to the console or a file, and by
-    setting the severity level of the messages to control the type
-    of messages displayed in the log.
+    '''Configure the logger.
+
+    Args:
+        level (str, optional): Sets the severity level of the messages to be
+            displayed in the log. Defaults to logging.DEBUG, the lowest level.
+        write_to_file (str, optional): Whether to write the log messages to a
+            file. Defaults to False.
+        filename (str, optional): The name of the file where log messages
+            should be written. Defaults to '' since log messages are written to
+            the console by default.
+
+    Returns:
+        None
     '''
     format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     if write_to_file:
@@ -84,11 +93,9 @@ def parse_args():
                         " lift should connect to")
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
                         default=False, help="Test Recursion")
-    parser.add_argument("-S", "--ssl", dest='ssl_only', action="store_true",
-                        default=False, help="For doing SSL checks only", )
-    # TODO Is --ssl flag still needed?
     parser.add_argument("-R", "--recon", dest='recon', action="store_true",
                         default=False, help="Gather info about a given device")
+    # TODO Is --ssl flag still needed?
     args = parser.parse_args()
     options = vars(args)
     logger.debug('Parsed the cli args: %s' % options)
@@ -103,6 +110,19 @@ def get_ips_from_ip(options):
 
 @contextmanager
 def opened_w_error(filename, mode="r"):
+    '''
+    A factory function that allows us to enter and exit the opened file context
+    while also catching and yielding any errors that occur in that context.
+
+    Args:
+        filename (str): The name of the file to be opened.
+        mode (str, optional): String indicating how the file is to be opened.
+            Defaults to 'r', reading mode.
+
+    Yields:
+        f (file):  The file object.
+        err (IOError): If the file cannot be opened.
+    '''
     try:
         f = open(filename, mode)
     except IOError, err:
@@ -124,7 +144,8 @@ def get_ips_from_file(options):
             logger.error(err)
         else:
             ip_list = f.readlines()
-
+            logger.debug("Found %d IPs in the given ipfile: %s" %
+                        (len(ip_list), options['ipfile']))
     return ip_list
 
 
@@ -135,6 +156,8 @@ def get_ips_from_subnet(options):
 
     try:
         ip_list = [ip for ip in netaddr.IPNetwork(options['subnet'])]
+        logger.debug("Found %d IPs in the given subnet: %s" %
+                    (len(ip_list), options['subnet']))
     except (netaddr.core.AddrFormatError, ValueError) as err:
         logger.error(err)
 
@@ -198,9 +221,25 @@ def is_valid_ip(ip):
 
 
 def get_certs_from_handshake(ip, **kwargs):
-    '''Perform a SSL handshake with the given IP address, and
-    return the SSLContext object, as well as two formats of the SSL certificate
-    a DER-encoded blob of bytes and a PEM-encoded string.
+    '''Negotiates an SSL connection with the given IP address.
+
+    Args:
+        ip (str): The IP address that we want connect to.
+        **kwargs: Keyword arguments containing the user-supplied, cli inputs.
+
+    Returns:
+        der_cert (bytes): The SSL certificate as a DER-encoded blob of bytes.
+            Defaults to None.
+        pem_cert: The SSL certificate as a PEM-encoded string. Defaults to
+            empty string.
+        ctx (SSLContext): An SSLContext object with default settings.
+
+    Raises:
+        socket.error: If any socket-related errors occur.
+        TypeError: If the DER-encoded cert that is provided is neither a string
+            nor buffer.
+        ValueError: If we attempt to get the given IP's certificate before the
+            SSL handshake is done.
     '''
     der_cert = None
     pem_cert = ''
@@ -218,7 +257,7 @@ def get_certs_from_handshake(ip, **kwargs):
 
         der_cert = ssl_sock.getpeercert(True)
         if not der_cert:
-            logger.info('%s did not provide an SSL certificate: %s' % ip)
+            logger.info('%s did not provide an SSL certificate' % ip)
 
         logger.info('Received an SSL certificate: %s' % str(der_cert))
         pem_cert = str(ssl.DER_cert_to_PEM_cert(der_cert))
@@ -234,9 +273,9 @@ def get_certs_from_handshake(ip, **kwargs):
         logger.error(err)
     except socket.error, err:
         logger.error(err)
-
-    sock.close()
-
+    finally:
+        sock.close()
+        logger.debug('Closed socket.')
     return der_cert, pem_cert, ctx
 
 
@@ -332,7 +371,8 @@ def identify_using_ssl_cert(ip, **kwargs):
     der_cert, pem_cert, ctx = get_certs_from_handshake(ip, **kwargs)
     device = lookup_cert(pem_cert, cert_lookup_dict)
     if device:
-        logger.debug('Found %s as a match for the cert provided by %s' % ip)
+        logger.debug('Found %s as a match for the cert provided by %s' %
+                    (device, ip))
         print_findings(ip, device)
     else:
         logger.info('No matching certs were found for IP %s' % ip)
@@ -392,6 +432,9 @@ def setup_cert_collection():
                 file_contents = f.read()
                 try:
                     json.loads(file_contents)
+                    # TODO check whether the correct fields are present
+                    # don't use a file if it's missing ssl_cert_info or
+                    # http_response_info arrays or their appropriate fields
                 except ValueError:
                     logger.error('File %s has invalid JSON' % cert_file)
                     num_files -= 1
