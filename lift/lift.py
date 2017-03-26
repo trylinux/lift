@@ -194,69 +194,44 @@ def is_valid_ip(ip):
     return True
 
 
-def get_certs_from_handshake(dest_ip, **kwargs):
+def get_certs_from_handshake(ip, **kwargs):
     '''Perform a SSL handshake with the given IP address, and
     return the SSLContext object, as well as two formats of the SSL certificate
-    , a DER-encoded blob of bytes and a PEM-encoded string.
+    a DER-encoded blob of bytes and a PEM-encoded string.
     '''
-    dport = kwargs['port']
-    verbose = kwargs['verbose']
-    ssl_only = kwargs['ssl_only']
-    info = kwargs['info']
-
+    der_cert = None
     pem_cert = ''
-
-    # Create a new SSLContext object `ctx` with default settings
     ctx = ssl.create_default_context()
-
-    # Do not match the peer cert's hostname with match_hostname() in
-    # SSLSocket.do_handshake().
     ctx.check_hostname = False
-
-    # The verify_mode attribute is about whether to try to verify other peers'
-    # certificates and how to behave if verification fails.
-    # In the CERT_NONE mode, no certificates will be required from the other
-    # side of the socket connection. If a certificate is received from the
-    # other end, no attempt to validate it is made.
     ctx.verify_mode = ssl.CERT_NONE
-
-    # Set the available ciphers for sockets created with this context.
     ctx.set_ciphers('ALL')
 
-    # Create an instance `sock` of socket.socket
-    sock = socket.socket()
-
-    # Set a timeout on blocking socket operations. Raise a timeout exception if
-    # the timeout period value has elapsed before the operation has completed.
-    sock.settimeout(5)
-
     try:
-        # Takes an instance sock of socket.socket, and returns an instance
-        # of ssl.SSLSocket
+        sock = socket.socket()
+        sock.settimeout(5)
         ssl_sock = ssl.wrap_socket(sock, cert_reqs=ssl.CERT_NONE)
+        ssl_sock.connect((ip, kwargs['port']))
+        logger.debug('Connecting to %s:%d...' % ((ip, kwargs['port'])))
 
-        # Connect to a remote socket at the given IP address on the given port
-        ssl_sock.connect((dest_ip, dport))
-
-        # der_cert is either an ssl certificate, provided as DER-encoded blob
-        # of bytes, or None if the peer did not provide a certificate.
         der_cert = ssl_sock.getpeercert(True)
+        if not der_cert:
+            logger.info('%s did not provide an SSL certificate: %s' % ip)
 
-        # pem_cert is a PEM-encoded string version of the ssl certificate
-        # If der_cert is not a string or buffer,
-        # DER_cert_to_PEM_cert() raises TypeError.
+        logger.info('Received an SSL certificate: %s' % str(der_cert))
         pem_cert = str(ssl.DER_cert_to_PEM_cert(der_cert))
+        logger.debug('Converted the cert from the DER to the PEM format')
 
-    except Exception as e:
-        # TODO replace with more specific exceptions:
-        # SSLError (a subtype of socket.error), a more specific SSLError,
-        # socket time out, socket.error
-        # If the SSL handshake hasn't been done yet,
-        # getpeercert() raises ValueError.
-        if verbose:
-            print "Error Catch at line 268 ", e
+    except TypeError, err:
+        logger.debug('ssl.DER_cert_to_PEM_cert() raises a TypeError if the'
+                     'given DER-encoded cert is neither a string nor buffer')
+        logger.error(err)
+    except ValueError, err:
+        logger.debug('The SSL handshake might not have been done yet.'
+                     'getpeercert() raises ValueError in that case')
+        logger.error(err)
+    except socket.error, err:
+        logger.error(err)
 
-    # Close the socket. All future operations on the socket object will fail
     sock.close()
 
     return der_cert, pem_cert, ctx
@@ -276,14 +251,14 @@ def identify_using_http_response(ip, **kwargs):
     if device:
         print_findings(ip, device, title=title, server=server)
     else:
-        logger.info('No matching certs were found for IP %s' % ip)
+        logger.info('No matching certs were found for IP:  %s' % ip)
         # TODO add logic to try rtsp request if http doesn't provide info
 
     return device
 
 
-def send_rstp_request(dest_ip):
-    new_ip = str(dest_ip).rstrip('\r\n)')
+def send_rstp_request(ip):
+    new_ip = str(ip).rstrip('\r\n)')
     bashcommand = ('curl --silent rtsp://' + new_ip +
                    ' -I -m 5| grep Server')
     proc = subprocess.Popen(['bash', '-c', bashcommand],
@@ -291,7 +266,7 @@ def send_rstp_request(dest_ip):
     output = proc.stdout.read()
     rtsp_server = str(output).rstrip('\r\n)')
     if 'Dahua' in str(rtsp_server):
-        print (str(dest_ip).rstrip('\r\n)') +
+        print (str(ip).rstrip('\r\n)') +
                ": Dahua RTSP Server Detected (RTSP Server)")
     return
 
@@ -300,12 +275,22 @@ def send_http_request(ip, **kwargs):
     #TODO add logic to try port 443, then port 80
     url = "https://%s:%s" % (ip, kwargs['port'])
     ctx = kwargs.get('ctx', None)
+    headers = {}
+    html = ''
+    try:
+        response = urllib2.urlopen(url, context=ctx, timeout=10)
 
-    f = urllib2.urlopen(url, context=ctx, timeout=10)
-
-    html = f.read()
-    headers = f.info()
-    f.close()
+    except urllib2.URLError as err:
+        if hasattr(err, 'reason'):
+            logger.error('Failed to reach a server at %s. Reason: %s' %
+                        (url, err.reason))
+        elif hasattr(err, 'code'):
+            logger.error('The server %s couldn\'t fulfill the request.'
+                         ' Error code: %s' % (url, err.code))
+    else:
+        html = response.read()
+        headers = response.info()
+        response.close()
 
     return headers, html
 
@@ -339,6 +324,7 @@ def identify_using_ssl_cert(ip, **kwargs):
     der_cert, pem_cert, ctx = get_certs_from_handshake(ip, **kwargs)
     device = lookup_cert(pem_cert, cert_lookup_dict)
     if device:
+        logger.debug('Found %s as a match for the cert provided by %s' % ip)
         print_findings(ip, device)
     else:
         logger.info('No matching certs were found for IP %s' % ip)
@@ -361,9 +347,12 @@ def process_ip(ip, options):
 
     try:
         correct_functions = dispatch_by_port[True]
+        logger.debug('Calling the function %s to process IP %s' %
+                    (' and '.join(correct_functions), ip))
         [func(ip, **options) for func in correct_functions]
     except KeyError:
-        raise ValueError('Invalid port number was supplied by the user.')
+        raise ValueError('Unsure how to handle the given port number (%d) with'
+                         ' the other cli arguments' % options['port'])
 
 
 def setup_cert_collection():
@@ -377,8 +366,7 @@ def setup_cert_collection():
     and return this object.
     '''
     json_file = '['
-    cert_collection_path = (os.path.dirname(os.path.realpath(__file__)) +
-                            '/cert_collection')
+    cert_collection_path = (local_path + '/cert_collection')
     cert_files = os.listdir(cert_collection_path)
 
     num_files = len(cert_files)
@@ -386,20 +374,23 @@ def setup_cert_collection():
     for x in range(num_files):
         cert_file = cert_collection_path + '/' + cert_files[x]
 
-        with open(cert_file) as f:
-            try:
-                file_contents = f.read()
-                json.loads(file_contents)
-            except ValueError:
-                logger.error('File %s is an invalid JSON object' % cert_file)
-                num_files -= 1
+        with opened_w_error(cert_file) as (f, err):
+            if err:
+                logger.error(err)
             else:
-                json_file += file_contents + ','
+                file_contents = f.read()
+                try:
+                    json.loads(file_contents)
+                except ValueError:
+                    logger.error('File %s has invalid JSON' % cert_file)
+                    num_files -= 1
+                else:
+                    json_file += file_contents + ','
 
     final = json_file.rstrip(',') + ']'
     cert_lookup_dict = json.loads(final)
-    logger.debug('Created cert_lookup_dict using %d manufacturer JSON files'
-                 % num_files)
+    logger.debug('Created cert_lookup_dict using %d JSON files from dir %s' %
+                 (num_files, cert_collection_path))
 
     return cert_lookup_dict
 
@@ -460,7 +451,6 @@ def main():
     results = []
 
     ip_list = convert_input_to_ips(options)
-    exit()
     for ip in ip_list:
         if is_valid_ip(ip):
             process_ip(ip, options)
