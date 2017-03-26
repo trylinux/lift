@@ -15,10 +15,14 @@ import colorlog
 import netaddr
 import pyasn
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/lib')
+local_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(local_path + '/lib')
 from ssdp_functions import recurse_ssdp_check
 from ntp_functions import ntp_monlist_check
 from dns_functions import recurse_DNS_check
+
+
+asndb = pyasn.pyasn(local_path + '/lib/ipasn.dat')
 
 
 logger = colorlog.getLogger('lift')
@@ -102,7 +106,7 @@ def parse_args():
 def get_ips_from_ip(options):
     '''Return a list with the IP address supplied to the command line.
     '''
-    return list(options['ip'])
+    return list(options['ip']) if options['ip'] else []
 
 
 @contextmanager
@@ -139,9 +143,8 @@ def get_ips_from_subnet(options):
 
     try:
         ip_list = [ip for ip in netaddr.IPNetwork(options['subnet'])]
-    except Exception as e:
-    # TODO replace with more specific exception:
-    # http://netaddr.readthedocs.io/en/latest/_modules/netaddr/core.html#AddrFormatError
+    except (netaddr.core.AddrFormatError, ValueError) as err:
+        logger.error(err)
 
     return ip_list
 
@@ -151,8 +154,6 @@ def get_ips_from_asn(options):
     subnets in the given Autonomous System Number.
     '''
     ip_list = []
-    libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
-    asndb = pyasn.pyasn(libpath + '/ipasn.dat')
 
     subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
 
@@ -475,9 +476,6 @@ def main():
     except KeyboardInterrupt:
         print "Quitting"
         sys.exit(0)
-    except Exception as e:  
-        # TODO remove or replace with more specific exception
-        print "Encountered an error ",e
 
 
 if __name__ == '__main__':
