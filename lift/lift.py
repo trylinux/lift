@@ -357,6 +357,8 @@ def process_ip(ip, options):
                     (correct_functions, ip))
         [func(ip, **options) for func in correct_functions]
         # TODO ^^ fix TypeError: 'function' object is not iterable caused by
+        # TODO ^^ fix TypeError: recurse_DNS_check() got an unexpected keyword
+        # argument 'subnet'
     except KeyError:
         raise ValueError('Unsure how to handle the given port number (%d) with'
                          ' the other cli arguments' % options['port'])
@@ -454,7 +456,7 @@ def lookup_http_data(title, server, cert_lookup_dict):
 def main():
     configure_logging()
     options = parse_args()
-    # cert_lookup_dict = setup_cert_collection()
+    cert_lookup_dict = setup_cert_collection()
     results = []
 
     ip_list = convert_input_to_ips(options)
