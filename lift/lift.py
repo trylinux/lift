@@ -94,7 +94,7 @@ def parse_args():
                         default=False, help="Gather info about a given device")
     args = parser.parse_args()
     options = vars(args)
-    logger.debug('Parsed the cli args: %s' % options)    
+    logger.debug('Parsed the cli args: %s' % options)
     return options
 
 
@@ -154,17 +154,19 @@ def get_ips_from_asn(options):
         ipasn_file = local_path + '/lib/ipasn.dat'
         asndb = pyasn.pyasn(ipasn_file)
         subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
-        logger.debug("Found %d prefixes advertised by given ASN: %s" %
+        logger.debug("Found %d prefixes advertised by the given ASN: %s" %
                     (len(subnets), options['asn']))
 
+    except Exception, err:
+        logger.error("AsnError: %s" % err)
+
+    else:
         # creates a nested list of lists
         nested_ip_list = [get_ips_from_subnet(subnet) for subnet in subnets]
 
         # flattens the nested list to a shallow list
         ip_list = itertools.chain.from_iterable(nested_ip_list)
 
-    except Exception, err:
-        logger.error("AsnError: %s" % err)
     return ip_list
 
 
@@ -197,19 +199,19 @@ def is_valid_ip(ip):
 
 def get_certs_from_handshake(dest_ip, **kwargs):
     '''Perform a SSL handshake with the given IP address, and
-    return the SSLContext object, as well as two formats of the SSL certificate,
-    a DER-encoded blob of bytes and a PEM-encoded string.  
+    return the SSLContext object, as well as two formats of the SSL certificate
+    , a DER-encoded blob of bytes and a PEM-encoded string.
     '''
     dport = kwargs['port']
     verbose = kwargs['verbose']
     ssl_only = kwargs['ssl_only']
     info = kwargs['info']
-    
+
     pem_cert = ''
 
     # Create a new SSLContext object `ctx` with default settings
     ctx = ssl.create_default_context()
-    
+
     # Do not match the peer cert's hostname with match_hostname() in
     # SSLSocket.do_handshake().
     ctx.check_hostname = False
@@ -217,18 +219,18 @@ def get_certs_from_handshake(dest_ip, **kwargs):
     # The verify_mode attribute is about whether to try to verify other peers'
     # certificates and how to behave if verification fails.
     # In the CERT_NONE mode, no certificates will be required from the other
-    # side of the socket connection. If a certificate is received from the other
-    # end, no attempt to validate it is made.
+    # side of the socket connection. If a certificate is received from the
+    # other end, no attempt to validate it is made.
     ctx.verify_mode = ssl.CERT_NONE
 
     # Set the available ciphers for sockets created with this context.
     ctx.set_ciphers('ALL')
-    
+
     # Create an instance `sock` of socket.socket
     sock = socket.socket()
 
-    # Set a timeout on blocking socket operations. Raise a timeout exception
-    # if the timeout period value has elapsed before the operation has completed.
+    # Set a timeout on blocking socket operations. Raise a timeout exception if
+    # the timeout period value has elapsed before the operation has completed.
     sock.settimeout(5)
 
     try:
@@ -239,9 +241,8 @@ def get_certs_from_handshake(dest_ip, **kwargs):
         # Connect to a remote socket at the given IP address on the given port
         ssl_sock.connect((dest_ip, dport))
 
-        # der_cert is either an ssl certificate, provided as DER-encoded blob of
-        # bytes, or None if the peer did not provide a certificate.
-        # If the SSL handshake hasn't been done yet, getpeercert() raises ValueError.
+        # der_cert is either an ssl certificate, provided as DER-encoded blob
+        # of bytes, or None if the peer did not provide a certificate.
         der_cert = ssl_sock.getpeercert(True)
 
         # pem_cert is a PEM-encoded string version of the ssl certificate
@@ -255,12 +256,13 @@ def get_certs_from_handshake(dest_ip, **kwargs):
 
     except Exception as e:
         # TODO replace with more specific exceptions:
-        # SSLError (a subtype of socket.error), a more specific SSLError, 
+        # SSLError (a subtype of socket.error), a more specific SSLError,
         # socket time out, socket.error
-        # If the SSL handshake hasn't been done yet, getpeercert() raises ValueError.
+        # If the SSL handshake hasn't been done yet,
+        # getpeercert() raises ValueError.
         if verbose:
             print "Error Catch at line 268 ", e
-    
+
     # Close the socket. All future operations on the socket object will fail
     sock.close()
 
@@ -281,7 +283,7 @@ def identify_using_http_response(ip, **kwargs):
     if device:
         print_findings(ip, device, title=title, server=server)
     else:
-        logger.info('No matching certs were found for IP %s' % ip)        
+        logger.info('No matching certs were found for IP %s' % ip)
         # TODO add logic to try rtsp request if http doesn't provide info
 
     return device
@@ -289,14 +291,14 @@ def identify_using_http_response(ip, **kwargs):
 
 def send_rstp_request(dest_ip):
     new_ip = str(dest_ip).rstrip('\r\n)')
-    bashcommand = ('curl --silent rtsp://'+ new_ip +
+    bashcommand = ('curl --silent rtsp://' + new_ip +
                    ' -I -m 5| grep Server')
-    proc = subprocess.Popen(['bash','-c', bashcommand], 
+    proc = subprocess.Popen(['bash', '-c', bashcommand],
                             stdout=subprocess.PIPE)
     output = proc.stdout.read()
     rtsp_server = str(output).rstrip('\r\n)')
     if 'Dahua' in str(rtsp_server):
-        print (str(dest_ip).rstrip('\r\n)') + 
+        print (str(dest_ip).rstrip('\r\n)') +
                ": Dahua RTSP Server Detected (RTSP Server)")
     return
 
@@ -305,19 +307,19 @@ def send_http_request(ip, **kwargs):
     #TODO add logic to try port 443, then port 80
     url = "https://%s:%s" % (ip, kwargs['port'])
     ctx = kwargs.get('ctx', None)
-    
+
     f = urllib2.urlopen(url, context=ctx, timeout=10)
-    
+
     html = f.read()
     headers = f.info()
     f.close()
-    
+
     return headers, html
 
 
 def parse_response(html, headers):
     '''Parse the HTML and headers from the HTTP response and return a dict with
-    all extracted data. 
+    all extracted data.
     '''
     # TODO figure out relevant exception from parsing to catch/react to
     soup = BeautifulSoup.BeautifulSoup(html)
@@ -335,9 +337,9 @@ def print_findings(ip, device, title='', server=''):
 
 
 def identify_using_ssl_cert(ip, **kwargs):
-    '''Calls functions that correspond to steps involved in identifying a device
-    based on data in the HTTP response headers or resource.
-    1. get cert from handshake 
+    '''Calls functions that correspond to steps involved in identifying a
+    device based on data in the HTTP response headers or resource.
+    1. get cert from handshake
     2. lookup cert
     3. print findings
     '''
@@ -382,15 +384,15 @@ def setup_cert_collection():
     and return this object.
     '''
     json_file = '['
-    cert_collection_path = (os.path.dirname(os.path.realpath(__file__)) + 
+    cert_collection_path = (os.path.dirname(os.path.realpath(__file__)) +
                             '/cert_collection')
     cert_files = os.listdir(cert_collection_path)
-    
+
     num_files = len(cert_files)
-    
+
     for x in range(num_files):
         cert_file = cert_collection_path + '/' + cert_files[x]
-        
+
         with open(cert_file) as f:
             try:
                 file_contents = f.read()
@@ -399,11 +401,11 @@ def setup_cert_collection():
                 logger.error('File %s is an invalid JSON object' % cert_file)
                 num_files -= 1
             else:
-                json_file += file_contents  + ','
+                json_file += file_contents + ','
 
     final = json_file.rstrip(',') + ']'
     cert_lookup_dict = json.loads(final)
-    logger.debug('Created cert_lookup_dict using %d manufacturer JSON files' 
+    logger.debug('Created cert_lookup_dict using %d manufacturer JSON files'
                  % num_files)
 
     return cert_lookup_dict
@@ -414,46 +416,46 @@ def lookup_cert(pem_cert, cert_lookup_dict):
     the cert_collection directory and return the device description if there's
      a match.
     '''
-    keys =  [cert_lookup_dict[x]['ssl_cert_info'][y]['PEM_cert'] 
-             for x in range(len(cert_lookup_dict)) 
-             for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
+    keys = [cert_lookup_dict[x]['ssl_cert_info'][y]['PEM_cert']
+            for x in range(len(cert_lookup_dict))
+            for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
             ]
-    
-    values = [cert_lookup_dict[x]['ssl_cert_info'][y]['display_name'] 
+
+    values = [cert_lookup_dict[x]['ssl_cert_info'][y]['display_name']
               for x in range(len(cert_lookup_dict))
               for y in range(len(cert_lookup_dict[x]['ssl_cert_info']))
-              ]   
+              ]
 
     pem_dict = dict(zip(keys, values))
-    device = pem_dict.get(pem_cert, '')   
+    device = pem_dict.get(pem_cert, '')
     return device
 
 
 def lookup_http_data(title, server, cert_lookup_dict):
     '''Lookup the given title and server in a dictionary containing all the
-    HTTP response data in the cert_collection directory. Return the device 
+    HTTP response data in the cert_collection directory. Return the device
     description if there's a match.
     '''
     c = cert_lookup_dict
 
-    server_search_terms =  [c[x]['http_response_info'][y]['server_search_text'] 
-                            for x in range(len(c)) 
-                            for y in range(len(c[x]['http_response_info']))
-                            ]
-    
-    title_search_terms =  [c[x]['http_response_info'][y]['title_search_text'] 
-                           for x in range(len(c)) 
+    server_search_terms = [c[x]['http_response_info'][y]['server_search_text']
+                           for x in range(len(c))
                            for y in range(len(c[x]['http_response_info']))
                            ]
 
-    display_names = [c[x]['http_response_info'][y]['display_name'] 
-              for x in range(len(c))
-              for y in range(len(c[x]['http_response_info']))
-              ]   
+    title_search_terms = [c[x]['http_response_info'][y]['title_search_text']
+                          for x in range(len(c))
+                          for y in range(len(c[x]['http_response_info']))
+                          ]
+
+    display_names = [c[x]['http_response_info'][y]['display_name']
+                     for x in range(len(c))
+                     for y in range(len(c[x]['http_response_info']))
+                     ]
 
     lookup_list = zip(server_search_terms, title_search_terms, display_names)
-    
-    device_description = next((n[2] for n in lookup_list 
+
+    device_description = next((n[2] for n in lookup_list
                                if n[0] in server and n[1] in title), '')
     return device_description
 
@@ -473,7 +475,7 @@ def main():
             else:
                 msg = '%s : fail' % ip
 
-            results.append(msg) 
+            results.append(msg)
         return results
     except KeyboardInterrupt:
         print "Quitting"
