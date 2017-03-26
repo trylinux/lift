@@ -252,8 +252,8 @@ def identify_using_http_response(ip, **kwargs):
         print_findings(ip, device, title=title, server=server)
     else:
         logger.info('No matching certs were found for IP:  %s' % ip)
-        # TODO add logic to try rtsp request if http doesn't provide info
-
+        logger.info('Trying rtsp since http request didn\'t ID device.')
+        send_rstp_request(ip)
     return device
 
 
@@ -261,13 +261,18 @@ def send_rstp_request(ip):
     new_ip = str(ip).rstrip('\r\n)')
     bashcommand = ('curl --silent rtsp://' + new_ip +
                    ' -I -m 5| grep Server')
-    proc = subprocess.Popen(['bash', '-c', bashcommand],
-                            stdout=subprocess.PIPE)
-    output = proc.stdout.read()
-    rtsp_server = str(output).rstrip('\r\n)')
-    if 'Dahua' in str(rtsp_server):
-        print (str(ip).rstrip('\r\n)') +
-               ": Dahua RTSP Server Detected (RTSP Server)")
+    try:
+        proc = subprocess.Popen(['bash', '-c', bashcommand],
+                                stdout=subprocess.PIPE)
+        output = proc.stdout.read()
+
+    except Exception, err:
+        logger.error(err)
+    else:
+        rtsp_server = str(output).rstrip('\r\n)')
+        if 'Dahua' in str(rtsp_server):
+            print (str(ip).rstrip('\r\n)') +
+                   ": Dahua RTSP Server Detected (RTSP Server)")
     return
 
 
