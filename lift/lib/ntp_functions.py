@@ -82,7 +82,7 @@ def monlist_scan(self, target):
             print "Error in ntp_monlist ", e
 
 
-def ntp_monlist_check(dest_ip):
+def ntp_monlist_check(dest_ip, **kwargs):
     '''Check whether the device, indicated by the given IP address, is
     vulnerable to the NTP monlist command.
     '''

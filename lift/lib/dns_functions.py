@@ -4,7 +4,7 @@ import dns.resolver
 import time
 
 
-def recurse_DNS_check(dest_ip):
+def recurse_DNS_check(dest_ip, **kwargs):
     '''Check whether the device, indicated by the given IP address, is
     is vulnerable to DNS amplication.
     '''
@@ -12,7 +12,7 @@ def recurse_DNS_check(dest_ip):
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [str(dest_ip)]
     try:
-        print "Trying: ",dest_ip
+        print "Trying: ", dest_ip
         start = time.time()
         while time.time() < start + 3:
             myAnswers = myResolver.query("google.com", "A")

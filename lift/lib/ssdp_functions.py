@@ -67,7 +67,7 @@ def get_ssdp_information(ipaddr):
     return b
 
 
-def recurse_ssdp_check(dest_ip):
+def recurse_ssdp_check(dest_ip, **kwargs):
     '''Check whether the device, indicated by the given IP address, is
     is an SSDP reflector.
     '''

@@ -12,9 +12,9 @@ import urllib2
 
 import BeautifulSoup
 import colorlog
+import IPy
 import netaddr
 import pyasn
-import IPy
 
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
@@ -220,11 +220,10 @@ def is_valid_ip(ip):
     return True
 
 
-def get_certs_from_handshake(ip, **kwargs):
+def get_certs_from_handshake(**kwargs):
     '''Negotiates an SSL connection with the given IP address.
 
     Args:
-        ip (str): The IP address that we want connect to.
         **kwargs: Keyword arguments containing the user-supplied, cli inputs.
 
     Returns:
@@ -252,8 +251,8 @@ def get_certs_from_handshake(ip, **kwargs):
         sock = socket.socket()
         sock.settimeout(5)
         ssl_sock = ssl.wrap_socket(sock, cert_reqs=ssl.CERT_NONE)
-        ssl_sock.connect((ip, kwargs['port']))
-        logger.debug('Connecting to %s:%d...' % ((ip, kwargs['port'])))
+        ssl_sock.connect((kwargs['ip'], kwargs['port']))
+        logger.debug('Connecting to %s:%d...' % ((kwargs['ip'], kwargs['port'])))
 
         der_cert = ssl_sock.getpeercert(True)
         if not der_cert:
@@ -361,19 +360,19 @@ def print_findings(ip, device, title='', server=''):
     print msg.format(**extra_params)
 
 
-def identify_using_ssl_cert(ip, **kwargs):
+def identify_using_ssl_cert(**kwargs):
     '''Calls functions that correspond to steps involved in identifying a
     device based on data in the HTTP response headers or resource.
     1. get cert from handshake
     2. lookup cert
     3. print findings
     '''
-    der_cert, pem_cert, ctx = get_certs_from_handshake(ip, **kwargs)
+    der_cert, pem_cert, ctx = get_certs_from_handshake(**kwargs)
     device = lookup_cert(pem_cert, cert_lookup_dict)
     if device:
         logger.debug('Found %s as a match for the cert provided by %s' %
-                    (device, ip))
-        print_findings(ip, device)
+                    (device, kwargs['ip']))
+        print_findings(kwargs['ip'], device)
     else:
         logger.info('No matching certs were found for IP %s' % ip)
     return device
@@ -384,20 +383,21 @@ def process_ip(ip, options):
     port and recurse options passed into the command line..
     '''
     dispatch_by_port = {
-        options['port'] == 80: (identify_using_http_response),
-        options['port'] != 80 and not options['recurse']: (identify_using_ssl_cert),
-        options['port'] == 53 and options['recurse']: (recurse_DNS_check),
-        options['port'] == 123 and options['recurse']: (ntp_monlist_check),
-        options['port'] == 1900 and options['recurse']: (recurse_ssdp_check),
-        options['port'] != 80 and options['recurse']: (
-            recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check),
+        options['port'] == 80: [identify_using_http_response],
+        options['port'] != 80 and not options['recurse']: [identify_using_ssl_cert],
+        options['port'] == 53 and options['recurse']: [recurse_DNS_check],
+        options['port'] == 123 and options['recurse']: [ntp_monlist_check],
+        options['port'] == 1900 and options['recurse']: [recurse_ssdp_check],
+        options['port'] != 80 and options['recurse']: [
+            recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check],
     }
 
     try:
         correct_functions = dispatch_by_port[True]
         logger.debug('Calling the function %s to process IP %s' %
                     (correct_functions, ip))
-        [func(ip, **options) for func in correct_functions]
+        # import ipdb; ipdb.set_trace()
+        [func(**options) for func in correct_functions]
         # TODO ^^ fix TypeError: 'function' object is not iterable caused by
         # TODO ^^ fix TypeError: recurse_DNS_check() got an unexpected keyword
         # argument 'subnet'
@@ -501,7 +501,7 @@ def lookup_http_data(title, server, cert_lookup_dict):
 def main():
     configure_logging()
     options = parse_args()
-    cert_lookup_dict = setup_cert_collection()
+    # cert_lookup_dict = setup_cert_collection()
     results = []
 
     ip_list = convert_input_to_ips(options)
