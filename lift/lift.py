@@ -297,7 +297,8 @@ def identify_using_http_response(options):
     if device:
         print_findings(options['ip'], device, title=title, server=server)
     else:
-        logger.info('No matching title/server was found for IP:  %s' % options['ip'])
+        logger.info('No matching title/server was found for IP:  %s' %
+                    options['ip'])
         logger.info('Trying rtsp since http request didn\'t ID device.')
         send_rstp_request(options['ip'])
     return device
@@ -385,6 +386,8 @@ def identify_using_ssl_cert(options):
         print_findings(options['ip'], device)
     else:
         logger.info('No matching certs were found for IP %s' % options['ip'])
+        # TODO add logic to identify_using_http_response since cert provided
+        # no insights into which device this is
     return device
 
 
@@ -394,7 +397,8 @@ def process_ip(options):
     '''
     dispatch_by_port = {
         options['port'] == 80: [identify_using_http_response],
-        options['port'] != 80 and not options['recurse']: [identify_using_ssl_cert],
+        options['port'] != 80 and not options['recurse']: [
+            identify_using_ssl_cert],
         options['port'] == 53 and options['recurse']: [recurse_DNS_check],
         options['port'] == 123 and options['recurse']: [ntp_monlist_check],
         options['port'] == 1900 and options['recurse']: [recurse_ssdp_check],
