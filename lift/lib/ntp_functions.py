@@ -26,7 +26,7 @@ logger.setLevel(49)
 MAX_RETRIES = 3
 
 
-def monlist_scan(self, target):
+def monlist_scan(options):
     '''Simulate the monlist command and return `results`, a boolean
     indicating whether or not the device is vulnerable to this attack.
 
@@ -44,7 +44,7 @@ def monlist_scan(self, target):
         data = "\x17\x00\x03\x2a" + "\x00" * 4
 
         # Create an IP layer for the packet, spoofing the target's address
-        ip = IP(dst=target)
+        ip = IP(dst=options['ip'])
 
         # Create a UDP layer for the packet
         udp = UDP(sport=random.randint(49152, 65536), dport=123)
@@ -78,20 +78,20 @@ def monlist_scan(self, target):
 
         return results
     except Exception as e:  # TODO replace with more specific exception
-        if kwargs['verbose']:
+        if options['verbose']:
             print "Error in ntp_monlist ", e
 
 
-def ntp_monlist_check(dest_ip, **kwargs):
+def ntp_monlist_check(options):
     '''Check whether the device, indicated by the given IP address, is
     vulnerable to the NTP monlist command.
     '''
     try:
-        a = monlist_scan(dest_ip)
+        a = monlist_scan(options)
         if a is None:
-            print dest_ip, "is not vulnerable to NTP monlist"
+            print options['ip'], "is not vulnerable to NTP monlist"
         elif a == 1:
-            print dest_ip, "is vulnerable to monlist"
+            print options['ip'], "is vulnerable to monlist"
     except KeyboardInterrupt:
         print "Quitting"
         sys.exit(1)

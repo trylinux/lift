@@ -67,19 +67,19 @@ def get_ssdp_information(ipaddr):
     return b
 
 
-def recurse_ssdp_check(dest_ip, **kwargs):
+def recurse_ssdp_check(options):
     '''Check whether the device, indicated by the given IP address, is
     is an SSDP reflector.
     '''
     try:
-        a = get_ssdp_information(dest_ip)
+        a = get_ssdp_information(options['ip'])
         if a is None:
-            print dest_ip, "is not an SSDP reflector"
+            print options['ip'], " is not an SSDP reflector"
         elif a is not None:
-            print dest_ip, "is an SSDP reflector with result", a
+            print options['ip'], " is an SSDP reflector with result", a
 
     except KeyboardInterrupt:
         print "Quitting in here"
         sys.exit(0)
     except Exception as e:  # TODO replace with more specific exception
-        print "Encountered exception", e
+        print "Encountered exception ", e
