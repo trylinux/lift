@@ -291,16 +291,22 @@ def identify_using_http_response(options):
     3. lookup response data
     4. print findings
     '''
+    device = ''
     headers, html = send_http_request(options)
     title, server = parse_response(html, headers)
-    device = lookup_http_data(title, server)
+
+    if title or server:
+        device = lookup_http_data(title, server)
+
     if device:
         print_findings(options['ip'], device, title=title, server=server)
     else:
-        logger.info('No matching title/server was found for IP:  %s' %
+        logger.info('No matching title/server was found for IP %s' %
                     options['ip'])
-        logger.info('Trying rtsp since http request didn\'t ID device.')
+        logger.info('Trying an RTSP request since the HTTP request(s) didn\'t'
+                    'return a helpful response.')
         send_rstp_request(options['ip'])
+
     return device
 
 
@@ -324,26 +330,45 @@ def send_rstp_request(ip):
 
 
 def send_http_request(options):
-    #TODO add logic to try port 443, then port 80
-    options['port'] = 443
-    url = "https://%s:%s" % (options['ip'], options['port'])
-    ctx = options.get('ctx', None)
+    '''Sends one HTTP request to port 443 and, if needed, another to port 80.
+
+    Args:
+        options: Keyword arguments containing the user-supplied, cli inputs.
+
+    Returns:
+        headers (dict): The HTTP response headers
+        html (str): The HTTP response body
+    '''
     headers = {}
     html = ''
-    try:
-        response = urllib2.urlopen(url, context=ctx, timeout=10)
 
-    except urllib2.URLError as err:
-        if hasattr(err, 'reason'):
-            logger.error('Failed to reach a server at %s. Reason: %s' %
-                        (url, err.reason))
-        elif hasattr(err, 'code'):
-            logger.error('The server %s couldn\'t fulfill the request.'
-                         ' Error code: %s' % (url, err.code))
-    else:
-        html = response.read()
-        headers = response.info()
-        response.close()
+    MAX_ATTEMPTS = 2
+    attempts = 1
+
+    options['port'] = 443
+    ctx = options.get('ctx', None)
+
+    while attempts <= MAX_ATTEMPTS:
+        try:
+            logger.info('Attempt %d of %d at sending an HTTP request to %s:%d' %
+                        (attempts, MAX_ATTEMPTS, options['ip'], options['port']))
+            url = "https://%s:%s" % (options['ip'], options['port'])
+            response = urllib2.urlopen(url, context=ctx, timeout=10)
+
+        except urllib2.URLError as err:
+            if hasattr(err, 'reason'):
+                logger.error('Failed to reach a server at %s. Reason: %s' %
+                            (url, err.reason))
+            elif hasattr(err, 'code'):
+                logger.error('The server %s couldn\'t fulfill the request.'
+                             ' Error code: %s' % (url, err.code))
+            attempts += 1
+            options['port'] = 80
+        else:
+            html = response.read()
+            headers = response.info()
+            response.close()
+            break
 
     return headers, html
 
@@ -352,7 +377,6 @@ def parse_response(html, headers):
     '''Parse the HTML and headers from the HTTP response and return a dict with
     all extracted data.
     '''
-    # TODO figure out relevant exception from parsing to catch/react to
     soup = BeautifulSoup.BeautifulSoup(html)
     title_tag = soup.find('title')
     title = str(title_tag.contents[0]) if title_tag else ''
@@ -374,20 +398,21 @@ def identify_using_ssl_cert(options):
     2. lookup cert
     3. print findings
     '''
-    device = ''
     der_cert, pem_cert, ctx = get_certs_from_handshake(options)
-    if not pem_cert:
-        return device
+    if pem_cert:
+        device = lookup_cert(pem_cert)
+    else:
+        logger.info('IP %s did not send a PEM certificate' % options['ip'])
+        device = ''
 
-    device = lookup_cert(pem_cert)
     if device:
         logger.debug('Found %s as a match for the cert provided by %s' %
                     (device, options['ip']))
         print_findings(options['ip'], device)
     else:
-        logger.info('No matching certs were found for IP %s' % options['ip'])
-        # TODO add logic to identify_using_http_response since cert provided
-        # no insights into which device this is
+        logger.info('No luck identifying IP %s using ssl cert.'
+                    'Try using HTTP response data' % options['ip'])
+        device = identify_using_http_response(options)
     return device
 
 
@@ -410,9 +435,7 @@ def process_ip(options):
         logger.debug('Calling the function %s to process IP %s' %
                     (correct_functions, options['ip']))
         [func(options) for func in correct_functions]
-        # TODO ^^ fix TypeError: 'function' object is not iterable caused by
-        # TODO ^^ fix TypeError: recurse_DNS_check() got an unexpected keyword
-        # argument 'subnet'
+
     except KeyError:
         raise ValueError('Unsure how to handle the given port number (%d) with'
                          ' the other cli arguments' % options['port'])
@@ -521,7 +544,7 @@ def main():
     ip_list = convert_input_to_ips(options)
     for ip in ip_list:
         if is_valid_ip(ip):
-            # cast the ip value as a string if it's an instance of IPNetwork.
+            # cast the ip value as a string in case it's type is IPNetwork.
             options['ip'] = str(ip)
             process_ip(options)
             msg = '%s : success' % ip
