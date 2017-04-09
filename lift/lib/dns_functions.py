@@ -1,6 +1,7 @@
 '''This module contains functions that test for DNS-related vulnerabilities.
 '''
 import time
+import sys
 
 import dns.resolver
 import dns.exception

@@ -304,7 +304,7 @@ def identify_using_http_response(options):
         logger.info('No matching title/server was found for IP %s' %
                     options['ip'])
         logger.info('Trying an RTSP request since the HTTP request(s) didn\'t'
-                    'return a helpful response.')
+                    ' return a helpful response.')
         send_rstp_request(options['ip'])
 
     return device
@@ -315,6 +315,7 @@ def send_rstp_request(ip):
     bashcommand = ('curl --silent rtsp://' + new_ip +
                    ' -I -m 5| grep Server')
     try:
+        logger.info('Sending RTSP request...')
         proc = subprocess.Popen(['bash', '-c', bashcommand],
                                 stdout=subprocess.PIPE)
         output = proc.stdout.read()
@@ -350,8 +351,9 @@ def send_http_request(options):
 
     while attempts <= MAX_ATTEMPTS:
         try:
-            logger.info('Attempt %d of %d at sending an HTTP request to %s:%d' %
-                        (attempts, MAX_ATTEMPTS, options['ip'], options['port']))
+            logger.info('Attempt %d of %d at sending HTTP request to %s:%d' %
+                        (attempts, MAX_ATTEMPTS, options['ip'],
+                         options['port']))
             url = "https://%s:%s" % (options['ip'], options['port'])
             response = urllib2.urlopen(url, context=ctx, timeout=10)
 
@@ -381,7 +383,6 @@ def parse_response(html, headers):
     title_tag = soup.find('title')
     title = str(title_tag.contents[0]) if title_tag else ''
     server = headers.get('Server') or ''
-
     return title, server
 
 
@@ -418,7 +419,17 @@ def identify_using_ssl_cert(options):
 
 def process_ip(options):
     '''Call the correct function(s) to process the IP address based on the
-    port and recurse options passed into the command line..
+    port and recurse options passed into the command line.
+
+    Args:
+        options: Keyword arguments containing the user-supplied, cli inputs.
+
+    Returns:
+        None
+
+    Raises:
+        ValueError: If the user-supplied combination of port number and recurse
+            option is not one of cases supported in the dispatch_by_port dict.
     '''
     dispatch_by_port = {
         options['port'] == 80: [identify_using_http_response],
@@ -502,6 +513,8 @@ def lookup_cert(pem_cert):
               ]
 
     pem_dict = dict(zip(keys, values))
+    logger.debug('Searching for the PEM cert (%s...) in the cert_collection '
+                 'directory' % pem_cert[29:39])
     device = pem_dict.get(pem_cert, '')
     return device
 
@@ -529,7 +542,8 @@ def lookup_http_data(title, server):
                      ]
 
     lookup_list = zip(server_search_terms, title_search_terms, display_names)
-
+    logger.debug('Searching for the title (%s) and server (%s) in the'
+                 ' cert_collection directory' % (title, server))
     device_description = next((n[2] for n in lookup_list
                                if n[0] in server and n[1] in title), '')
     return device_description
@@ -539,7 +553,6 @@ def main():
     configure_logging()
     setup_cert_collection()
     options = parse_args()
-    results = []
 
     ip_list = convert_input_to_ips(options)
     for ip in ip_list:
@@ -547,13 +560,7 @@ def main():
             # cast the ip value as a string in case it's type is IPNetwork.
             options['ip'] = str(ip)
             process_ip(options)
-            msg = '%s : success' % ip
-        else:
-            msg = '%s : fail' % ip
-
-        results.append(msg)
-    print results
-    return results
+            logger.debug('Done trying to identify IP %s' % ip)
 
 
 if __name__ == '__main__':
