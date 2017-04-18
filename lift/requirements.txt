@@ -7,3 +7,4 @@ dnspython
 scapy
 colorlog
 IPy
+jsonschema
