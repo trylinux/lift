@@ -1,4 +1,4 @@
-schema = {
+{
 	"type": "object",
 	"properties": {
 		"profile_info": {
@@ -9,7 +9,7 @@ schema = {
 			"properties": {
 				"PEM_cert": {
 					"type": "string",
-					"description": "The SSL certificate as a PEM-encoded string"
+					"description": "The SSL certificate as a PEM-encoded string."
 				},
 				"display_name": {
 					"type": "string",

@@ -13,8 +13,10 @@ import urllib2
 import BeautifulSoup
 import colorlog
 import IPy
+import jsonschema
 import netaddr
 import pyasn
+
 
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
@@ -468,6 +470,11 @@ def setup_cert_collection():
 
     num_files = len(cert_files)
 
+    # load the schema for all JSON files in the cert_collection directory
+    cert_file_schema = ''
+    with open(cert_collection_path + '/_schema.json') as ff:
+        cert_file_schema = json.loads(ff.read())
+
     for x in range(num_files):
         cert_file = cert_collection_path + '/' + cert_files[x]
 
@@ -477,12 +484,16 @@ def setup_cert_collection():
             else:
                 file_contents = f.read()
                 try:
-                    json.loads(file_contents)
-                    # TODO check whether the correct fields are present
-                    # don't use a file if it's missing ssl_cert_info or
-                    # http_response_info arrays or their appropriate fields
+                    cert_file = json.loads(file_contents)
+                    # import ipdb; ipdb.set_trace()
+                    # TODO debug why aethra.json is NOT causing ValidationError
+                    jsonschema.validate(cert_file, cert_file_schema)
                 except ValueError:
                     logger.error('File %s has invalid JSON' % cert_file)
+                    num_files -= 1
+                except jsonschema.exceptions.ValidationError, e:
+                    logger.error('File %s is invalid given the schema. %s' %
+                                (cert_file, e))
                     num_files -= 1
                 else:
                     json_file += file_contents + ','
