@@ -485,15 +485,14 @@ def setup_cert_collection():
                 file_contents = f.read()
                 try:
                     cert_file = json.loads(file_contents)
-                    # import ipdb; ipdb.set_trace()
-                    # TODO debug why aethra.json is NOT causing ValidationError
                     jsonschema.validate(cert_file, cert_file_schema)
-                except ValueError:
-                    logger.error('File %s has invalid JSON' % cert_file)
+                except ValueError, e:
+                    logger.error('File %s has invalid JSON. %s' %
+                                (cert_file, str(e)))
                     num_files -= 1
                 except jsonschema.exceptions.ValidationError, e:
                     logger.error('File %s is invalid given the schema. %s' %
-                                (cert_file, e))
+                                (cert_file, str(e)))
                     num_files -= 1
                 else:
                     json_file += file_contents + ','

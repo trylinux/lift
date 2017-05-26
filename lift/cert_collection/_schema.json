@@ -6,33 +6,40 @@
 		},
 		"ssl_cert_info": {
 			"type": "array",
-			"properties": {
-				"PEM_cert": {
-					"type": "string",
-					"description": "The SSL certificate as a PEM-encoded string."
+			"items":{
+				"properties": {
+					"PEM_cert": {
+						"type": "string",
+						"description": "The SSL certificate as a PEM-encoded string."
+					},
+					"display_name": {
+						"type": "string",
+						"description": "The text to display to the lift user, describing the device based on the PEM cert."
+					}
 				},
-				"display_name": {
-					"type": "string",
-					"description": "The text to display to the lift user, describing the device based on the PEM cert."
-				}
+				"required": ["PEM_cert", "display_name"]
 			}
 		},
 		"http_response_info": {
 			"type": "array",
-			"properties": {
-				"server_search_text": {
-					"type": "string",
-					"description": "The text to search for within the Server header of the HTTP response."
+			"items":{
+				"properties": {
+					"server_search_text": {
+						"type": "string",
+						"description": "The text to search for within the Server header of the HTTP response."
+					},
+					"title_search_text": {
+						"type": "string",
+						"description": "The text to search for within the title tag of the HTML page returned by the HTTP response."
+					},
+					"display_name": {
+						"type": "string",
+						"description": "The text to display to the lift user, describing the device based on the text found in the HTML page's title or header."
+					}
 				},
-				"title_search_text": {
-					"type": "string",
-					"description": "The text to search for within the title tag of the HTML page returned by the HTTP response."
-				},
-				"display_name": {
-					"type": "string",
-					"description": "The text to display to the lift user, describing the device based on the text found in the HTML page's title or header."
-				}
+				"required":["server_search_text", "title_search_text", "display_name"]
 			}
 		}
-	}
+	},
+	"required": ["profile_info", "ssl_cert_info", "http_response_info"]
 }
