@@ -12,7 +12,7 @@ who have connected to that server.
 import sys
 import time
 
-
+import colorlog
 from scapy.all import IP
 from scapy.all import UDP
 from scapy.all import Raw
@@ -21,8 +21,8 @@ from scapy.all import sr1
 
 import logging
 
-logger = logging.getLogger("scapy.runtime")
-logger.setLevel(49)
+logger = colorlog.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 MAX_RETRIES = 3
 

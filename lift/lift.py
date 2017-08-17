@@ -15,6 +15,7 @@ import IPy
 import jsonschema
 import netaddr
 import pyasn
+import colorlog
 
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
@@ -22,10 +23,10 @@ from lib.ssdp_functions import recurse_ssdp_check
 from lib.ntp_functions import ntp_monlist_check
 from lib.dns_functions import recurse_DNS_check
 
-logger = logging.getLogger(__name__)
+logger = colorlog.getLogger()
 
 
-def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
+def configure_logging(logger, level=logging.DEBUG, write_to_file=False, filename=''):
     '''Configure the logger.
 
     Args:
@@ -40,12 +41,26 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
     Returns:
         None
     '''
-    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    formatter = logging.Formatter(format)
+    format = '%(asctime)s - %(module)s - %(levelname)s - %(message)s'
     if write_to_file:
         handler = logging.FileHandler(filename)
+        formatter = logging.Formatter(format)
     else:
-        handler = logging.StreamHandler()
+        handler = colorlog.StreamHandler()
+        formatter = colorlog.ColoredFormatter(
+            '%(log_color)s' + format,
+            datefmt=None,
+            reset=True,
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'purple',
+            },
+            secondary_log_colors={},
+            style='%'
+        )
 
     logger.setLevel(level)
     handler.setFormatter(formatter)
@@ -316,7 +331,10 @@ def send_rstp_request(ip):
 
 
 def send_http_request(options):
-    '''Sends one HTTP request to port 443 and, if needed, another to port 80.
+    '''Sends one HTTP request to the port number supplied via command line
+    parameter OR port 443 if none was given.
+    If the HTTP connection is refused (or another HTTP error is raised),
+    re-attempt a request but this time to port 80.
 
     Args:
         options: Keyword arguments containing the user-supplied, cli inputs.
@@ -331,7 +349,7 @@ def send_http_request(options):
     MAX_ATTEMPTS = 2
     attempts = 1
 
-    options['port'] = 443
+    # options['port'] = 443
     ctx = options.get('ctx', None)
 
     while attempts <= MAX_ATTEMPTS:
@@ -416,25 +434,27 @@ def process_ip(options):
         ValueError: If the user-supplied combination of port number and recurse
             option is not one of cases supported in the dispatch_by_port dict.
     '''
-    dispatch_by_port = {
-        options['port'] == 80: [identify_using_http_response],
-        options['port'] != 80 and not options['recurse']: [
-            identify_using_ssl_cert],
-        options['port'] == 53 and options['recurse']: [recurse_DNS_check],
-        options['port'] == 123 and options['recurse']: [ntp_monlist_check],
-        options['port'] == 1900 and options['recurse']: [recurse_ssdp_check],
-        options['port'] != 80 and options['recurse']: [
-            recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check],
-    }
-    try:
-        correct_functions = dispatch_by_port[True]
-        logger.debug('Calling the function %s to process IP %s' %
-                    (correct_functions, options['ip']))
-        [func(options) for func in correct_functions]
 
-    except KeyError:
+    if options['port'] == 80:
+        correct_functions = [identify_using_http_response]
+    elif options['port'] != 80 and not options['recurse']:
+        correct_functions = [identify_using_ssl_cert]
+    elif options['port'] == 53 and options['recurse']:
+        correct_functions = [recurse_DNS_check]
+    elif options['port'] == 123 and options['recurse']:
+        correct_functions = [ntp_monlist_check]
+    elif options['port'] == 1900 and options['recurse']:
+        correct_functions = [recurse_ssdp_check]
+    elif options['port'] != 80 and options['recurse']:
+        correct_functions = [recurse_DNS_check, ntp_monlist_check, recurse_ssdp_check]
+    else:
         raise ValueError('Unsure how to handle the given port number (%d) with'
                          ' the other cli arguments' % options['port'])
+
+    logger.debug('Calling the function %s to process IP %s' %
+                (correct_functions, options['ip']))
+    for func in correct_functions:
+        func(options)
 
 
 def setup_cert_collection():
@@ -551,7 +571,7 @@ def lookup_http_data(title, server):
 
 
 def main():
-    configure_logging()
+    configure_logging(logger)
     setup_cert_collection()
     options = parse_args()
 

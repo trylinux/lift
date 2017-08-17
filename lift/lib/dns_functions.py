@@ -4,11 +4,12 @@ import logging
 import time
 import sys
 
+import colorlog
 import dns.resolver
 import dns.exception
 
-logger = logging.getLogger(__name__)
-
+logger = colorlog.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 def recurse_DNS_check(options):
     '''Check whether the device, indicated by the given IP address, is
@@ -29,6 +30,7 @@ def recurse_DNS_check(options):
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [dest_ip]
     logging.info("Checking %s for a DNS amplification vulnerabilty" % dest_ip)
+    # import ipdb; ipdb.set_trace()
     start = time.time()
     try:
         while time.time() < start + 3:

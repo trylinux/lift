@@ -15,19 +15,14 @@ import logging
 import time
 
 import colorlog
-
 from scapy.all import IP
 from scapy.all import UDP
 from scapy.all import sr1
 from scapy.all import random
 from scapy.all import Raw
 
-logging.basicConfig()
-logger = logging.getLogger(__file__)
-# logger = colorlog.getLogger(__name__)
-
-# logger = logging.getLogger("scapy.runtime")
-logger.setLevel(49)
+logger = colorlog.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def active_scan(self, target):
