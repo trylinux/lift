@@ -1,4 +1,4 @@
-// This file is a proposed schema for lift's certificate collection.
+// Use this file as a template when adding a new signature to lift.
 
 // To add a new signature to lift, copy the example JSON object (below), 
 // replacing the default empty strings with relevant data. Then save the 

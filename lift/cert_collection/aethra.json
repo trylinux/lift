@@ -6,7 +6,7 @@
 	},
 	"ssl_cert_info": [
 		{
-			"PEM_cert": [],  
+			"PEM_cert": "",
 			"display_name": ""
 		}
 	],
