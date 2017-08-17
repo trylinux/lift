@@ -14,14 +14,19 @@ import json
 import logging
 import time
 
+import colorlog
+
 from scapy.all import IP
 from scapy.all import UDP
 from scapy.all import sr1
 from scapy.all import random
 from scapy.all import Raw
 
+logging.basicConfig()
+logger = logging.getLogger(__file__)
+# logger = colorlog.getLogger(__name__)
 
-logger = logging.getLogger("scapy.runtime")
+# logger = logging.getLogger("scapy.runtime")
 logger.setLevel(49)
 
 
@@ -74,12 +79,12 @@ def recurse_ssdp_check(options):
     try:
         a = get_ssdp_information(options['ip'])
         if a is None:
-            print options['ip'], " is not an SSDP reflector"
+            logger.info("%s is not an SSDP reflector" % options['ip'])
         elif a is not None:
-            print options['ip'], " is an SSDP reflector with result", a
+            logger.info("%s is an SSDP reflector with result %s" % (options['ip'], a))
 
     except KeyboardInterrupt:
-        print "Quitting in here"
+        logger.error("KeyboardInterrupt. Quitting in here")
         sys.exit(0)
     except Exception as e:  # TODO replace with more specific exception
-        print "Encountered exception ", e
+        logger.error("Encountered exception. %s" % e)

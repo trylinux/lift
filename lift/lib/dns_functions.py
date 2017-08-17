@@ -1,10 +1,13 @@
 '''This module contains functions that test for DNS-related vulnerabilities.
 '''
+import logging
 import time
 import sys
 
 import dns.resolver
 import dns.exception
+
+logger = logging.getLogger(__name__)
 
 
 def recurse_DNS_check(options):
@@ -25,23 +28,24 @@ def recurse_DNS_check(options):
     dest_ip = str(options['ip'])
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [dest_ip]
+    logging.info("Checking %s for a DNS amplification vulnerabilty" % dest_ip)
+    start = time.time()
     try:
-        print "Trying: ", dest_ip
-        start = time.time()
         while time.time() < start + 3:
             myAnswers = myResolver.query("google.com", "A")
             if myAnswers:
-                print dest_ip, " is vulnerable to DNS AMP"
+                logging.info("%s is vulnerable to DNS AMP" % dest_ip)
                 break
             else:
-                print dest_ip, " is a nope"
+                logging.info("%s is not vulnerable to DNS AMP" % dest_ip)
                 break
         else:
-            print dest_ip, " is a nope"
+            logging.info("%s is not vulnerable to DNS AMP" % dest_ip)
 
     except KeyboardInterrupt:
-        print "Quitting"
+        logging.error("KeyboardInterrupt. Quitting")
         sys.exit()
 
-    except dns.exception.DNSException:
-        print dest_ip, " is not vulnerable to DNS AMP"
+    except dns.exception.DNSException as e:
+        logging.info("%s is not vulnerable to DNS AMP" % dest_ip)
+        logging.debug(str(e))

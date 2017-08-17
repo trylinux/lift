@@ -9,9 +9,9 @@ counts of connected clients. In response the the "get monlist" request, an
 unpatched NTP server sends the requester a list of the last 600 hosts
 who have connected to that server.
 '''
-import logging
 import sys
 import time
+
 
 from scapy.all import IP
 from scapy.all import UDP
@@ -19,6 +19,7 @@ from scapy.all import Raw
 from scapy.all import random
 from scapy.all import sr1
 
+import logging
 
 logger = logging.getLogger("scapy.runtime")
 logger.setLevel(49)
@@ -63,13 +64,17 @@ def monlist_scan(options):
             # response.
             # The timeout parameter specifies the time to wait after the
             # last packet has been sent.
+            logger.info('Sending the monlist command. Attempt %d of %d' %
+                        (retries, MAX_RETRIES))
             rep = sr1(pck, verbose=0, timeout=5)
 
             if hasattr(rep, 'answers'):
+                logger.debug('Received response from monlist command.')
                 results = 1
                 break
 
             elif not hasattr(rep, 'answers') and (retries < MAX_RETRIES):
+                logger.debug('No response received from monlist. Retrying')
                 retries += 1
 
             else:
@@ -78,8 +83,7 @@ def monlist_scan(options):
 
         return results
     except Exception as e:  # TODO replace with more specific exception
-        if options['verbose']:
-            print "Error in ntp_monlist ", e
+        logger.error("Error in ntp_monlist. %s" % str(e))
 
 
 def ntp_monlist_check(options):
@@ -89,9 +93,9 @@ def ntp_monlist_check(options):
     try:
         a = monlist_scan(options)
         if a is None:
-            print options['ip'], "is not vulnerable to NTP monlist"
+            logger.info("%s is not vulnerable to NTP monlist" % options['ip'])
         elif a == 1:
-            print options['ip'], "is vulnerable to monlist"
+            logger.info("%s is vulnerable to monlist" % options['ip'])
     except KeyboardInterrupt:
-        print "Quitting"
+        logger.error("KeyboardInterrupt. Quitting")
         sys.exit(1)

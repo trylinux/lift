@@ -11,21 +11,18 @@ import ssl
 import urllib2
 
 import BeautifulSoup
-import colorlog
 import IPy
 import jsonschema
 import netaddr
 import pyasn
 
-
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
-from ssdp_functions import recurse_ssdp_check
-from ntp_functions import ntp_monlist_check
-from dns_functions import recurse_DNS_check
+from lib.ssdp_functions import recurse_ssdp_check
+from lib.ntp_functions import ntp_monlist_check
+from lib.dns_functions import recurse_DNS_check
 
-
-logger = colorlog.getLogger('lift')
+logger = logging.getLogger(__name__)
 
 
 def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
@@ -44,25 +41,11 @@ def configure_logging(level=logging.DEBUG, write_to_file=False, filename=''):
         None
     '''
     format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    formatter = logging.Formatter(format)
     if write_to_file:
         handler = logging.FileHandler(filename)
-        formatter = logging.Formatter(format)
     else:
-        handler = colorlog.StreamHandler()
-        formatter = colorlog.ColoredFormatter(
-            '%(log_color)s' + format,
-            datefmt=None,
-            reset=True,
-            log_colors={
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'purple',
-            },
-            secondary_log_colors={},
-            style='%'
-        )
+        handler = logging.StreamHandler()
 
     logger.setLevel(level)
     handler.setFormatter(formatter)
@@ -464,21 +447,25 @@ def setup_cert_collection():
     Convert this JSON string into a Python object, using json.loads()
     and return this object.
     '''
-    json_file = '['
-    cert_collection_path = (local_path + '/cert_collection')
+    cert_collection_path = os.path.abspath(os.path.join(local_path, 'cert_collection'))
+    schemas_path = os.path.abspath(os.path.join(local_path, 'schemas'))
     cert_files = os.listdir(cert_collection_path)
 
     num_files = len(cert_files)
 
+    # start concatenating the array object for the massive JSON file that will
+    # contain every JSON file in the cert_collection folder
+    json_file = '['
+
     # load the schema for all JSON files in the cert_collection directory
     cert_file_schema = ''
-    with open(cert_collection_path + '/_schema.json') as ff:
-        cert_file_schema = json.loads(ff.read())
+    with open(os.path.join(schemas_path, 'cert_file_schema.json')) as schema_file:
+        cert_file_schema = json.loads(schema_file.read())
 
-    for x in range(num_files):
-        cert_file = cert_collection_path + '/' + cert_files[x]
+    for i in range(num_files):
+        cert_file_path = os.path.join(cert_collection_path, cert_files[i])
 
-        with opened_w_error(cert_file) as (f, err):
+        with opened_w_error(cert_file_path) as (f, err):
             if err:
                 logger.error(err)
             else:
@@ -488,15 +475,19 @@ def setup_cert_collection():
                     jsonschema.validate(cert_file, cert_file_schema)
                 except ValueError, e:
                     logger.error('File %s has invalid JSON. %s' %
-                                (cert_file, str(e)))
+                                (cert_file_path, str(e)))
                     num_files -= 1
                 except jsonschema.exceptions.ValidationError, e:
                     logger.error('File %s is invalid given the schema. %s' %
-                                (cert_file, str(e)))
+                                (cert_file_path, str(e)))
                     num_files -= 1
                 else:
+                    # append the contents of this opened JSON file to that
+                    # massive file we're creating
                     json_file += file_contents + ','
 
+    # remove the trailing comma from the last JSON file we appended and
+    # append a closing bracket to close the array object
     final = json_file.rstrip(',') + ']'
 
     global cert_lookup_dict
