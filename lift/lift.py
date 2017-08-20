@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 from contextlib import contextmanager
 import argparse
 import itertools
@@ -19,9 +21,9 @@ import colorlog
 
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
-from lib.ssdp_functions import recurse_ssdp_check
-from lib.ntp_functions import ntp_monlist_check
-from lib.dns_functions import recurse_DNS_check
+from .lib.ssdp_functions import recurse_ssdp_check
+from .lib.ntp_functions import ntp_monlist_check
+from .lib.dns_functions import recurse_DNS_check
 
 logger = colorlog.getLogger()
 
@@ -130,7 +132,7 @@ def opened_w_error(filename, mode="r"):
     '''
     try:
         f = open(filename, mode)
-    except IOError, err:
+    except IOError as err:
         yield None, err
     else:
         try:
@@ -181,7 +183,7 @@ def get_ips_from_asn(options):
         subnets = [subnet for subnet in asndb.get_as_prefixes(options['asn'])]
         logger.debug("Found %d prefixes advertised by the given ASN: %s" %
                     (len(subnets), options['asn']))
-    except Exception, err:
+    except Exception as err:
         logger.error("AsnError: %s" % err)
     else:
         # creates a nested list of lists
@@ -207,7 +209,7 @@ def convert_input_to_ips(options):
         correct_function = next(v for k, v in dispatch.items() if options[k])
         ip_list = correct_function(options)
         return ip_list
-    except StopIteration, KeyError:
+    except StopIteration as KeyError:
         raise UsageError('None of the cli arguments contained IP addresses.')
 
 
@@ -221,7 +223,7 @@ def is_valid_ip(ip):
 
     try:
         valid = True if IPy.IP(ip) else False
-    except ValueError, TypeError:
+    except ValueError as TypeError:
         logger.error('%s is not a valid IP address' % ip)
 
     return valid
@@ -269,15 +271,15 @@ def get_certs_from_handshake(options):
         pem_cert = str(ssl.DER_cert_to_PEM_cert(der_cert))
         logger.debug('Converted the cert from the DER to the PEM format')
 
-    except TypeError, err:
+    except TypeError as err:
         logger.debug('ssl.DER_cert_to_PEM_cert() raises a TypeError if the'
                      'given DER-encoded cert is neither a string nor buffer')
         logger.error(err)
-    except ValueError, err:
+    except ValueError as err:
         logger.debug('The SSL handshake might not have been done yet.'
                      'getpeercert() raises ValueError in that case')
         logger.error(err)
-    except socket.error, err:
+    except socket.error as err:
         logger.error(err)
     finally:
         sock.close()
@@ -322,7 +324,7 @@ def send_rstp_request(ip):
                                 stdout=subprocess.PIPE)
         output = proc.stdout.read()
 
-    except Exception, err:
+    except Exception as err:
         logger.error(err)
     else:
         rtsp_server = str(output).rstrip('\r\n)')
@@ -395,7 +397,7 @@ def print_findings(ip, device, title='', server='', outfile='./outfile.txt'):
     """Print the result to stdout and write it to the outfile"""
     msg = "IP: " + str(ip).rstrip('\r\n)') + ", data: " + device + "\n"
     extra_params = {'title': title, 'server': server}
-    print msg.format(**extra_params)
+    print(msg.format(**extra_params))
 
     with open(outfile, 'a') as f:
         f.write(msg.format(**extra_params))
@@ -500,11 +502,11 @@ def setup_cert_collection():
                 try:
                     cert_file = json.loads(file_contents)
                     jsonschema.validate(cert_file, cert_file_schema)
-                except ValueError, e:
+                except ValueError as e:
                     logger.error('File %s has invalid JSON. %s' %
                                 (cert_file_path, str(e)))
                     num_files -= 1
-                except jsonschema.exceptions.ValidationError, e:
+                except jsonschema.exceptions.ValidationError as e:
                     logger.error('File %s is invalid given the schema. %s' %
                                 (cert_file_path, str(e)))
                     num_files -= 1
