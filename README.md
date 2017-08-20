@@ -63,27 +63,46 @@ $ git clone git@github.com:trylinux/lift.git
 $ cd lift
 ```
 
-2. Create a virtual environment
+2. Create a virtual environment   
+
+For Python2   
 
 ```
 $ virtualenv -p python venv
 $ source venv/bin/activate
 ```
+For Python3   
 
-3. Install the project's dependencies in a virtual environment
+```
+$ python3 -m venv venv
+$ source venv/bin/activate
+```
+3. Install the project's dependencies in a virtual environment   
+
+For Python2   
 
 ```
 $ pip install -r requirements.txt
 ```
+For Python3   
 
+```
+$ python -m pip install -r lift/requirements.txt 
+```
 ### Examples
 
-The best way to use this tool is to run 
+The best way to use this tool is to run the following:   
+
+For Python2   
 
 ```
 $ python lift.py -f <file_with_one_ip_per_line> -I 
 ```
+For Python3 (Scapy must be run with root priviledges.)   
 
+```
+$ sudo python -m lift.lift -i <ip_address> -p <port_number> 
+```
 Only one of the required arguments can be supplied when running the lift tool.
 
 **Required Arguments**:
