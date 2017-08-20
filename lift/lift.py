@@ -98,6 +98,8 @@ def parse_args():
     parser.add_argument("-v", "--verbose", dest='verbose', action="store_true",
                         default=False, help="WARNING DO NOT USE -v UNLESS YOU"
                         "WANT ALL THE REASONS WHY SOMETHING IS FAILING.")
+    parser.add_argument("-o", "--outfile", dest='outfile', default='./outfile.txt',
+                    help=" Where to write the results of this IP scanning")
     # TODO Is --ssl flag still needed?
     args = parser.parse_args()
     options = vars(args)
@@ -389,11 +391,15 @@ def parse_response(html, headers):
     return title, server
 
 
-def print_findings(ip, device, title='', server=''):
-    msg = str(ip).rstrip('\r\n)') + ": " + device
+def print_findings(ip, device, title='', server='', outfile='./outfile.txt'):
+    """Print the result to stdout and write it to the outfile"""
+    msg = "IP: " + str(ip).rstrip('\r\n)') + ", data: " + device + "\n"
     extra_params = {'title': title, 'server': server}
     print msg.format(**extra_params)
 
+    with open(outfile, 'a') as f:
+        f.write(msg.format(**extra_params))
+    return
 
 def identify_using_ssl_cert(options):
     '''Calls functions that correspond to steps involved in identifying a
@@ -408,6 +414,7 @@ def identify_using_ssl_cert(options):
     else:
         logger.info('IP %s did not send a PEM certificate' % options['ip'])
         device = ''
+        print_findings(options['ip'], device)
 
     if device:
         logger.debug('Found %s as a match for the cert provided by %s' %
