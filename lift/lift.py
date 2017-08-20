@@ -10,9 +10,9 @@ import subprocess
 import sys
 import socket
 import ssl
-import urllib2
+import urllib.request, urllib.error
 
-import BeautifulSoup
+from bs4 import BeautifulSoup
 import IPy
 import jsonschema
 import netaddr
@@ -362,9 +362,9 @@ def send_http_request(options):
                         (attempts, MAX_ATTEMPTS, options['ip'],
                          options['port']))
             url = "https://%s:%s" % (options['ip'], options['port'])
-            response = urllib2.urlopen(url, context=ctx, timeout=10)
+            response = urllib.request.urlopen(url, context=ctx, timeout=10)
 
-        except urllib2.URLError as err:
+        except urllib.error.URLError as err:
             if hasattr(err, 'reason'):
                 logger.error('Failed to reach a server at %s. Reason: %s' %
                             (url, err.reason))
@@ -402,6 +402,7 @@ def print_findings(ip, device, title='', server='', outfile='./outfile.txt'):
     with open(outfile, 'a') as f:
         f.write(msg.format(**extra_params))
     return
+
 
 def identify_using_ssl_cert(options):
     '''Calls functions that correspond to steps involved in identifying a

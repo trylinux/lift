@@ -1,9 +1,12 @@
 argparse
-BeautifulSoup
+# BeautifulSoup  # python2 compatible
+beautifulsoup4
 netaddr
 pyasn
 dnspython
-scapy
+# scapy  # python2 compatible
 colorlog
 IPy
 jsonschema
+scapy-python3
+netifaces

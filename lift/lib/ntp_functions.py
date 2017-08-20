@@ -24,7 +24,7 @@ import logging
 logger = colorlog.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-MAX_RETRIES = 3
+MAX_TRIES = 3
 
 
 def monlist_scan(options):
@@ -38,7 +38,7 @@ def monlist_scan(options):
     results = None
 
     # number of attempts
-    retries = 0
+    tries = 1
 
     try:
         # `data` is the "get monlist" request
@@ -56,7 +56,7 @@ def monlist_scan(options):
         # Assemble a packet `pck` comprised of the layers IP, UDP and Raw.
         pck = ip/udp/a
 
-        while (retries < MAX_RETRIES):
+        while (tries <= MAX_TRIES):
 
             # Send the assembled packet `pck` to `target`, and the given
             # IP address. Return one packet that answered the packet set we
@@ -65,7 +65,7 @@ def monlist_scan(options):
             # The timeout parameter specifies the time to wait after the
             # last packet has been sent.
             logger.info('Sending the monlist command. Attempt %d of %d' %
-                        (retries, MAX_RETRIES))
+                        (tries, MAX_TRIES))
             rep = sr1(pck, verbose=0, timeout=5)
 
             if hasattr(rep, 'answers'):
@@ -73,9 +73,9 @@ def monlist_scan(options):
                 results = 1
                 break
 
-            elif not hasattr(rep, 'answers') and (retries < MAX_RETRIES):
+            elif not hasattr(rep, 'answers') and (tries < MAX_TRIES):
                 logger.debug('No response received from monlist. Retrying')
-                retries += 1
+                tries += 1
 
             else:
                 results = None
