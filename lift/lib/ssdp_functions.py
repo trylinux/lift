@@ -22,15 +22,13 @@ from scapy.all import random
 from scapy.all import Raw
 
 logger = colorlog.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 # capture any log messages from the scapy package
 scapy_logger = colorlog.getLogger("scapy")
-scapy_logger.setLevel(logging.DEBUG)
 
-# remove any StreamHandlers attached to the scapy's logger
-# to prevent duplicate log messages appearing in the Terminal
+# remove any StreamHandlers attached to the scapy logger
+# to prevent duplicate log messages from appearing in the Terminal
 for handler in scapy_logger.handlers:
     if isinstance(handler, logging.StreamHandler):
         scapy_logger.removeHandler(handler)
@@ -52,8 +50,7 @@ def active_scan(target):
             if rep[Raw]:
                 results = rep[Raw].load
 
-    except Exception as e:
-        # results = None
+    except Exception as e:  # TODO replace with more specific exception
         logger.error(str(e))
         raise
     return results
@@ -90,7 +87,8 @@ def recurse_ssdp_check(options):
         if a is None:
             logger.info("%s is not an SSDP reflector" % options['ip'])
         elif a is not None:
-            logger.info("%s is an SSDP reflector with result %s" % (options['ip'], a))
+            logger.info("%s is an SSDP reflector with result %s"
+                        % (options['ip'], a))
 
     except KeyboardInterrupt:
         logger.error("KeyboardInterrupt. Quitting in here")

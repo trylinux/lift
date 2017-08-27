@@ -38,11 +38,11 @@ from lift.lib.dns_functions import recurse_DNS_check
 logger = colorlog.getLogger()
 
 
-def configure_logging(logger, level=logging.DEBUG, write_to_file=False, filename=''):
+def configure_logging(logger, verbose=False, write_to_file=False, filename=''):
     '''Configure the logger.
 
     Args:
-        level (str, optional): Sets the severity level of the messages to be
+        verbosity (bool, optional): Sets the severity level of the messages to be
             displayed in the log. Defaults to logging.DEBUG, the lowest level.
         write_to_file (str, optional): Whether to write the log messages to a
             file. Defaults to False.
@@ -73,7 +73,7 @@ def configure_logging(logger, level=logging.DEBUG, write_to_file=False, filename
             secondary_log_colors={},
             style='%'
         )
-
+    level = logging.DEBUG if verbose else logging.INFO
     logger.setLevel(level)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
@@ -102,24 +102,24 @@ def parse_args():
                          help="ASN number. WARNING: This will take a while")
     parser.add_argument("-p", "--port", dest='port', type=int, default=443,
                         help=" The port number at the supplied IP address that"
-                        " lift should connect to")
+                        " lift should connect to. Default=443")
     parser.add_argument("-r", "--recurse", dest='recurse', action="store_true",
-                        default=False, help="Test Recursion")
+                        default=False, help="Test Recursion. Default=False")
     parser.add_argument("-R", "--recon", dest='recon', action="store_true",
-                        default=False, help="Gather info about a given device")
+                        default=False, help="Gather info about a given device."
+                        " Default=False")
     parser.add_argument("-v", "--verbose", dest='verbose', action="store_true",
-                        default=False, help="WARNING DO NOT USE -v UNLESS YOU"
-                        "WANT ALL THE REASONS WHY SOMETHING IS FAILING.")
+                        default=False, help="if True, lift displays all log "
+                        "messagses, whether trivial or severe. Default=False")
     parser.add_argument("-o", "--outfile", dest='outfile', default='./outfile.txt',
                     help="Where to write the results of this IP scanning")
     parser.add_argument("-t", "--num-threads", dest='num_threads', type=int,
                         default=1,
                         help="instead of checking 1 IP address at a time, check"
-                        " this many IP addresses concurrently")
+                        " this many IP addresses concurrently. Default=1")
     # TODO Is --ssl flag still needed?
     args = parser.parse_args()
     options = vars(args)
-    logger.debug('Parsed the cli args: %s' % options)
     return options
 
 
@@ -487,6 +487,7 @@ def process_ip(ip, options):
         func(options)
     return 'Done running process_ip() for IP %s' % ip
 
+
 def setup_cert_collection():
     '''Returns the cert_lookup_dict against which the user-supplied IP
     address will be compared for matching SSL certificates or HTTP
@@ -601,12 +602,12 @@ def lookup_http_data(title, server):
 
 
 def main():
-    configure_logging(logger)
-    setup_cert_collection()
     options = parse_args()
+    configure_logging(logger, verbose=options['verbose'])
+    setup_cert_collection()
 
     ip_list = convert_input_to_ips(options)
-    
+
     if options['num_threads'] == 1:
         # check one IP address at a time
         for ip in ip_list:

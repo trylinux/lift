@@ -22,14 +22,12 @@ from scapy.all import sr1
 import logging
 
 logger = colorlog.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 # capture any log messages from the scapy package
 scapy_logger = colorlog.getLogger("scapy")
-scapy_logger.setLevel(logging.DEBUG)
 
-# remove any StreamHandlers attached to the scapy's logger
-# to prevent duplicate log messages appearing in the Terminal
+# remove any StreamHandlers attached to the scapy logger
+# to prevent duplicate log messages from appearing in the Terminal
 for handler in scapy_logger.handlers:
     if isinstance(handler, logging.StreamHandler):
         scapy_logger.removeHandler(handler)

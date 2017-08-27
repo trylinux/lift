@@ -9,7 +9,6 @@ import dns.resolver
 import dns.exception
 
 logger = colorlog.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 def recurse_DNS_check(options):
     '''Check whether the device, indicated by the given IP address, is
