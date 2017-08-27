@@ -29,8 +29,9 @@ def recurse_DNS_check(options):
     dest_ip = str(options['ip'])
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [dest_ip]
-    logging.info("Checking %s for a DNS amplification vulnerabilty" % dest_ip)
-    # import ipdb; ipdb.set_trace()
+    logging.info("Checking %s for a DNS amplification vulnerabilty. "
+                 "(Will timeout after waiting %s seconds)" % 
+                 (dest_ip, myResolver.lifetime))
     start = time.time()
     try:
         while time.time() < start + 3:

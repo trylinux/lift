@@ -1,3 +1,11 @@
+"""
+Lift: Quietly "lift" fingerprints from devices by using their SSL certificates,
+HTTP headers or other characteristics.
+
+Usable either from the command line or as a Python library.
+https://github.com/trylinux/lift/
+"""
+
 from __future__ import print_function
 from __future__ import absolute_import
 from contextlib import contextmanager
@@ -10,7 +18,9 @@ import subprocess
 import sys
 import socket
 import ssl
-import urllib.request, urllib.error
+import urllib.request
+import urllib.error
+from concurrent.futures import ThreadPoolExecutor
 
 from bs4 import BeautifulSoup
 import IPy
@@ -21,9 +31,9 @@ import colorlog
 
 local_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(local_path + '/lib')
-from .lib.ssdp_functions import recurse_ssdp_check
-from .lib.ntp_functions import ntp_monlist_check
-from .lib.dns_functions import recurse_DNS_check
+from lift.lib.ssdp_functions import recurse_ssdp_check
+from lift.lib.ntp_functions import ntp_monlist_check
+from lift.lib.dns_functions import recurse_DNS_check
 
 logger = colorlog.getLogger()
 
@@ -101,7 +111,11 @@ def parse_args():
                         default=False, help="WARNING DO NOT USE -v UNLESS YOU"
                         "WANT ALL THE REASONS WHY SOMETHING IS FAILING.")
     parser.add_argument("-o", "--outfile", dest='outfile', default='./outfile.txt',
-                    help=" Where to write the results of this IP scanning")
+                    help="Where to write the results of this IP scanning")
+    parser.add_argument("-t", "--num-threads", dest='num_threads', type=int,
+                        default=1,
+                        help="instead of checking 1 IP address at a time, check"
+                        " this many IP addresses concurrently")
     # TODO Is --ssl flag still needed?
     args = parser.parse_args()
     options = vars(args)
@@ -386,7 +400,7 @@ def parse_response(html, headers):
     '''Parse the HTML and headers from the HTTP response and return a dict with
     all extracted data.
     '''
-    soup = BeautifulSoup.BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     title_tag = soup.find('title')
     title = str(title_tag.contents[0]) if title_tag else ''
     server = headers.get('Server') or ''
@@ -430,7 +444,7 @@ def identify_using_ssl_cert(options):
     return device
 
 
-def process_ip(options):
+def process_ip(ip, options):
     '''Call the correct function(s) to process the IP address based on the
     port and recurse options passed into the command line.
 
@@ -444,6 +458,12 @@ def process_ip(options):
         ValueError: If the user-supplied combination of port number and recurse
             option is not one of cases supported in the dispatch_by_port dict.
     '''
+    if not is_valid_ip(ip):
+        logger.error('IP %s is not a valid IP address' % ip)
+        return
+
+    # cast the ip value as a string in case it's type is IPNetwork.
+    options['ip'] = str(ip)
 
     if options['port'] == 80:
         correct_functions = [identify_using_http_response]
@@ -465,7 +485,7 @@ def process_ip(options):
                 (correct_functions, options['ip']))
     for func in correct_functions:
         func(options)
-
+    return 'Done running process_ip() for IP %s' % ip
 
 def setup_cert_collection():
     '''Returns the cert_lookup_dict against which the user-supplied IP
@@ -586,12 +606,20 @@ def main():
     options = parse_args()
 
     ip_list = convert_input_to_ips(options)
-    for ip in ip_list:
-        if is_valid_ip(ip):
-            # cast the ip value as a string in case it's type is IPNetwork.
-            options['ip'] = str(ip)
-            process_ip(options)
+    
+    if options['num_threads'] == 1:
+        # check one IP address at a time
+        for ip in ip_list:
+            process_ip(ip, options)
             logger.debug('Done trying to identify IP %s' % ip)
+
+    else:
+        # check multiple IP addresses concurrently
+        with ThreadPoolExecutor(max_workers=options['num_threads']) as exe:
+            jobs = [exe.submit(process_ip, ip, options) for ip in ip_list]
+            results = [job.result() for job in jobs]
+
+        print('\n'.join(results))
 
 
 if __name__ == '__main__':

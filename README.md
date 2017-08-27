@@ -116,6 +116,8 @@ Only one of the required arguments can be supplied when running the lift tool.
 - **-p** &nbsp;&nbsp; or &nbsp;&nbsp; **--port**  `integer` - The port number at the supplied IP address that lift should connect to.
 - **--recurse** - Test Recursion
 - **--recon**   - Gather information about a given device.
+- **-o** &nbsp;&nbsp; or &nbsp;&nbsp; **--outfile**  `filename` - Where to write the results of this IP scanning.
+- **-t** &nbsp;&nbsp; or &nbsp;&nbsp; **--num-threads**  `integer` - instead of checking 1 IP address at a time, check this many IP addresses concurrently.
 
 
 ## Documentation and Support
@@ -147,9 +149,7 @@ If you want more signatures added to lift's collection of certificates, please n
 
 #### Features
 
-- Apply asynchronous programming concepts and/or parallelization techniques (multi-threading) to speed up the slow task of checking each IP address.
-
-- Write a tool for adding signatures in a standard fashion. In doing so, users of lift can supply their own list of indicators against which lift will compare the devices that it checks.
+- Write a tool for adding signatures in a standard fashion. In doing so, users of lift can supply their own list of indicators that lift will use when checking the IP addresses.
 
 - Design ways to implement the features that are presently not used -- testing for UDP, DNS, SSDP and NTP amplification abilities on remote devices.
 

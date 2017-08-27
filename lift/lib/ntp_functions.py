@@ -24,7 +24,18 @@ import logging
 logger = colorlog.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+# capture any log messages from the scapy package
+scapy_logger = colorlog.getLogger("scapy")
+scapy_logger.setLevel(logging.DEBUG)
+
+# remove any StreamHandlers attached to the scapy's logger
+# to prevent duplicate log messages appearing in the Terminal
+for handler in scapy_logger.handlers:
+    if isinstance(handler, logging.StreamHandler):
+        scapy_logger.removeHandler(handler)
+
 MAX_TRIES = 3
+TIMEOUT = 5
 
 
 def monlist_scan(options):
@@ -64,9 +75,12 @@ def monlist_scan(options):
             # response.
             # The timeout parameter specifies the time to wait after the
             # last packet has been sent.
-            logger.info('Sending the monlist command. Attempt %d of %d' %
-                        (tries, MAX_TRIES))
-            rep = sr1(pck, verbose=0, timeout=5)
+            # chainCC=1 so that when Ctrl-C is pressed, scapy will raise
+            # the KeyboardInterrupt exception instead of suppressing it
+            logger.info('Sending the monlist command. Waiting %d seconds '
+                        'before timeout. Attempt %d of %d' %
+                        (TIMEOUT, tries, MAX_TRIES))
+            rep = sr1(pck, verbose=1, timeout=TIMEOUT, chainCC=1)
 
             if hasattr(rep, 'answers'):
                 logger.debug('Received response from monlist command.')
