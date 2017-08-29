@@ -25,7 +25,7 @@ logger = colorlog.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def active_scan(self, target):
+def active_scan(target):
     # req contains the type of payload that is likely to originate from a
     # UPnP device that is vulnerable to this attack.
     req = ('M-SEARCH * HTTP/1.1\r\nHost:239.255.255.250:1900\r\n'
