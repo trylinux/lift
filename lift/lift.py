@@ -43,7 +43,7 @@ def configure_logging(logger, verbose=False, write_to_file=False, filename=''):
 
     Args:
         verbosity (bool, optional): Sets the severity level of the messages to be
-            displayed in the log. Defaults to logging.DEBUG, the lowest level.
+            displayed in the log. Defaults to logging.INFO level.
         write_to_file (str, optional): Whether to write the log messages to a
             file. Defaults to False.
         filename (str, optional): The name of the file where log messages
@@ -612,7 +612,7 @@ def main():
         # check one IP address at a time
         for ip in ip_list:
             process_ip(ip, options)
-            logger.debug('Done trying to identify IP %s' % ip)
+            logger.info('Done trying to identify IP %s' % ip)
 
     else:
         # check multiple IP addresses concurrently
