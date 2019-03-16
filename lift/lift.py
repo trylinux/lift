@@ -431,7 +431,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
         elif str("Inicio").decode("utf-8") in str(title_contents).decode("utf-8"):
             print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem"
-        elif str("WV-NS202A Network Camera").decode("utf-8") in str(title_contents).decode("utf-8") and server is "HTTPD"
+        elif str("WV-NS202A Network Camera").decode("utf-8") in str(title_contents).decode("utf-8") and server is "HTTPD":
             print str(dest_ip).rstrip('\r\n)') + ": Panasonic WV-NS202A Network Camera"
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
