@@ -396,27 +396,27 @@ def getheaders(dest_ip, dport, vbose, info):
         soup = BeautifulSoup.BeautifulSoup(html)
         try:
             title = soup.html.head.title
-            a = title.contents
+            title_contents = title.contents
         except:
             title = None
         if title is None:
             try:
                 title = soup.html.title
-                a = title.contents
+                title_contents = title.contents
             except:
-                a = None
+                title_contents = None
 
         # a = title.contents
-        if 'RouterOS' in str(a) and server is None:
+        if 'RouterOS' in str(title_contents) and server is None:
             router_os_version = soup.find('body').h1.contents
             print str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
                 soup.find('body').h1.contents.pop()), "(Login Page Title)"
             soup = BeautifulSoup.BeautifulSoup(html)
-        if 'D-LINK' in str(a) and 'siyou server' in server:
+        if 'D-LINK' in str(title_contents) and 'siyou server' in server:
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
             print str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model
             soup = BeautifulSoup.BeautifulSoup(html)
-        if a is None:
+        if title_contents is None:
             answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             if "js_check" in str(answer):
                 print str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found"
@@ -429,35 +429,37 @@ def getheaders(dest_ip, dport, vbose, info):
                             print str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)"
             else:
                 print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
-        elif str("Inicio").decode("utf-8") in str(a).decode("utf-8"):
+        elif str("Inicio").decode("utf-8") in str(title_contents).decode("utf-8"):
             print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem"
+        elif str("WV-NS202A Network Camera").decode("utf-8") in str(title_contents).decode("utf-8") and server is "HTTPD"
+            print str(dest_ip).rstrip('\r\n)') + ": Panasonic WV-NS202A Network Camera"
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
-        elif 'ePMP' in str(a):
+        elif 'ePMP' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
-        elif 'Wimax CPE Configuration' in str(a):
+        elif 'Wimax CPE Configuration' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)"
-        elif 'NXC2500' in str(a) and server is None:
+        elif 'NXC2500' in str(title_contents) and server is None:
             print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
         elif 'MiniServ/1.580' in server:
             print str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)"
-        elif 'IIS' in str(a):
-            print str(dest_ip).rstrip('\r\n)') + ":", str(a.pop()), "Server (Page Title)"
-        elif 'Vigor' in str(a):
-            print str(dest_ip).rstrip('\r\n)') + ":", str(a.pop()), "Switch (Title)"
-        elif 'Aethra' in str(a):
+        elif 'IIS' in str(title_contents):
+            print str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Server (Page Title)"
+        elif 'Vigor' in str(title_contents):
+            print str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Switch (Title)"
+        elif 'Aethra' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
-        elif 'Industrial Ethernet Switch' in str(a):
+        elif 'Industrial Ethernet Switch' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
-        elif a.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
+        elif title_contents.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
             print str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)"
-        elif 'NUUO Network Video Recorder Login' in a:
+        elif 'NUUO Network Video Recorder Login' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
-        elif 'CDE-30364' in a:
+        elif 'CDE-30364' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)"
-        elif 'BUFFALO' in a:
+        elif 'BUFFALO' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
-        elif 'Netgear' in a:
+        elif 'Netgear' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
         elif 'IIS' in server:
             print str(dest_ip).rstrip('\r\n)') + ":", str(server), "Server (Server Version)"
@@ -465,57 +467,57 @@ def getheaders(dest_ip, dport, vbose, info):
             print str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)"
         elif "SonicWALL" in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
-        elif "iGate" in a:
+        elif "iGate" in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)"
-        elif 'LG ACSmart Premium' in str(a):
+        elif 'LG ACSmart Premium' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)"
-        elif 'IFQ360' in str(a):
+        elif 'IFQ360' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)"
-        elif 'Tank Sentinel AnyWare' in str(a):
+        elif 'Tank Sentinel AnyWare' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
         elif 'Z-World Rabbit' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)"
-        elif 'Intellian Aptus Web' in str(a):
+        elif 'Intellian Aptus Web' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)"
-        elif 'SECURUS' in str(a):
+        elif 'SECURUS' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)"
         elif 'uc-httpd' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
-                a.pop()), "(Server)"
-        elif '::: Login :::' in str(a) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
+                title_contents.pop()), "(Server)"
+        elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
             print str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)"
-        elif 'NetDvrV3' in str(a):
+        elif 'NetDvrV3' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)"
-        elif 'Open Webif' in str(a):
+        elif 'Open Webif' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
-        elif 'IVSWeb' in str(a):
+        elif 'IVSWeb' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)"
         elif 'DVRDVS-Webs' in server or 'Hikvision-Webs' in server or 'App-webs/' in server:
             print str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)"
         elif 'Router Webserver' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(a.pop()), "(Title)"
-        elif 'DD-WRT' in str(a):
-            print str(dest_ip).rstrip('\r\n)') + ":", str(a.pop()), "Router (Title)"
-        elif 'Samsung DVR' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)"
+        elif 'DD-WRT' in str(title_contents):
+            print str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Router (Title)"
+        elif 'Samsung DVR' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)"
-        elif 'HtmlAnvView' in str(a):
+        elif 'HtmlAnvView' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)"
         elif 'ZTE corp' in str(server):
-            print str(dest_ip).rstrip('\r\n)') + ": ZTE", str(a.pop()), "Router (Title and Server)"
-        elif 'Haier Q7' in str(a):
+            print str(dest_ip).rstrip('\r\n)') + ": ZTE", str(title_contents.pop()), "Router (Title and Server)"
+        elif 'Haier Q7' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)"
         elif 'Cross Web Server' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)"
-        elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(a):
-            print str(dest_ip).rstrip('\r\n)') + ": ", str(a.pop()), "(Title and server)"
-        elif 'SunGuard' in str(a):
+        elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(title_contents):
+            print str(dest_ip).rstrip('\r\n)') + ": ", str(title_contents.pop()), "(Title and server)"
+        elif 'SunGuard' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)"
         else:
             if info is not None:
                 try:
-                    a = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(a.pop()).rstrip(
+                    title_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents.pop()).rstrip(
                         '\r\n)') + " and server is " + server
-                    print str(a)
+                    print str(title_contents)
                 except:
                     print "Title on IP", str(dest_ip).rstrip('\r\n)'), "does not exists and server is", server
             else:
