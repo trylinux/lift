@@ -549,6 +549,9 @@ def getheaders(dest_ip, dport, vbose, info):
             print str(dest_ip).rstrip('\r\n)') + ": ", str(title_contents.pop()), "(Title and server)"
         elif 'SunGuard' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)"
+
+        elif str(server) is str('VCS-VideoJet-Webserver'):
+            print str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)"
         else:
             if info is not None:
                 try:
