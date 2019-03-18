@@ -436,7 +436,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print str(dest_ip).rstrip('\r\n)') + ": Panasonic WV-NS202A Network Camera"
 
         elif str("Radiant Device Brower").decode("utf-8") in str(title_contents):
-            print str(dest_ip).rstrip('\r\n)') + ": Radiant RM1121 Series Monitor"
+            print str(dest_ip).rstrip('\r\n)') + ": Radiant RM1121 Series Monitor" + str(server)
 
         elif "VCS-VideoJet-Webserver" in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": Bosch AutoDome Camera"
