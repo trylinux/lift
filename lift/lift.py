@@ -430,7 +430,7 @@ def getheaders(dest_ip, dport, vbose, info):
             else:
                 print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
 
-        elif str(server) is str("ver2.4 rev0"):
+        elif str(server) in str("ver2.4 rev0"):
             print str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop())
 
         elif str("Inicio").decode("utf-8") in str(title_contents).decode("utf-8"):
