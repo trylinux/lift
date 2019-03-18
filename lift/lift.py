@@ -429,6 +429,10 @@ def getheaders(dest_ip, dport, vbose, info):
                             print str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)"
             else:
                 print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
+
+        elif str(server) is str("ver2.4 rev0"):
+            print str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop())
+
         elif str("Inicio").decode("utf-8") in str(title_contents).decode("utf-8"):
             print str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem"
 
@@ -440,57 +444,83 @@ def getheaders(dest_ip, dport, vbose, info):
 
         elif "VCS-VideoJet-Webserver" in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": Bosch AutoDome Camera"
+
         elif 'axhttpd/1.4.0' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+
         elif 'ePMP' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)"
+
         elif 'Wimax CPE Configuration' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)"
+
         elif 'NXC2500' in str(title_contents) and server is None:
             print str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)"
+
         elif 'MiniServ/1.580' in server:
             print str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)"
+
         elif 'IIS' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Server (Page Title)"
+
         elif 'Vigor' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Switch (Title)"
+
         elif 'Aethra' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)"
+
         elif 'Industrial Ethernet Switch' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)"
+
         elif title_contents.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
             print str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)"
+
         elif 'NUUO Network Video Recorder Login' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)"
+
         elif 'CDE-30364' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)"
+
         elif 'BUFFALO' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)"
+
         elif 'Netgear' in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)"
+
         elif 'IIS' in server:
             print str(dest_ip).rstrip('\r\n)') + ":", str(server), "Server (Server Version)"
+
         elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
             print str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)"
+
         elif "SonicWALL" in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)"
+
         elif "iGate" in title_contents:
             print str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)"
+
         elif 'LG ACSmart Premium' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)"
+
         elif 'IFQ360' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)"
+
         elif 'Tank Sentinel AnyWare' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)"
+
         elif 'Z-World Rabbit' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)"
+
         elif 'Intellian Aptus Web' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)"
+
         elif 'SECURUS' in str(title_contents):
             print str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)"
+
         elif 'uc-httpd' in str(server):
             print str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)"
+
         elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
             print str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)"
         elif 'NetDvrV3' in str(title_contents):
