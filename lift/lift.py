@@ -405,7 +405,8 @@ def getheaders(dest_ip, dport, vbose, info):
                 title_contents = title.contents
             except:
                 title_contents = None
-
+        if checkheaders.getcode() != 200: 
+            print str(dest_ip).rstrip('\r\n)') + ": Status Code " + checkheaders.getcode() + " Server: "+ server
         # a = title.contents
         if 'RouterOS' in str(title_contents) and server is None:
             router_os_version = soup.find('body').h1.contents
@@ -563,6 +564,8 @@ def getheaders(dest_ip, dport, vbose, info):
             else:
                 pass
         checkheaders.close()
+    except urllib2.HTTPError as e:
+        print str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e)
     except Exception as e:
         try:
             if 'NoneType' in str(e):
