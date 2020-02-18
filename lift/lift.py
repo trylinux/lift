@@ -573,7 +573,7 @@ def getheaders(dest_ip, dport, vbose, info):
            device_model = str(auth_header_realm[1]).replace("\"","")
            print str(dest_ip).rstrip('\r\n)') + ": D-Link Device Model ",str(device_model)
         elif "mini_httpd/1.19 19dec2003" in str(server) and int(e.code) == 401 :
-            print str(dest_ip).rstrip('\r\n)') + ": iCatch or related DVR (Needs ID)"
+            print str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)"
         else: 
             print str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e)
     except Exception as e:
