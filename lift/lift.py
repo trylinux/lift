@@ -430,7 +430,20 @@ def getheaders(dest_ip, dport, vbose, info):
                             print str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)"
             else:
                 print str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title"
-
+        elif str('WebServer') in str(server) and "D-LINK" in title_contents:
+            version_table = soup.find("table",{"id":"versionTable"})
+            for row in version_table.findAll('td'):
+                if "script" in str(row):
+                    if "Model" in str(row):
+                        grab_header = str(row.text).split(":")
+                        model_name = grab_header[1].lstrip(" ")
+                    elif "Hardware" in str(row):
+                        grab_header = str(row.text).split(":")
+                        hw_version = grab_header[1].lstrip(" ")
+                    elif "Firmware" in str(row):
+                        grab_header = str(row.text).split(":")
+                        fw_version = grab_header[1].lstrip(" ")
+            print str(dest_ip).rstrip('\r\n)') +": D-LINK Model " + model_name + " " + hw_version + " " + fw_version
         elif str(server) in str("ver2.4 rev0"):
             print str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop())
 
