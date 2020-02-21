@@ -9,7 +9,8 @@ import logging
 import time
 l=logging.getLogger("scapy.runtime")
 l.setLevel(49)
-from scapy.all import IP,send,UDP,Raw,random,send,sr1
+from scapy.layers.inet import IP, UDP
+from scapy.all import send,Raw,random,send,sr1
 
 class NTPscan:
     def monlist_scan(self,target):
@@ -27,7 +28,7 @@ class NTPscan:
                 results = 1
                 break
             elif not hasattr(rep,'answers') and (n < 3):
-                #print "Pass ",n
+                #print("Pass ",n)
                 n = n + 1
             else:
                 results = None
@@ -37,5 +38,5 @@ class NTPscan:
         #    sys.exit(0)
         #except Exception as e:
     #        results = None
-            #print e
+            #print(e)
         return results

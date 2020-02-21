@@ -1,6 +1,6 @@
 gevent
 argparse
-BeautifulSoup
+beautifulsoup4
 netaddr
 pyasn
 dnspython
