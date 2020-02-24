@@ -448,6 +448,8 @@ def getheaders(dest_ip, dport, vbose, info):
                         grab_header = str(row.text).split(":")
                         fw_version = grab_header[1].lstrip(" ")
             print(str(dest_ip).rstrip('\r\n)') +": D-LINK Model " + model_name + " " + hw_version + " " + fw_version)
+        elif "Synology" in str(title_contents) and str("nginx") in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": Synology Device Storage Device")
         elif str(server) in str("ver2.4 rev0"):
             print(str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop()))
 
