@@ -452,13 +452,13 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str(server) in str("ver2.4 rev0"):
             print(str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop()))
 
-        elif str("Inicio").decode("utf-8") in str(title_contents).decode("utf-8"):
+        elif "Inicio" in title_contents:
             print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem")
 
-        elif str("WV-NS202A Network Camera").decode("utf-8") in str(title_contents).decode("utf-8") and server is str("HTTPD"):
+        elif str("WV-NS202A Network Camera") in str(title_contents) and server is str("HTTPD"):
             print(str(dest_ip).rstrip('\r\n)') + ": Panasonic WV-NS202A Network Camera")
 
-        elif str("Radiant Device Brower").decode("utf-8") in str(title_contents) and str("thttpd/2.25b 29dec2003") in str(server):
+        elif str("Radiant Device Brower") in str(title_contents) and str("thttpd/2.25b 29dec2003") in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Radiant RM1121 Series Monitor")
 
         elif "VCS-VideoJet-Webserver" in str(server):
@@ -572,15 +572,12 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str(server) is str('VCS-VideoJet-Webserver'):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
         else:
-            if info is not None:
-                try:
-                    title_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents.pop()).rstrip(
-                        '\r\n)') + " and server is " + server
-                    print(str(title_contents))
-                except:
-                    print("Title on IP", str(dest_ip).rstrip('\r\n)'), "does not exists and server is", server)
-            else:
-                pass
+            try:
+                title_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents.pop()).rstrip(
+                    '\r\n)') + " and server is " + server
+                print(str(title_contents))
+            except:
+                print("Title on IP", str(dest_ip).rstrip('\r\n)'), "does not exists and server is", server)
         checkheaders.close()
     except HTTPError as e:
         server = str(e.info().get('Server'))
