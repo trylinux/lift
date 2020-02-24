@@ -89,7 +89,7 @@ def main():
             sys.exit(0)
         except Exception as e:
             sys.exc_info()[0]
-            print("error in first try", e)
+            print("error in first try", e, traceback.format_exc())
             pass
     elif args.subnet:
         try:
@@ -218,7 +218,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
     s.settimeout(3)
     try:
         c = ssl.wrap_socket(s, cert_reqs=ssl.CERT_NONE)
-        c.connect((dest_ip, dport))
+        c.connect((str(host), dport))
         a = c.getpeercert(True)
         b = str(ssl.DER_cert_to_PEM_cert(a))
         device = (certs.getcertinfo(b))
@@ -330,6 +330,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
         elif ("timed out" or 'sslv3' in e) and ssl_only == 0:
             getheaders(dest_ip, dport, verbose, info)
             pass
+        pass
         # if verbose is not None:
         #	print( )str(dest_ip).rstrip('\r\n)') + ": had error " + str(e).rstrip('\r\n)'))
         if verbose is not None:
