@@ -1,5 +1,9 @@
-import urllib2
+try:
+	from urllib.request import urlopen
+	from urllib.error import HTTPError
+except ImportError:
+	from urllib2 import urlopen, HTTPError
 
 def servertypes(ipaddr):
 	
-	host = urllib2.urlopen("http://96.245.113.24").info().getheader('Server')
+	host = urlopen("http://96.245.113.24").info().getheader('Server')
