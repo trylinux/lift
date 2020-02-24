@@ -18,15 +18,14 @@ try:
 except ImportError:
     from urllib2 import urlopen, HTTPError
 
-from .lib import certs
 import bs4
 import netaddr
 import os
 import pyasn
 import dns.resolver
 
-from .lib import certs
-from .lib import ssdp_info, ntp_function
+from lib import certs
+from lib import ssdp_info, ntp_function
 
 
 def main():
