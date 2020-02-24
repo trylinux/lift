@@ -391,7 +391,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             dport = 80
             getheaders(dest_ip, dport, vbose, info)
         if vbose is not None:
-            print("Error in getsslheaders: " + str(e) + str(dest_ip))
+            print("Error in getsslheaders: " + str(e) + str(dest_ip), traceback.format_exc())
         pass
     return
 
