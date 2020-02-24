@@ -348,7 +348,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         if not server:
             server = None
         html = checkheaders.read()
-        soup = bs4.BeautifulSoup(html)
+        soup = bs4.BeautifulSoup(html,'html.parser')
         title = soup.html.head.title
         if title is None:
             title = soup.html.title
@@ -396,7 +396,7 @@ def getheaders(dest_ip, dport, vbose, info):
         except:
             server = None
         html = checkheaders.read()
-        soup = bs4.BeautifulSoup(html)
+        soup = bs4.BeautifulSoup(html,'html.parser')
         try:
             title = soup.html.head.title
             title_contents = title.contents
@@ -415,11 +415,11 @@ def getheaders(dest_ip, dport, vbose, info):
             router_os_version = soup.find('body').h1.contents
             print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
                 soup.find('body').h1.contents.pop()), "(Login Page Title)")
-            soup = bs4.BeautifulSoup(html)
+            soup = bs4.BeautifulSoup(html,'html.parser')
         if 'D-LINK' in str(title_contents) and 'siyou server' in server:
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
             print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
-            soup = bs4.BeautifulSoup(html)
+            soup = bs4.BeautifulSoup(html,'html.parser')
         if title_contents is None:
             answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             if "js_check" in str(answer):
@@ -435,7 +435,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 print(str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title")
         elif str('WebServer') in str(server) and "D-LINK" in title_contents:
             version_table = soup.find("table",{"id":"versionTable"})
-            for row in version_table.findAll('td'):
+            for row in version_table.find_all('td'):
                 if "script" in str(row):
                     if "Model" in str(row):
                         grab_header = str(row.text).split(":")
