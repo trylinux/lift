@@ -83,7 +83,7 @@ def main():
                         # print("Skipping SSL test for", dport)
                         getheaders(str(line).rstrip('\r\n)'), dport, verbose, info)
                     else:
-                        testips(line, dport, verbose, ssl_only, info)
+                        testips(str(line).rstrip('\r\n)'), dport, verbose, ssl_only, info)
         except KeyboardInterrupt:
             # print("Quitting")
             sys.exit(0)
