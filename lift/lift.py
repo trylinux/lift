@@ -478,7 +478,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif 'NXC2500' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)")
 
-        elif 'MiniServ/1.580' in server:
+        elif server is not None and 'MiniServ/1.580' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)")
 
         elif 'IIS' in str(title_contents):
@@ -508,7 +508,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif 'Netgear' in title_contents:
             print(str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)")
 
-        elif 'IIS' in server:
+        elif 'IIS' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ":", str(server), "Server (Server Version)")
 
         elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
@@ -542,7 +542,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)")
 
-        elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in server:
+        elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)")
         elif 'NetDvrV3' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)")
@@ -550,7 +550,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)")
         elif 'IVSWeb' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
-        elif 'DVRDVS-Webs' in server or 'Hikvision-Webs' in server or 'App-webs/' in server:
+        elif 'DVRDVS-Webs' in str(server) or 'Hikvision-Webs' in str(server) or 'App-webs/' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)")
         elif 'Router Webserver' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
