@@ -347,7 +347,6 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
 
 def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
     hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
-    print(type(cert))
     try:
         checkheaders = urlopen(hostname, context=ctx, timeout=5)
         try:
@@ -386,6 +385,10 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             else:
                 print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip(), '\r\n)', "and server is", server)
         checkheaders.close()
+    except HTTPError as e:
+        server = str(e.info().get('Server'))
+        print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code)) + " and server " + str(server)
+
     except Exception as e:
         if dport is 443 and ssl_only == 0:
             dport = 80
