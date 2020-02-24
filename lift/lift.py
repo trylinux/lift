@@ -347,7 +347,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
 
 def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
     hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
-
+    print(type(cert))
     try:
         checkheaders = urlopen(hostname, context=ctx, timeout=5)
         try:
