@@ -339,7 +339,8 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
         if 'gaierror' in str(e):
             pass
         else:
-            print(e)
+            if verbose is not None:
+                print(e)
 
 
 
