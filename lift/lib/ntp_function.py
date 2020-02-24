@@ -1,10 +1,7 @@
 import sys
 if 'threading' in sys.modules:
     del sys.modules['threading']
-import gevent
-import gevent.socket
-import gevent.monkey
-gevent.monkey.patch_all()
+
 import logging
 import time
 l=logging.getLogger("scapy.runtime")
