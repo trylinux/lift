@@ -3,9 +3,9 @@
 Quietly **"lift"** fingerprints from devices by using their SSL certificates, HTTP headers or other characteristics.
 
 **Requires Python 2.7.10 or higher**
+**BEST IF USED WITH PYTHON 3**
 
-
-This project requires Python 2.7.10 or higher because of the massive changes to the ssl library. Python 2.7.10 introduced the SSLContext class to help sophisticated applications (like lift) manage settings and certificates.
+This project requires Python 2.7.10 (Preferrably Python 3) or higher because of the massive changes to the ssl library. Python 2.7.10 introduced the SSLContext class to help sophisticated applications (like lift) manage settings and certificates.
 
 ## Table of Contents
 
@@ -66,7 +66,7 @@ $ cd lift
 2. Create a virtual environment
 
 ```
-$ virtualenv -p python venv
+$ virtualenv -p python3 venv
 $ source venv/bin/activate
 ```
 
@@ -84,6 +84,12 @@ The best way to use this tool is to run
 $ python lift.py -f <file_with_one_ip_per_line> -I 
 ```
 
+If you want to get the full debug output (noisy)
+
+```
+$ python lift.py -v1 -I -f <file_with_one_ip_per_line>
+```
+
 Only one of the required arguments can be supplied when running the lift tool.
 
 **Required Arguments**:
@@ -91,7 +97,7 @@ Only one of the required arguments can be supplied when running the lift tool.
 - **-f** &nbsp;&nbsp; or &nbsp;&nbsp; **--ifile** &nbsp;&nbsp;&nbsp;&nbsp; `filename` - file with one IP address per line
 - **-s** &nbsp;&nbsp; or &nbsp;&nbsp; **--subnet** &nbsp;&nbsp;&nbsp;&nbsp;`string` -  the IP address range of a subnet
 - **-i** &nbsp;&nbsp; or &nbsp;&nbsp; **--ip** &nbsp;&nbsp;&nbsp;&nbsp;`string` - a single IP address
-- **-a** &nbsp;&nbsp; or  &nbsp;&nbsp; **--asn** &nbsp;&nbsp;&nbsp;&nbsp; `integer` - The officially registered autonomous system number (ASN) of an internet service provider (ISP)
+- **-a** &nbsp;&nbsp; or  &nbsp;&nbsp; **--asn** &nbsp;&nbsp;&nbsp;&nbsp; `integer` - The officially registered autonomous system number (ASN) of an internet service provider (ISP) (CURRENTLY NOT WORKING)
 
 **Optional Arguments**:
 - **--I** &nbsp;&nbsp; or &nbsp;&nbsp; **--info**  - Get more info about operations
