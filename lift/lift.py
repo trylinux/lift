@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import traceback
+
 import os
 import subprocess
 import sys
@@ -14,9 +16,9 @@ import time
 
 try:
     from urllib.request import urlopen
-    from urllib.error import HTTPError
+    from urllib.error import HTTPError, URLError
 except ImportError:
-    from urllib2 import urlopen, HTTPError
+    from urllib2 import urlopen, HTTPError, URLError
 
 import bs4
 import netaddr
@@ -452,7 +454,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str(server) in str("ver2.4 rev0"):
             print(str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop()))
 
-        elif "Inicio" in title_contents:
+        elif "Inicio" in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem")
 
         elif str("WV-NS202A Network Camera") in str(title_contents) and server is str("HTTPD"):
@@ -490,9 +492,9 @@ def getheaders(dest_ip, dport, vbose, info):
 
         elif 'Industrial Ethernet Switch' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)")
-
-        elif title_contents.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
-            print(str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)")
+        #Removing the following line due to some weirdness with bytes
+        #elif title_contents.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
+        #    print(str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)")
 
         elif 'NUUO Network Video Recorder Login' in title_contents:
             print(str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)")
@@ -591,6 +593,11 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)")
         else: 
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
+    except URLError as e:
+        if vbose is not None:
+            print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open")
+        else:
+            pass
     except Exception as e:
         try:
             if 'NoneType' in str(e):
@@ -608,7 +615,7 @@ def getheaders(dest_ip, dport, vbose, info):
             pass
 
         if vbose is not None:
-            print("Error in getheaders(): ", str(dest_ip).rstrip('\r\n)'), ":", str(e))
+            print("Error in getheaders(): ", str(dest_ip).rstrip('\r\n)'), ":", str(e), traceback.format_exc())
         pass
 
 
