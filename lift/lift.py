@@ -386,16 +386,15 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
                 print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip(), '\r\n)', "and server is", server)
         checkheaders.close()
     except HTTPError as e:
-        if vbose is not None:
-
-            if "Server" in str(e.info()):
-                server = str(e.info().get('Server'))
-            else:
-                server = "is not available"
-            if "AkamaiGHost" in str(server):
-                print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
-            else:
-                print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code)) + " and server " + str(server)
+        if "Server" in str(e.info()):
+            server = str(e.info().get('Server'))
+        else:
+            server = "is not available"
+        if "AkamaiGHost" in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
+        elif vbose is not None:
+            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code)) + " and server " + str(server)
+        else:
             pass
     except Exception as e:
         if dport is 443 and ssl_only == 0:
