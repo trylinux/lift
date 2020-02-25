@@ -348,7 +348,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             pass
         else:
             if verbose is not None:
-                print(e)
+                print("Error in TestIPs",str(e))
 
 
 
