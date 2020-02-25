@@ -212,7 +212,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    ctx.set_ciphers('ALL','eNULL')
+    ctx.set_ciphers('ALL:eNULL')
     s = socket()
     s.settimeout(3)
     try:
