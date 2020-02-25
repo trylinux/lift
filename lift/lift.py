@@ -617,12 +617,11 @@ def getheaders(dest_ip, dport, vbose, info):
         else:
             try:
 
-                crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents).rstrip(
+                crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents.pop()).rstrip(
                     '\r\n)') + " and server is " + str(server)
                 print(str(crap_contents))
             except:
-                print(title_contents)
-                print("Title on IP", str(dest_ip).rstrip('\r\n)'), "does not exists and server is", server)
+                print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is empty and server is", server)
         checkheaders.close()
     except HTTPError as e:
         server = str(e.info().get('Server'))
