@@ -23,7 +23,7 @@ except ImportError:
 import bs4
 import netaddr
 import os
-import pyasn
+#import pyasn
 import dns.resolver
 
 from lib import certs
