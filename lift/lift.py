@@ -391,7 +391,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)")
         elif 'axhttpd/1.4.0' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
-        elif 'ZeroShell' in str(a):
+        elif 'ZeroShell' in str(cert):
             print(str(dest_ip).rstrip('\r\n)') + ": ZeroShell Firewall")
         else:
             if ssl_only == 0:
