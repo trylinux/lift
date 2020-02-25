@@ -396,7 +396,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         if "AkamaiGHost" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
         elif vbose is not None:
-            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code)) + " and server " + str(server)
+            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server))
         else:
             pass
     except Exception as e:
