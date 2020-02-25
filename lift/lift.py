@@ -616,7 +616,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
         else:
             try:
-                title_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents.pop()).rstrip(
+
+                title_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents).rstrip(
                     '\r\n)') + " and server is " + server
                 print(str(title_contents))
             except:
