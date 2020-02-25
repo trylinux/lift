@@ -337,7 +337,8 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             elif ("timed out" or 'sslv3' in e) and ssl_only == 0:
                 getheaders(dest_ip, dport, verbose, info)
                 pass
-            pass
+            else:
+                getheaders(dest_ip, dport, verbose, info)
             # if verbose is not None:
             #	print( )str(dest_ip).rstrip('\r\n)') + ": had error " + str(e).rstrip('\r\n)'))
             if verbose is not None:
