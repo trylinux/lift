@@ -387,7 +387,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         checkheaders.close()
     except HTTPError as e:
         if vbose is not None:
-            print(e)
+            print(e.info())
             server = str(e.info().get('Server'))
             print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code)) + " and server " + str(server)
             pass
