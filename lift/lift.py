@@ -387,7 +387,10 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         checkheaders.close()
     except HTTPError as e:
         if "Server" in str(e.info()):
-            server = str(e.info().get('Server'))
+            try:
+                server = str(e.info().get('Server'))
+            except:
+                server = "is not available"
         else:
             server = "is not available"
         if "AkamaiGHost" in str(server):
