@@ -212,7 +212,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    ctx.set_ciphers('ALL')
+    ctx.set_ciphers('ALL','eNULL')
     s = socket()
     s.settimeout(3)
     try:
@@ -323,6 +323,13 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
         except KeyboardInterrupt:
             print("Quitting")
             sys.exit(0)
+        except URLError as e:
+            if verbose is not None:
+                print(str(dest_ip).rstrip('\r\n)') + ":" + str(dport) + " is not open")
+                getheaders(dest_ip, dport, verbose, info)
+            else:
+                getheaders(dest_ip, dport, verbose, info)
+                pass
         except Exception as e:
             s.close()
             if 111 in e and ssl_only == 0:
