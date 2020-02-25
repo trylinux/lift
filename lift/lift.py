@@ -45,8 +45,8 @@ def main():
     parser.add_argument("-S", "--ssl", help="For doing SSL checks only", action="store_true")
     parser.add_argument("-R", "--recon", help="Gather information about a given device", action="store_true")
     args = parser.parse_args()
-    libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
-    asndb = pyasn.pyasn(libpath + '/ipasn.dat')
+    #libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
+    #asndb = pyasn.pyasn(libpath + '/ipasn.dat')
     if args.verbose is None:
         verbose = None
     else:
@@ -122,32 +122,32 @@ def main():
             sys.exit()
         except Exception as e:
             sys.exit()
-    elif args.asn:
-        for subnet in asndb.get_as_prefixes(int(args.asn)):
-            try:
-                for ip in netaddr.IPNetwork(str(subnet)):
-                    if dport == 80:
-                        getheaders(str(ip).rstrip('\r\n)'), dport, verbose, info)
-                    elif args.recurse:
-                        if dport == 53:
-                            recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
-                        elif dport == 1900:
-                            recurse_ssdp_check(str(ip).rstrip('\r\n'), verbose)
-                        elif dport == 123:
-                            ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
-                        else:
-                            recurse_ssdp_check(str(ip).rstrip('\r\n'), verbose)
-                            recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
-                            ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
-                    else:
-                        testips(str(ip), dport, verbose, ssl_only, info)
-            except KeyboardInterrupt:
-                print("Quitting")
-                sys.exit(1)
-            except Exception as e:
-                if args.verbose is not None:
-                    print("Error occured in Subnet", e)
-                    sys.exit(0)
+ # #   elif args.asn:
+ # #      for subnet in asndb.get_as_prefixes(int(args.asn)):
+ # #           try:
+ #                for ip in netaddr.IPNetwork(str(subnet)):
+ #                    if dport == 80:
+ #                        getheaders(str(ip).rstrip('\r\n)'), dport, verbose, info)
+ #                    elif args.recurse:
+ #                        if dport == 53:
+ #                            recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
+ #                        elif dport == 1900:
+ #                            recurse_ssdp_check(str(ip).rstrip('\r\n'), verbose)
+ #                        elif dport == 123:
+ #                            ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
+ #                        else:
+ #                            recurse_ssdp_check(str(ip).rstrip('\r\n'), verbose)
+ #                            recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
+ #                            ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
+ #                    else:
+ #                        testips(str(ip), dport, verbose, ssl_only, info)
+ #            except KeyboardInterrupt:
+ #                print("Quitting")
+ #                sys.exit(1)
+ #            except Exception as e:
+ #                if args.verbose is not None:
+ #                    print("Error occured in Subnet", e)
+ #                    sys.exit(0)
 
 
     elif args.ifile and args.recurse:
