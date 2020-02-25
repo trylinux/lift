@@ -390,7 +390,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             print(e)
             server = str(e.info().get('Server'))
             print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code)) + " and server " + str(server)
-
+            pass
     except Exception as e:
         if dport is 443 and ssl_only == 0:
             dport = 80
