@@ -366,21 +366,28 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             server = None
         html = checkheaders.read()
         soup = bs4.BeautifulSoup(html,'html.parser')
-        title = soup.html.head.title
+        try:
+            title = soup.html.head.title
+            title_contents = title.contents
+        except:
+            title = None
         if title is None:
-            title = soup.html.title
-        a = title.contents
-        if 'EdgeOS' in title.contents and 'Ubiquiti' in cert:
+            try:
+                title = soup.html.title
+                title_contents = title.contents
+            except:
+                title_contents = None
+        if 'EdgeOS' in title_contents and 'Ubiquiti' in cert:
             print(str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)")
         # if ('ubnt.com','UBNT') in cert:
         #	print(str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)")
-        elif 'iR-ADV' in str(cert) and 'Catwalk' in str(title.contents):
+        elif 'iR-ADV' in str(cert) and 'Catwalk' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)")
         elif 'Cyberoam' in str(cert):
             print(str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)")
         elif 'TG582n' in str(cert):
             print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)")
-        elif 'RouterOS' in title.contents:
+        elif 'RouterOS' in title_contents:
             print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)")
         elif 'axhttpd/1.4.0' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
@@ -403,7 +410,11 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         if "AkamaiGHost" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
         elif vbose is not None:
-            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server))
+            try:
+                authenticate_header = e.headers.get('WWW-Authenticate')
+            except:
+                authenticate_header = "noauth"
+            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
         else:
             pass
     except Exception as e:
