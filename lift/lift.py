@@ -620,7 +620,9 @@ def getheaders(dest_ip, dport, vbose, info):
                 crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + str(title_contents.pop()).rstrip(
                     '\r\n)') + " and server is " + str(server)
                 print(str(crap_contents))
-            except:
+            except Exception as e:
+                if vbose is not None:
+                    print(e,str(traceback.format_exc()))
                 print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is empty and server is", server)
         checkheaders.close()
     except HTTPError as e:
