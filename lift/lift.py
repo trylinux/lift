@@ -584,7 +584,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 title_contents.pop()), "(Server)")
         elif 'Boa/0.93.15' in str(server):
             if 'Home Gateway' in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Product")
+                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
             elif str('1GE') in str(title_contents) or str('1FE') in str(title_contents):
                 print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology Model "+str(title_contents.pop()))
 
