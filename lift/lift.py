@@ -584,9 +584,9 @@ def getheaders(dest_ip, dport, vbose, info):
                 title_contents.pop()), "(Server)")
         elif 'Boa/0.93.15' in str(server):
             if 'Home Gateway' in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Syrotech GOPON 1000 2WONU Device")
+                print(str(dest_ip).rstrip('\r\n)') + ": Shenzen C-Data Technology GPON/ONU/EPON Product")
             elif str('1GE') in str(title_contents) or str('1FE') in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Syrotech Model "+str(title_contents.pop()))
+                print(str(dest_ip).rstrip('\r\n)') + ": Shenzen C-Data Technology Model "+str(title_contents.pop()))
 
         elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)")
