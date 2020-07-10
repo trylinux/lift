@@ -459,11 +459,11 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
                 soup.find('body').h1.contents.pop()), "(Login Page Title)")
             soup = bs4.BeautifulSoup(html,'html.parser')
-        if 'D-LINK' in str(title_contents) and 'siyou server' in server:
+        elif 'D-LINK' in str(title_contents) and 'siyou server' in server:
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
             print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
             soup = bs4.BeautifulSoup(html,'html.parser')
-        if title_contents is None:
+        elif title_contents is None:
             answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             if "js_check" in str(answer):
                 print(str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found")
