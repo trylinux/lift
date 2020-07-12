@@ -44,6 +44,7 @@ def main():
     parser.add_argument("-I", "--info", help="Get more info about operations", action="store_true")
     parser.add_argument("-S", "--ssl", help="For doing SSL checks only", action="store_true")
     parser.add_argument("-R", "--recon", help="Gather information about a given device", action="store_true")
+    parser.add_argument("-o","--ofile", help="Output File")
     args = parser.parse_args()
     #libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
     #asndb = pyasn.pyasn(libpath + '/ipasn.dat')
@@ -227,93 +228,93 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             # print("device: ",device)
             if device is not None:
                 if device is "ubiquiti":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)")
                 if "UBNT" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)")
                 elif "samsung" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Unknown Samsung Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Unknown Samsung Device (SSL)")
                 elif "qnap" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": QNAP NAS TS series detected (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": QNAP NAS TS series detected (SSL)")
                 elif device is "hikvision":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Hikvision Default Cert")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Hikvision Default Cert")
                 elif device is "avigilon":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Aviligon Gateway Default cert")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Aviligon Gateway Default cert")
                 elif device is "netgear_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": NetGear Default cert UTM  (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": NetGear Default cert UTM  (SSL)")
                 elif device is "verifone_sapphire":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Verifone Sapphire Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Verifone Sapphire Device (SSL)")
                 elif "Vigor" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": DrayTek Vigor Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": DrayTek Vigor Device (SSL)")
                 elif device is "lifesize_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Lifesize Product (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Lifesize Product (SSL)")
                 elif "filemaker" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Filemaker Secure Database Website (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Filemaker Secure Database Website (SSL)")
                 elif device is "verizon_jungo":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Verizon Jungo OpenRG product (SSL/8443)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Verizon Jungo OpenRG product (SSL/8443)")
                 elif device is "canon_iradv":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Canon IR-ADV Login Page (SSL/8443)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Canon IR-ADV Login Page (SSL/8443)")
                 elif "colubris" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": HPE MSM Series Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": HPE MSM Series Device (SSL)")
                 elif device is "ecessa":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Ecessa PowerLink Wan Optimizer (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Ecessa PowerLink Wan Optimizer (SSL)")
                 elif device is "nomadix_ag_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Nomadix AG series Gateway (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Nomadix AG series Gateway (SSL)")
                 elif "netvanta" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": ADTRAN NetVanta Total Access Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": ADTRAN NetVanta Total Access Device (SSL)")
                 elif "valuepoint_gwc_1" is device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": ValuePoint Networks Gateway Controller Series (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": ValuePoint Networks Gateway Controller Series (SSL)")
                 elif device is "broadcom_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Broadcom Generic Modem (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Broadcom Generic Modem (SSL)")
                 elif device is "lg_nas_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": LG NAS Device (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": LG NAS Device (SSL)")
                 elif device is "edgewater_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": EdgeWater Networks VOIP Solution (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": EdgeWater Networks VOIP Solution (SSL)")
                 elif device is "foscam_cam":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Foscam IPcam Client Login (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Foscam IPcam Client Login (SSL)")
                 elif device is "lacie_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": LaCie CloudBox (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": LaCie CloudBox (SSL)")
                 elif device is "huawei_hg658":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway HG658d (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway HG658d (SSL)")
                 elif device is "interpeak_device":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Something made by interpeak (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Something made by interpeak (SSL)")
                 elif device is "fujistu_celvin":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)")
                 elif device is "opengear_default_cert":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)")
                 elif device is "zyxel_pk5001z":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)")
                 elif device is "audiocodecs_8443":
-                    print(str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)")
                 elif "supermicro_ipmi" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Supermicro IPMI Default Certs (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Supermicro IPMI Default Certs (SSL)")
                 elif device is "enco_player_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)")
                 elif device is "ami_megarac":
-                    print(str(dest_ip).rstrip('\r\n)') + ": AMI MegaRac Remote Management Default Cert (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": AMI MegaRac Remote Management Default Cert (SSL)")
                 elif device is "avocent_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": Avocent Default cert (unknown device) (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Avocent Default cert (unknown device) (SSL)")
                 elif device is "ligowave_1":
-                    print(str(dest_ip).rstrip('\r\n)') + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)")
                 elif "intelbras_wom500" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": IntelBras Wom500 (admin/admin) (SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": IntelBras Wom500 (admin/admin) (SSL)")
                 elif "netgear_2" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)")
                 elif "buffalo_1" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Buffalo Default Cert (443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Buffalo Default Cert (443/SSL)")
                 elif "digi_int_1" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Digi Passport Default Cert (443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Digi Passport Default Cert (443/SSL)")
                 elif "prtg_network_monitor_1" in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Paessler PTRG Monitoring Default Cert(443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Paessler PTRG Monitoring Default Cert(443/SSL)")
                 elif 'axentra_1' in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)")
                 elif 'ironport_device' in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Cisco IronPort Device Default SSL (443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Cisco IronPort Device Default SSL (443/SSL)")
                 elif 'meru_net_1' in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": Meru Network Management Device  (443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Meru Network Management Device  (443/SSL)")
                 elif 'bticino_1' in device:
-                    print(str(dest_ip).rstrip('\r\n)') + ": BTcinino My Home Device w/ Default Cert  (443/SSL)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": BTcinino My Home Device w/ Default Cert  (443/SSL)")
             # elif "matrix_sample_ssl_1":
-            #	print(str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)")
+            #	result = print(str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)")
             elif a is not None and device is None:
                 getheaders_ssl(dest_ip, dport, a, verbose, ctx, ssl_only, info)
             else:
@@ -325,7 +326,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             sys.exit(0)
         except URLError as e:
             if verbose is not None:
-                print(str(dest_ip).rstrip('\r\n)') + ":" + str(dport) + " is not open")
+                result = print(str(dest_ip).rstrip('\r\n)') + ":" + str(dport) + " is not open")
                 getheaders(dest_ip, dport, verbose, info)
             else:
                 getheaders(dest_ip, dport, verbose, info)
@@ -349,6 +350,8 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
         else:
             if verbose is not None:
                 print("Error in TestIPs",str(e))
+    print(result)
+    return result
 
 
 
@@ -359,7 +362,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         checkheaders = urlopen(hostname, context=ctx, timeout=5)
         try:
             if ('ubnt.com', 'UBNT') in cert:
-                print(str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)")
+                result = print(str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)")
         except:
             pass
         server = checkheaders.info().get('Server')
@@ -379,26 +382,27 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             except:
                 title_contents = None
         if 'EdgeOS' in str(title_contents) and 'Ubiquiti' in cert:
-            print(str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": EdgeOS Device (SSL + Server header)")
         # if ('ubnt.com','UBNT') in cert:
-        #	print(str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)")
+        #	result = print(str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)")
         elif 'iR-ADV' in str(cert) and 'Catwalk' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Canon iR-ADV Login Page (SSL + Server header)")
         elif 'Cyberoam' in str(cert):
-            print(str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Cyberoam Device (SSL)")
         elif 'TG582n' in str(cert):
-            print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG582n (SSL)")
         elif 'RouterOS' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS (Login Page Title)")
         elif 'axhttpd/1.4.0' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
         elif 'ZeroShell' in str(cert):
-            print(str(dest_ip).rstrip('\r\n)') + ": ZeroShell Firewall")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": ZeroShell Firewall")
         else:
             if ssl_only == 0:
                 getheaders(dest_ip, 80, vbose, info)
             else:
-                print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip(), '\r\n)', "and server is", server)
+                result = ("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip(), '\r\n)', "and server is", server)
+
         checkheaders.close()
     except HTTPError as e:
         if "Server" in str(e.info()):
@@ -409,13 +413,13 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         else:
             server = "is not available"
         if "AkamaiGHost" in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
         elif vbose is not None:
             try:
                 authenticate_header = e.headers.get('WWW-Authenticate')
             except:
                 authenticate_header = "noauth"
-            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
+            result = print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
         else:
             pass
     except Exception as e:
@@ -425,7 +429,8 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         if vbose is not None:
             print("Error in getsslheaders: " + str(e) + str(dest_ip), traceback.format_exc())
         pass
-    return
+    print(result)
+    return result
 
 
 def getheaders(dest_ip, dport, vbose, info):
@@ -452,30 +457,30 @@ def getheaders(dest_ip, dport, vbose, info):
             except:
                 title_contents = None
         if checkheaders.getcode() != 200: 
-            print(str(dest_ip).rstrip('\r\n)') + ": Status Code " + checkheaders.getcode() + " Server: "+ server)
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Status Code " + checkheaders.getcode() + " Server: "+ server)
         # a = title.contents
         if 'RouterOS' in str(title_contents) and server is None:
             router_os_version = soup.find('body').h1.contents
-            print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
+            result = print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
                 soup.find('body').h1.contents.pop()), "(Login Page Title)")
             soup = bs4.BeautifulSoup(html,'html.parser')
         elif 'D-LINK' in str(title_contents) and 'siyou server' in server:
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
-            print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
+            result = print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
             soup = bs4.BeautifulSoup(html,'html.parser')
         elif title_contents is None:
             answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             if "js_check" in str(answer):
-                print(str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found")
+                result = print(str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found")
 
             elif 'WebServer/1.0 UPnP/1.0' in str(server):
                 get_label = soup.find('label').contents
                 if len(get_label) is not 0:
                     for record in get_label:
                         if 'TP-LINK' in record:
-                            print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
+                            result = print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
             else:
-                print(str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title")
+                result = print(str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title")
         elif str('WebServer') in str(server) and "D-LINK" in title_contents:
             version_table = soup.find("table",{"id":"versionTable"})
             for row in version_table.find_all('td'):
@@ -489,136 +494,136 @@ def getheaders(dest_ip, dport, vbose, info):
                     elif "Firmware" in str(row):
                         grab_header = str(row.text).split(":")
                         fw_version = grab_header[1].lstrip(" ")
-            print(str(dest_ip).rstrip('\r\n)') +": D-LINK Model " + model_name + " " + hw_version + " " + fw_version)
+            result = print(str(dest_ip).rstrip('\r\n)') +": D-LINK Model " + model_name + " " + hw_version + " " + fw_version)
         elif "Synology" in str(title_contents) and str("nginx") in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Synology Device Storage Device")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Synology Device Storage Device")
         elif str(server) in str("ver2.4 rev0"):
-            print(str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop()))
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Panasonic IP Camera/NVR Model: " + str(title_contents.pop()))
 
         elif "Inicio" in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Technicolor TG series modem")
 
         elif str("WV-NS202A Network Camera") in str(title_contents) and server is str("HTTPD"):
-            print(str(dest_ip).rstrip('\r\n)') + ": Panasonic WV-NS202A Network Camera")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Panasonic WV-NS202A Network Camera")
 
         elif str("Radiant Device Brower") in str(title_contents) and str("thttpd/2.25b 29dec2003") in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Radiant RM1121 Series Monitor")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Radiant RM1121 Series Monitor")
 
         elif "VCS-VideoJet-Webserver" in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Bosch AutoDome Camera")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Bosch AutoDome Camera")
 
         elif 'axhttpd/1.4.0' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
 
         elif 'ePMP' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Cambium ePMP 1000 Device (Server type + title)")
 
         elif 'Wimax CPE Configuration' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)")
 
         elif 'NXC2500' in str(title_contents) and server is None:
-            print(str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)")
 
         elif server is not None and 'MiniServ/1.580' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)")
 
         elif 'IIS' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Server (Page Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Server (Page Title)")
 
         elif 'Vigor' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Switch (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Switch (Title)")
 
         elif 'Aethra' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Aethra Telecommunications Device (Title)")
 
         elif 'Industrial Ethernet Switch' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)")
         #Removing the following line due to some weirdness with bytes
         #elif title_contents.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
-        #    print(str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)")
+        #    result = print(str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)")
 
         elif 'NUUO Network Video Recorder Login' in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)")
 
         elif 'CDE-30364' in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Hitron Technologies CDE (Title)")
 
         elif 'BUFFALO' in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Buffalo Networking Device (Title)")
 
         elif 'Netgear' in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)")
 
         elif 'IIS' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(server), "Server (Server Version)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ":", str(server), "Server (Server Version)")
 
         elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)")
 
         elif "SonicWALL" in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)")
 
         elif "iGate" in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)")
 
         elif 'LG ACSmart Premium' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)")
 
         elif 'IFQ360' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)")
 
         elif 'Tank Sentinel AnyWare' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)")
 
         elif 'Z-World Rabbit' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)")
 
         elif 'Intellian Aptus Web' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)")
 
         elif 'SECURUS' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)")
 
         elif 'uc-httpd' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
+            result = print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)")
         elif 'Boa/0.93.15' in str(server):
             if 'Home Gateway' in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
+                result = print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
             elif str('1GE') in str(title_contents) or str('1FE') in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology Model "+str(title_contents.pop()))
+                result = print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology Model "+str(title_contents.pop()))
 
         elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)")
         elif 'NetDvrV3' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)")
         elif 'Open Webif' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)")
         elif 'IVSWeb' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
         elif 'DVRDVS-Webs' in str(server) or 'Hikvision-Webs' in str(server) or 'App-webs/' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)")
         elif 'Router Webserver' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
         elif 'DD-WRT' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Router (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Router (Title)")
         elif 'Samsung DVR' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
         elif 'HtmlAnvView' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)")
         elif 'ZTE corp' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": ZTE", str(title_contents.pop()), "Router (Title and Server)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": ZTE", str(title_contents.pop()), "Router (Title and Server)")
         elif 'Haier Q7' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)")
         elif 'Cross Web Server' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)")
         elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": ", str(title_contents.pop()), "(Title and server)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": ", str(title_contents.pop()), "(Title and server)")
         elif 'SunGuard' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
 
         elif str(server) is str('VCS-VideoJet-Webserver'):
-            print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
         else:
             try:
 
@@ -637,14 +642,14 @@ def getheaders(dest_ip, dport, vbose, info):
            auth_header_split = auth_header.split(",")
            auth_header_realm = auth_header_split[0].split("=")
            device_model = str(auth_header_realm[1]).replace("\"","")
-           print(str(dest_ip).rstrip('\r\n)') + ": D-Link Device Model ",str(device_model))
+           result = print(str(dest_ip).rstrip('\r\n)') + ": D-Link Device Model ",str(device_model))
         elif "mini_httpd/1.19 19dec2003" in str(server) and int(e.code) == 401 :
-            print(str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)")
+            result = print(str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)")
         else: 
-            print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
+            result = print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
     except URLError as e:
         if vbose is not None:
-            print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open")
+            result = print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open")
         else:
             pass
     except Exception as e:
@@ -658,15 +663,17 @@ def getheaders(dest_ip, dport, vbose, info):
                 rtsp_server = str(output).rstrip('\r\n)')
                 # print(rtsp_server)
                 if 'Dahua' in str(rtsp_server):
-                    print(str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)")
+                    result = print(str(dest_ip).rstrip('\r\n)') + ": Dahua RTSP Server Detected (RTSP Server)")
         except Exception as t:
             print("This didn't work", t)
             pass
 
         if vbose is not None:
             print("Error in getheaders(): ", str(dest_ip).rstrip('\r\n)'), ":", str(e), traceback.format_exc())
+            result = None
         pass
-
+    print(result)
+    return result
 
 def recurse_DNS_check(dest_ip, vbose):
     myResolver = dns.resolver.Resolver()
