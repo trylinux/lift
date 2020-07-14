@@ -642,11 +642,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)")
         else:
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
-    except URLError as e:
-        if vbose is not None:
-            print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open")
-        else:
-            pass
+
     except Exception as e:
         try:
             if 'NoneType' in str(e):
@@ -665,6 +661,9 @@ def getheaders(dest_ip, dport, vbose, info):
 
         if vbose is not None:
             print("Error in getheaders(): ", str(dest_ip).rstrip('\r\n)'), ":", str(e), traceback.format_exc())
+    except URLError as e:
+        if vbose is not None:
+            print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open")
         pass
 
 
