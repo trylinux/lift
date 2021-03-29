@@ -618,6 +618,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
         elif 'CMS Web Viewer' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": 3R Global DVR -- Unknown Brand")
+        elif 'WEB SERVICE' in str(title_contents) and server is None:
+            print(str(dest_ip).rstrip('\r\n)') + ": Dahua Product (DVR/NVR/HVR likely)")
 
         elif str(server) is str('VCS-VideoJet-Webserver'):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
