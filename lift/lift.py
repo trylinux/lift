@@ -464,8 +464,13 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
             soup = bs4.BeautifulSoup(html,'html.parser')
         elif title_contents is None:
-            answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
-            if "js_check" in str(answer):
+            try:
+                answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
+            except Exception as e:
+                answer = None
+            if 'Serial' in str(server) and 'HP' in str(server):
+                print(str(dest_ip).rstrip('\r\n)') + ": HP Product w/ Identifiers -- " + str(server))
+            elif "js_check" in str(answer):
                 print(str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found")
 
             elif 'WebServer/1.0 UPnP/1.0' in str(server):
@@ -474,6 +479,7 @@ def getheaders(dest_ip, dport, vbose, info):
                     for record in get_label:
                         if 'TP-LINK' in record:
                             print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
+
             else:
                 print(str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title")
         elif str('WebServer') in str(server) and "D-LINK" in title_contents:
@@ -620,7 +626,14 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": 3R Global DVR -- Unknown Brand")
         elif 'WEB SERVICE' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Dahua Product (DVR/NVR/HVR likely)")
-
+        elif 'Brother ' in str(title_contents) and str('debut') in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
+        elif 'Lexmark' in (str(title_contents)) and server is None:
+            print(str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
+        elif 'gSOAP/2.8' in str(server) and len(title_contents) is 0:
+            print(str(dest_ip).rstrip('\r\n)') + ": TVT CCTV Device (Camera or Recorder)")
+        elif 'Milesight Network Camera' in str(title_contents) and server is None:
+            print(str(dest_ip).rstrip('\r\n)') + ": Milesight DVR Device")
         elif str(server) is str('VCS-VideoJet-Webserver'):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
         else:
