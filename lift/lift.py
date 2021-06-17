@@ -622,20 +622,22 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": ", str(title_contents.pop()), "(Title and server)")
         elif 'SunGuard' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
-        elif 'CMS Web Viewer' in str(title_contents) and server is None:
+        elif 'CMS Web Viewer' in str(title_contents) and (server is None or  "lighttpd/1.4.54" in str(server)):
             print(str(dest_ip).rstrip('\r\n)') + ": 3R Global DVR -- Unknown Brand")
         elif 'WEB SERVICE' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Dahua Product (DVR/NVR/HVR likely)")
         elif 'Brother ' in str(title_contents) and str('debut') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
-        elif 'Lexmark' in (str(title_contents)) and server is None:
+        elif 'Lexmark' in (str(title_contents)) and (server is None or 'Lexmark' in str(server)):
             print(str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
-        elif 'gSOAP/2.8' in str(server) and len(title_contents) is 0:
+        elif 'gSOAP/2.8' in str(server) and (len(title_contents) is 0 or title_contents.pop() == str('IPCamera Components Download')):
             print(str(dest_ip).rstrip('\r\n)') + ": TVT CCTV Device (Camera or Recorder)")
         elif 'Milesight Network Camera' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Milesight DVR Device")
         elif str(server) is str('VCS-VideoJet-Webserver'):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
+        elif 'EPSON_Linux' in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
         else:
             try:
 
