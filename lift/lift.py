@@ -641,6 +641,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
         elif 'Boa' in str(server) and title_contents.pop() is str('Web Client'):
             print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
+        elif title_contents.pop() is str('CPPLUS DVR') and server is None:
+            print(str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
 
         else:
             try:
