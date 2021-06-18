@@ -639,7 +639,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
         elif 'EPSON_Linux' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
-        elif 'Boa' in str(server) and title_contents.pop() is str('Web Client'):
+        elif 'Boa' in str(server) and str('Web Client') in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
         elif str('CPPLUS DVR') in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
