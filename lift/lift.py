@@ -26,8 +26,9 @@ import os
 #import pyasn
 import dns.resolver
 
+#Removing for the future fixing
 from lib import certs
-from lib import ssdp_info, ntp_function
+#from lib import ssdp_info, ntp_function
 
 
 def main():
@@ -638,6 +639,9 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Bosch Network Camera (Possibly AUTODOME IP starlight 7000)")
         elif 'EPSON_Linux' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
+        elif 'Boa' in str(server) and title_contents.pop() is str('Web Client'):
+            print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
+
         else:
             try:
 
