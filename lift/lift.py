@@ -631,7 +631,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
         elif 'Lexmark' in (str(title_contents)) and (server is None or 'Lexmark' in str(server)):
             print(str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
-        elif 'gSOAP/2.8' in str(server) and (len(title_contents) is 0 or title_contents.pop() == str('IPCamera Components Download')):
+        elif 'gSOAP/2.8' in str(server) and (len(title_contents) is 0 or str('IPCamera Components Download') in str(title_contents)):
             print(str(dest_ip).rstrip('\r\n)') + ": TVT CCTV Device (Camera or Recorder)")
         elif 'Milesight Network Camera' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Milesight DVR Device")
@@ -641,7 +641,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
         elif 'Boa' in str(server) and title_contents.pop() is str('Web Client'):
             print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
-        elif title_contents.pop() is str('CPPLUS DVR') and server is None:
+        elif str('CPPLUS DVR') in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
 
         else:
