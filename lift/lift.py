@@ -667,11 +667,13 @@ def getheaders(dest_ip, dport, vbose, info):
     except HTTPError as e:
         server = str(e.info().get('Server'))
         auth_header = (e.headers.get('WWW-Authenticate'))
-        if auth_header is not None and (str(server) in "alphapd/2.1.8" or str(server) in "Embedthis-Appweb/3.3.1" or str(server) in "WebServer/2.0") and int(e.code) == 401:
-           auth_header_split = auth_header.split(",")
-           auth_header_realm = auth_header_split[0].split("=")
-           device_model = str(auth_header_realm[1]).replace("\"","")
-           print(str(dest_ip).rstrip('\r\n)') + ": D-Link Device Model ",str(device_model))
+        if auth_header is not None and (str(server) in "alphapd/2.1.8" or str(server) in "Embedthis-Appweb/3.3.1" or str(server) in "WebServer/2.0" ) and int(e.code) == 401:
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace("\"","")
+            print(str(dest_ip).rstrip('\r\n)') + ": D-Link Device Model ",str(device_model))
+        elif auth_header is not None and (str(server) == 'PDR-M800/1.0') and int(e.code)==401:
+            print(str(dest_ip).rstrip('\r\n)') + ": LiLin PDR-800 DVR")
         elif "mini_httpd/1.19 19dec2003" in str(server) and int(e.code) == 401 :
             print(str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)")
         elif str(server) is "none" and int(e.code) == 401:
