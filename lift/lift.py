@@ -678,6 +678,11 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": LiLin PDR-800 DVR")
         elif "mini_httpd/1.19 19dec2003" in str(server) and int(e.code) == 401 :
             print(str(dest_ip).rstrip('\r\n)') + ": iCatch OEM H/D/NVR Device (Server and headers)")
+        elif 'Router' in str(server) and int(e.code) == 401:
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace("\"", "")
+            print(str(dest_ip).rstrip('\r\n)') + ": TP-Link",str(device_model))
         elif str(server) is "none" and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
