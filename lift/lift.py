@@ -649,6 +649,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
         elif str('Boa/0.94.14rc21') in str(server) and (len(title_contents) is 0):
             print(str(dest_ip).rstrip('\r\n)') + ": Hanwha Techwin Co CCTV Product")
+        elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
 
         else:
             try:
