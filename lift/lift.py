@@ -434,7 +434,7 @@ def getheaders(dest_ip, dport, vbose, info):
         dport = 80
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
-        checkheaders = urlopen(hostname, timeout=3)
+        checkheaders = urlopen(hostname, timeout=5)
         try:
             server = checkheaders.info().get('Server')
         except:
@@ -647,6 +647,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
+        elif str('Boa/0.94.14rc21') in str(server) and (len(title_contents) is 0):
+            print(str(dest_ip).rstrip('\r\n)') + ": Hanwha Techwin Co CCTV Product")
 
         else:
             try:
