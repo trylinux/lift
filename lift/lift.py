@@ -439,11 +439,14 @@ def getheaders(dest_ip, dport, vbose, info):
             server = checkheaders.info().get('Server')
         except:
             server = None
+
         html = checkheaders.read()
         soup = bs4.BeautifulSoup(html,'html.parser')
+
         try:
             title = soup.html.head.title
             title_contents = title.contents
+
         except:
             title = None
         if title is None:
@@ -655,6 +658,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Beward IP Camera Device")
         elif str("GPON ONT") in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": VNPT GPON/iGate Device likely")
+        elif str("ZK Web Server") in str(server) and len(title_contents) == 0:
+            print(str(dest_ip).rstrip('\r\n)') + ": ZK Software-based Fingerprint Reader")
 
         else:
             try:
