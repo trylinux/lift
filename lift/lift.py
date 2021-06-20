@@ -227,7 +227,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             # print("Trying: ",str(dest_ip).rstrip('\r\n)'))
             # print("device: ",device)
             if device is not None:
-                if device is "ubiquiti":
+                if device == "ubiquiti":
                     print(str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)")
                 if "UBNT" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Ubiquiti AirMax or AirFiber Device (SSL)")
@@ -653,6 +653,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
         elif str('BEWARD Network HD camera') in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Beward IP Camera Device")
+        elif str("GPON ONT") in str(title_contents) and server == None:
+            print(str(dest_ip).rstrip('\r\n)') + ": VNPT GPON/iGate Device likely")
 
         else:
             try:
