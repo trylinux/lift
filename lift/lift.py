@@ -483,6 +483,8 @@ def getheaders(dest_ip, dport, vbose, info):
                     for record in get_label:
                         if 'TP-LINK' in record:
                             print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
+            elif 'uc-httpd/1.0.0' in str(server):
+                print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
 
             else:
                 print(str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title")
@@ -592,6 +594,8 @@ def getheaders(dest_ip, dport, vbose, info):
         elif 'uc-httpd' in str(server) or  "NETSurveillance WEB" in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)")
+        elif 'uc-httpd/1.0.0' in str(server) and len(title_contents) == 0:
+            print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
         elif 'Boa/0.93.15' in str(server):
             if 'Home Gateway' in str(title_contents):
                 print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
