@@ -589,7 +589,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif 'SECURUS' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)")
 
-        elif 'uc-httpd' in str(server):
+        elif 'uc-httpd' in str(server) or  "NETSurveillance WEB" in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)")
         elif 'Boa/0.93.15' in str(server):
