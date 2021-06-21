@@ -685,7 +685,7 @@ def getheaders(dest_ip, dport, vbose, info):
     except HTTPError as e:
         server = str(e.info().get('Server'))
         auth_header = (e.headers.get('WWW-Authenticate'))
-        if auth_header is not None and (str(server) in "alphapd/2.1.8" or str(server) in "Embedthis-Appweb/3.3.1" or str(server) in "WebServer/2.0" ) and int(e.code) == 401:
+        if auth_header is not None and ("alphapd/2.1.8" in str(server)  or  "Embedthis-Appweb/3.3.1" in str(server)   or  "WebServer/2.0" in str(server)  or "RomPager/4.07 UPnP/1.0" in str(server)) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"","")
