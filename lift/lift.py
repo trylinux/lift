@@ -665,6 +665,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": ZK Software-based Fingerprint Reader")
         elif "Keenetic Web" in  str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": KEENETIC Device")
+        elif 'uc-httpd/1.0.0' in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera w/ Title " + str(title_contents.pop()))
 
         else:
             try:
