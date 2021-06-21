@@ -663,6 +663,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": VNPT GPON/iGate Device likely")
         elif str("ZK Web Server") in str(server) and len(title_contents) == 0:
             print(str(dest_ip).rstrip('\r\n)') + ": ZK Software-based Fingerprint Reader")
+        elif "Keenetic Web" in  str(title_contents):
+            print(str(dest_ip).rstrip('\r\n)') + ": KEENETIC Device")
 
         else:
             try:
