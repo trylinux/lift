@@ -443,6 +443,7 @@ def getheaders(dest_ip, dport, vbose, info):
         html = checkheaders.read()
         soup = bs4.BeautifulSoup(html,'html.parser')
 
+
         try:
             title = soup.html.head.title
             title_contents = title.contents
@@ -594,8 +595,6 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str(server) == 'uc-httpd 1.0.0' or "NETSurveillance WEB" in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)")
-        elif 'uc-httpd/1.0.0' in str(server) and len(title_contents) == 0:
-            print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
         elif 'Boa/0.93.15' in str(server):
             if 'Home Gateway' in str(title_contents):
                 print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
@@ -701,6 +700,12 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": Device model ",str(device_model))
+        elif "WebServer/1.0 UPnP/1.0" in str(server)  and int(e.code) == 401:
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace("\"", "")
+            print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
+
         else:
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
     except URLError as e:
