@@ -667,6 +667,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": KEENETIC Device")
         elif 'uc-httpd/1.0.0' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera w/ Title " + str(title_contents.pop()))
+        elif "Reolink" in title_contents and ("nginx" in str(server) or server == None):
+            print(str(dest_ip).rstrip('\r\n)') + ": Reolink DVR Device")
 
         else:
             try:
