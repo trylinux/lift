@@ -21,7 +21,6 @@ try:
 except ImportError:
     from urllib2 import urlopen, HTTPError, URLError
 
-import requests
 
 import bs4
 import netaddr
@@ -659,7 +658,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) is 0) or "WebClient" in str(title_contents)):
             ocx=soup.body.findAll("object", {"name":"dvrocx"})
             if len(ocx) is not 0:
-                print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand")
+                print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
         elif str('BEWARD Network HD camera') in str(title_contents) and server is None:
@@ -674,6 +673,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera w/ Title " + str(title_contents.pop()))
         elif "Reolink" in title_contents and ("nginx" in str(server) or server == None):
             print(str(dest_ip).rstrip('\r\n)') + ": Reolink DVR Device")
+        elif "Network Surveillance" in str(title_contents) and server == None:
+            print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen Baichuan Digital Technology CCTV Device")
 
         else:
             try:
