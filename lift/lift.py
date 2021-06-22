@@ -20,6 +20,8 @@ try:
 except ImportError:
     from urllib2 import urlopen, HTTPError, URLError
 
+import requests
+
 import bs4
 import netaddr
 import os
@@ -653,7 +655,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
-        elif str('Boa/0.94.14rc21') in str(server) and (len(title_contents) is 0):
+        elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) is 0) or "WebClient" in str(title_contents)):
             print(str(dest_ip).rstrip('\r\n)') + ": Raysharp OEM device likely")
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
