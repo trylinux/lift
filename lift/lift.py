@@ -5,6 +5,7 @@ import traceback
 import os
 import subprocess
 import sys
+import re
 
 if 'threading' in sys.modules:
     del sys.modules['threading']
@@ -656,7 +657,9 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
         elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) is 0) or "WebClient" in str(title_contents)):
-            print(str(dest_ip).rstrip('\r\n)') + ": Raysharp OEM device likely")
+            ocx=soup.body.findAll("object", {"name":"dvrocx"})
+            if len(ocx) is not 0:
+                print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand")
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
         elif str('BEWARD Network HD camera') in str(title_contents) and server is None:
