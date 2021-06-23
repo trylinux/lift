@@ -677,7 +677,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen Baichuan Digital Technology CCTV Device")
         elif len(title_contents) == 0 and server is None:
             comment = soup.find(string=lambda tag: isinstance(tag, bs4.Comment))
-            if "RSVideoOcx.cab#version=1.0.1.17" in comment:
+            if "RSVideoOcx.cab" in comment:
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif "Login Page" in str(title_contents) and str(server) == "httpserver":
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
