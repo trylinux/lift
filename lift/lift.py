@@ -681,7 +681,8 @@ def getheaders(dest_ip, dport, vbose, info):
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif "Login Page" in str(title_contents) and str(server) == "httpserver":
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
-
+        elif "nginx/" in str(server) and "CentOS" in str(title_contents):
+            print(str(dest_ip).rstrip('\r\n)') + ": Centos Server w/ " + str(server))
         else:
             try:
                 try:
