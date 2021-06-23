@@ -649,9 +649,9 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
         elif 'Boa' in str(server) and str('Web Client') in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
-        elif str('CPPLUS DVR') in str(title_contents) and server is None:
+        elif str('CPPLUS DVR') in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
-        elif str("ATHD DVR") in str(title_contents) and server is None:
+        elif str("ATHD DVR") in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
@@ -661,7 +661,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
-        elif str('BEWARD Network HD camera') in str(title_contents) and server is None:
+        elif str('BEWARD Network HD camera') in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": Beward IP Camera Device")
         elif str("GPON ONT") in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": VNPT GPON/iGate Device likely")
@@ -679,6 +679,8 @@ def getheaders(dest_ip, dport, vbose, info):
             comment = soup.find(string=lambda tag: isinstance(tag, bs4.Comment))
             if "RSVideoOcx.cab#version=1.0.1.17" in comment:
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
+        elif "Login Page" in str(title_contents) and str(server) == "httpserver":
+            print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
 
         else:
             try:
