@@ -489,6 +489,8 @@ def getheaders(dest_ip, dport, vbose, info):
             elif 'uc-httpd/1.0.0' in str(server):
                 print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
 
+
+
             else:
                 print(str(dest_ip).rstrip('\r\n)') + ": has server ", str(server), " and no viewable title")
         elif str('WebServer') in str(server) and "D-LINK" in title_contents:
@@ -683,6 +685,11 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
         elif "nginx/" in str(server) and "CentOS" in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Centos Server w/ " + str(server))
+        elif "nginx" in str(server) and "CentOS" not in str(title_contents):
+            if "Ubuntu" in str(server):
+                print(str(dest_ip).rstrip('\r\n)') + ": Ubuntu Server w/ " + str(server) + " with title w/ "+ str(title_contents.pop()))
+        elif "Web Application Manager" in str(title_contents) and server is None:
+            print(str(dest_ip).rstrip('\r\n)') + ": KongTop Industrial (Shenzhen) CCTV Device")
         else:
             try:
                 try:
