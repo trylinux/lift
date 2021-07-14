@@ -692,7 +692,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 print(str(dest_ip).rstrip('\r\n)') + ": Ubuntu Server w/ " + str(server) + " with title w/ "+ str(title_contents.pop()))
         elif "Web Application Manager" in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": KongTop Industrial (Shenzhen) CCTV Device")
-        elif str(title_contents) == "PON Home Gateway" and server is None:
+        elif "PON Home Gateway" in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen HDV Photoelectron Technology LTD PON Device")
 
         else:
