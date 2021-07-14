@@ -692,6 +692,9 @@ def getheaders(dest_ip, dport, vbose, info):
                 print(str(dest_ip).rstrip('\r\n)') + ": Ubuntu Server w/ " + str(server) + " with title w/ "+ str(title_contents.pop()))
         elif "Web Application Manager" in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": KongTop Industrial (Shenzhen) CCTV Device")
+        elif str(title_contents) == "PON Home Gateway" and server is None:
+            print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen HDV Photoelectron Technology LTD PON Device")
+
         else:
             try:
                 try:
@@ -733,6 +736,8 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
+        elif str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server" and int(e.code) == 401:
+            print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
 
         else:
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
