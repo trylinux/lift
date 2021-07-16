@@ -466,7 +466,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
                 soup.find('body').h1.contents.pop()), "(Login Page Title)")
             soup = bs4.BeautifulSoup(html,'html.parser')
-        elif 'D-LINK' in str(title_contents) and 'siyou server' in server:
+        elif ('D-LINK' in str(title_contents) and 'siyou server' in server) or (str(server) == "mini_httpd/1.19 19dec2003"):
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
             print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
             soup = bs4.BeautifulSoup(html,'html.parser')
@@ -694,6 +694,9 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": KongTop Industrial (Shenzhen) CCTV Device")
         elif "PON Home Gateway" in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen HDV Photoelectron Technology LTD PON Device")
+        elif "Login" in str(title_contents) and server is None and "loginN4.js" in str(soup.head):
+            title = str(soup.find("div", {"id": "login-title"}).contents.pop())
+            print(str(dest_ip).rstrip('\r\n)') + ": Tridium Niagra Product w/ Title " + str(title))
 
         else:
             try:
