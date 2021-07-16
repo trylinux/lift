@@ -741,6 +741,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
         elif str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server" and int(e.code) == 401:
             print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
+        elif str(server) == "Keil-EWEB/2.1" and int(e.code) == 401:
+            print(str(dest_ip).rstrip('\r\n)') + ": Keil ARM Development Tool Web Server")
 
         else:
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
