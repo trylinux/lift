@@ -697,6 +697,8 @@ def getheaders(dest_ip, dport, vbose, info):
         elif "Login" in str(title_contents) and server is None and "loginN4.js" in str(soup.head):
             title = str(soup.find("div", {"id": "login-title"}).contents.pop())
             print(str(dest_ip).rstrip('\r\n)') + ": Tridium Niagra Product w/ Title " + str(title))
+        elif "TOTOLINK" in str(title_contents) and str(server) == "Boa/0.94.14rc21":
+            print(str(dest_ip).rstrip('\r\n)') + ": Totolink Device (Modem or Router)")
 
         else:
             try:
