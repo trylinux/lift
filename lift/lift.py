@@ -617,8 +617,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)")
         elif 'Router Webserver' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
-        elif 'DD-WRT' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Router (Title)")
+        elif '- Info' in str(title_contents) and str(server) in "httpd":
+            print(str(dest_ip).rstrip('\r\n)') + ": DD-WRT Device w/ Title " + str(title_contents.pop()))
         elif 'Samsung DVR' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
         elif 'HtmlAnvView' in str(title_contents):
