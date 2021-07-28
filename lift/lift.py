@@ -683,8 +683,11 @@ def getheaders(dest_ip, dport, vbose, info):
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif "Login Page" in str(title_contents) and str(server) == "httpserver":
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
-        elif str(server) == "GNU rsp/1.0" and "XVR LOGIN" in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Cenova XVR Product (Unknown if OEM)")
+        elif str(server) == "GNU rsp/1.0" :
+            if "XVR LOGIN" in str(title_contents):
+                print(str(dest_ip).rstrip('\r\n)') + ": Cenova XVR Product (OEM Shenzhen Milantek Co")
+            else:
+                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen Milantek Co OEM Device (Unknown Downstream)")
         elif "nginx/" in str(server) and "CentOS" in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Centos Server w/ " + str(server))
         elif "nginx" in str(server) and "CentOS" not in str(title_contents):
