@@ -42,7 +42,7 @@ def main():
     parser.add_argument("-v", "--verbose",
                         help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION")
     argroup.add_argument("-s", "--subnet", help="A subnet!")
-    argroup.add_argument("-a", "--asn", help="ASN number. WARNING: This will take a while")
+    #argroup.add_argument("-a", "--asn", help="ASN number. WARNING: This will take a while")
     parser.add_argument("-r", "--recurse", help="Test Recursion", action="store_true")
     parser.add_argument("-I", "--info", help="Get more info about operations", action="store_true")
     parser.add_argument("-S", "--ssl", help="For doing SSL checks only", action="store_true")
@@ -702,7 +702,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Tridium Niagra Product w/ Title " + str(title))
         elif "TOTOLINK" in str(title_contents) and str(server) == "Boa/0.94.14rc21":
             print(str(dest_ip).rstrip('\r\n)') + ": Totolink Device (Modem or Router)")
-
+        elif "SVM-R1" in str(title_contents) and "Apache" in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": Daikin HVAC SVM/VRV Controller w/ Software Version "+ str(title_contents.pop()))
         else:
             try:
                 try:
