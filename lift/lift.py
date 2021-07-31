@@ -737,7 +737,10 @@ def getheaders(dest_ip, dport, vbose, info):
                 print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is empty and server is", server)
         checkheaders.close()
     except HTTPError as e:
-        server = str(e.info().get('Server'))
+        try:
+            server = str(e.info().get('Server'))
+        except:
+            server = None
         auth_header = (e.headers.get('WWW-Authenticate'))
         if auth_header is not None and ("alphapd/2.1.8" in str(server)  or  "Embedthis-Appweb/3.3.1" in str(server)   or  "WebServer/2.0" in str(server)  or "RomPager/4.07 UPnP/1.0" in str(server)) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
@@ -763,6 +766,8 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
+        elif "everfocus" in str(auth_header) and  int(e.code) == 401:
+            print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device (admin/111111)")
         elif str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server" and int(e.code) == 401:
             print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
         elif str(server) == "Keil-EWEB/2.1" and int(e.code) == 401:
