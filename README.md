@@ -97,7 +97,6 @@ Only one of the required arguments can be supplied when running the lift tool.
 - **-f** &nbsp;&nbsp; or &nbsp;&nbsp; **--ifile** &nbsp;&nbsp;&nbsp;&nbsp; `filename` - file with one IP address per line
 - **-s** &nbsp;&nbsp; or &nbsp;&nbsp; **--subnet** &nbsp;&nbsp;&nbsp;&nbsp;`string` -  the IP address range of a subnet
 - **-i** &nbsp;&nbsp; or &nbsp;&nbsp; **--ip** &nbsp;&nbsp;&nbsp;&nbsp;`string` - a single IP address
-- **-a** &nbsp;&nbsp; or  &nbsp;&nbsp; **--asn** &nbsp;&nbsp;&nbsp;&nbsp; `integer` - The officially registered autonomous system number (ASN) of an internet service provider (ISP) (CURRENTLY NOT WORKING)
 
 **Optional Arguments**:
 - **--I** &nbsp;&nbsp; or &nbsp;&nbsp; **--info**  - Get more info about operations

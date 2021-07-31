@@ -504,6 +504,8 @@ def getheaders(dest_ip, dport, vbose, info):
                             print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
             elif 'uc-httpd/1.0.0' in str(server):
                 print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
+            elif 'Boa/0.94.13' in str(server):
+                print(str(dest_ip).rstrip('\r\n)') + ": Macroview KR based CCTV Device ")
 
 
 
