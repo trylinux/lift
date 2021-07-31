@@ -478,7 +478,23 @@ def getheaders(dest_ip, dport, vbose, info):
             if 'Serial' in str(server) and 'HP' in str(server):
                 print(str(dest_ip).rstrip('\r\n)') + ": HP Product w/ Identifiers -- " + str(server))
             elif "js_check" in str(answer):
-                print(str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found")
+                get_login_html = "http://%s:%s/login.html" % (str(dest_ip).rstrip('\r\n)'), dport)
+                try:
+                    check_login_page = urlopen(get_login_html, timeout=5)
+                    get_page = check_login_page.read()
+                    if check_login_page.getcode() == 200:
+                        soup2 = bs4.BeautifulSoup(get_page,'html.parser')
+                        title2 = soup2.html.head.title
+                        title2_contents = title2.contents
+                        if "Airties" in title2_contents.pop():
+                            print(str(dest_ip).rstrip('\r\n)') + ": Airties Modem/Router")
+                        else:
+                            print(str(dest_ip).rstrip('\r\n)') + ": Device with Title "+title2)
+                    else:
+                        print(str(dest_ip).rstrip('\r\n)') + ": Possible  KitDuo DVR Found")
+                except Exception as e:
+                    print(e)
+
 
             elif 'WebServer/1.0 UPnP/1.0' in str(server):
                 get_label = soup.find('label').contents
