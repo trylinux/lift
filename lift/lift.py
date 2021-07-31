@@ -685,7 +685,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
         elif str(server) == "GNU rsp/1.0" :
             if "XVR LOGIN" in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Cenova XVR Product (OEM Shenzhen Milantek Co")
+                print(str(dest_ip).rstrip('\r\n)') + ": Cenova XVR Product (OEM Shenzhen Milantek Co)")
             else:
                 print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen Milantek Co OEM Device (Unknown Downstream)")
         elif "nginx/" in str(server) and "CentOS" in str(title_contents):
