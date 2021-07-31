@@ -766,8 +766,14 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
-        elif "everfocus" in str(auth_header) and  int(e.code) == 401:
-            print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device (admin/111111)")
+        elif "everfocus" in str(auth_header) or "ELUX" in str(auth_header) and int(e.code) == 401:
+            if "ELUX" in str(auth_header):
+                auth_header_split = auth_header.split(",")
+                auth_header_realm = auth_header_split[0].split("=")
+                device_model = str(auth_header_realm[1]).replace("\"", "")
+                print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device Model "+ str(device_model))
+            else:
+                print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device (admin/111111)")
         elif str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server" and int(e.code) == 401:
             print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
         elif str(server) == "Keil-EWEB/2.1" and int(e.code) == 401:
