@@ -779,7 +779,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 device_model = str(auth_header_realm[1]).replace("\"", "")
                 print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device Model "+ str(device_model))
             else:
-                print(auth_header)
+
                 print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device (admin/111111)")
         elif str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server" and int(e.code) == 401:
             print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
