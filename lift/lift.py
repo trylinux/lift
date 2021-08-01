@@ -237,73 +237,73 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
                     print(str(dest_ip).rstrip('\r\n)') + ": Unknown Samsung Device (SSL)")
                 elif "qnap" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": QNAP NAS TS series detected (SSL)")
-                elif device is "hikvision":
+                elif device == "hikvision":
                     print(str(dest_ip).rstrip('\r\n)') + ": Hikvision Default Cert")
-                elif device is "avigilon":
+                elif device == "avigilon":
                     print(str(dest_ip).rstrip('\r\n)') + ": Aviligon Gateway Default cert")
-                elif device is "netgear_1":
+                elif device == "netgear_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": NetGear Default cert UTM  (SSL)")
-                elif device is "verifone_sapphire":
+                elif device == "verifone_sapphire":
                     print(str(dest_ip).rstrip('\r\n)') + ": Verifone Sapphire Device (SSL)")
-                elif "Vigor" in device:
+                elif "Vigor" == device:
                     print(str(dest_ip).rstrip('\r\n)') + ": DrayTek Vigor Device (SSL)")
-                elif device is "lifesize_1":
+                elif device == "lifesize_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": Lifesize Product (SSL)")
                 elif "filemaker" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Filemaker Secure Database Website (SSL)")
-                elif device is "verizon_jungo":
+                elif device == "verizon_jungo":
                     print(str(dest_ip).rstrip('\r\n)') + ": Verizon Jungo OpenRG product (SSL/8443)")
-                elif device is "canon_iradv":
+                elif device == "canon_iradv":
                     print(str(dest_ip).rstrip('\r\n)') + ": Canon IR-ADV Login Page (SSL/8443)")
                 elif "colubris" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": HPE MSM Series Device (SSL)")
-                elif device is "ecessa":
+                elif device == "ecessa":
                     print(str(dest_ip).rstrip('\r\n)') + ": Ecessa PowerLink Wan Optimizer (SSL)")
-                elif device is "nomadix_ag_1":
+                elif device == "nomadix_ag_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": Nomadix AG series Gateway (SSL)")
                 elif "netvanta" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": ADTRAN NetVanta Total Access Device (SSL)")
-                elif "valuepoint_gwc_1" is device:
+                elif "valuepoint_gwc_1" == device:
                     print(str(dest_ip).rstrip('\r\n)') + ": ValuePoint Networks Gateway Controller Series (SSL)")
-                elif device is "broadcom_1":
+                elif device == "broadcom_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": Broadcom Generic Modem (SSL)")
-                elif device is "lg_nas_1":
+                elif device == "lg_nas_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": LG NAS Device (SSL)")
-                elif device is "edgewater_1":
+                elif device == "edgewater_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": EdgeWater Networks VOIP Solution (SSL)")
-                elif device is "foscam_cam":
+                elif device == "foscam_cam":
                     print(str(dest_ip).rstrip('\r\n)') + ": Foscam IPcam Client Login (SSL)")
-                elif device is "lacie_1":
+                elif device == "lacie_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": LaCie CloudBox (SSL)")
-                elif device is "huawei_hg658":
+                elif device == "huawei_hg658":
                     print(str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway HG658d (SSL)")
-                elif device is "interpeak_device":
+                elif device == "interpeak_device":
                     print(str(dest_ip).rstrip('\r\n)') + ": Something made by interpeak (SSL)")
-                elif device is "fujistu_celvin":
+                elif device == "fujistu_celvin":
                     print(str(dest_ip).rstrip('\r\n)') + ": Fujitsu Celvin NAS (SSL)")
-                elif device is "opengear_default_cert":
+                elif device == "opengear_default_cert":
                     print(str(dest_ip).rstrip('\r\n)') + ": Opengear Management Console Default cert (SSL)")
-                elif device is "zyxel_pk5001z":
+                elif device == "zyxel_pk5001z":
                     print(str(dest_ip).rstrip('\r\n)') + ": Zyxel PK5001Z default cert (SSL)")
-                elif device is "audiocodecs_8443":
+                elif device == "audiocodecs_8443":
                     print(str(dest_ip).rstrip('\r\n)') + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)")
                 elif "supermicro_ipmi" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Supermicro IPMI Default Certs (SSL)")
-                elif device is "enco_player_1":
+                elif device == "enco_player_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": Enco Enplayer Default Cert (SSL)")
-                elif device is "ami_megarac":
+                elif device == "ami_megarac":
                     print(str(dest_ip).rstrip('\r\n)') + ": AMI MegaRac Remote Management Default Cert (SSL)")
-                elif device is "avocent_1":
+                elif device == "avocent_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": Avocent Default cert (unknown device) (SSL)")
-                elif device is "ligowave_1":
+                elif device == "ligowave_1":
                     print(str(dest_ip).rstrip('\r\n)') + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)")
-                elif "intelbras_wom500" in device:
+                elif "intelbras_wom500" == device:
                     print(str(dest_ip).rstrip('\r\n)') + ": IntelBras Wom500 (admin/admin) (SSL)")
-                elif "netgear_2" in device:
+                elif "netgear_2" == device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Netgear Default Cert Home Router (8443/SSL)")
-                elif "buffalo_1" in device:
+                elif "buffalo_1" == device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Buffalo Default Cert (443/SSL)")
-                elif "digi_int_1" in device:
+                elif "digi_int_1" == device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Digi Passport Default Cert (443/SSL)")
                 elif "prtg_network_monitor_1" in device:
                     print(str(dest_ip).rstrip('\r\n)') + ": Paessler PTRG Monitoring Default Cert(443/SSL)")
@@ -553,7 +553,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif 'Wimax CPE Configuration' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)")
 
-        elif 'NXC2500' in str(title_contents) and server is None:
+        elif 'NXC2500' in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": Zyxel NXC2500 (Page Title)")
 
         elif server is not None and 'MiniServ/1.580' in str(server):
@@ -661,7 +661,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
         elif 'Lexmark' in (str(title_contents)) and (server is None or 'Lexmark' in str(server)):
             print(str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
-        elif 'gSOAP/2.8' in str(server) and (len(title_contents) is 0 or str('IPCamera Components Download') in str(title_contents)):
+        elif 'gSOAP/2.8' in str(server) and (len(title_contents) == 0 or str('IPCamera Components Download') in str(title_contents)):
             print(str(dest_ip).rstrip('\r\n)') + ": TVT CCTV Device (Camera or Recorder)")
         elif 'Milesight Network Camera' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Milesight DVR Device")
@@ -677,7 +677,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
-        elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) is 0) or "WebClient" in str(title_contents)):
+        elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents)):
             ocx=soup.body.findAll("object", {"name":"dvrocx"})
             if len(ocx) is not 0:
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
