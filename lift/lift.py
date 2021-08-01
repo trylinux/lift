@@ -69,7 +69,7 @@ def main():
 
     if args.ip and not args.recurse and not args.recon:
         dest_ip = args.ip
-        if dport is 80 or 81:
+        if dport == 80 or dport == 81:
             getheaders(args.ip, dport, verbose, info)
             print("Skipping SSL test for", dport)
 
@@ -397,6 +397,8 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             print(str(dest_ip).rstrip('\r\n)') + ": IntelBras WOM500 (Probably admin/admin) (Server string)")
         elif 'ZeroShell' in str(cert):
             print(str(dest_ip).rstrip('\r\n)') + ": ZeroShell Firewall")
+        elif 'FIBERHOME.COM.CN' in str(cert):
+            print(str(dest_ip).rstrip('\r\n)') + ": Fiberhome ONU/OLT Device (SSL Cert name)")
         else:
             if ssl_only == 0:
                 getheaders(dest_ip, 80, vbose, info)
@@ -766,7 +768,7 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
-        elif "everfocus" in str(auth_header) or "ELUX" in str(auth_header) and int(e.code) == 401:
+        elif "everfocus" in str(auth_header) or "ELUX" in str(auth_header) or "ECOR" in str(auth_header) and int(e.code) == 401:
             if "ELUX" in str(auth_header):
                 auth_header_split = auth_header.split(",")
                 auth_header_realm = auth_header_split[0].split("=")
