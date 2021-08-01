@@ -69,7 +69,7 @@ def main():
 
     if args.ip and not args.recurse and not args.recon:
         dest_ip = args.ip
-        if dport == 80 or dport == 81:
+        if dport != 443:
             getheaders(args.ip, dport, verbose, info)
             print("Skipping SSL test for", dport)
 
@@ -770,6 +770,8 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": ZTE Device "+str(device_model))
+        elif "cpe@zte.com" in str(auth_header) and int(e.code) == 401:
+            print(str(dest_ip).rstrip('\r\n)') + ": ZTE ONU/ONT Device" )
         elif "everfocus" in str(auth_header) or "ELUX" in str(auth_header) or "ECOR" in str(auth_header) and int(e.code) == 401:
             if "ELUX" in str(auth_header):
                 auth_header_split = auth_header.split(",")
@@ -777,6 +779,7 @@ def getheaders(dest_ip, dport, vbose, info):
                 device_model = str(auth_header_realm[1]).replace("\"", "")
                 print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device Model "+ str(device_model))
             else:
+                print(auth_header)
                 print(str(dest_ip).rstrip('\r\n)') + ": Everfocus CCTV Device (admin/111111)")
         elif str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server" and int(e.code) == 401:
             print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
