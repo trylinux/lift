@@ -69,7 +69,7 @@ def main():
 
     if args.ip and not args.recurse and not args.recon:
         dest_ip = args.ip
-        if dport != 443:
+        if dport in [80, 8080, 81, 88, 8000, 8888, 7547]:
             getheaders(args.ip, dport, verbose, info)
             print("Skipping SSL test for", dport)
 
@@ -424,10 +424,10 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
         else:
             pass
     except Exception as e:
-        if dport is 443 and ssl_only == 0:
+        if dport == 443 and ssl_only == 0:
             dport = 80
             getheaders(dest_ip, dport, vbose, info)
-        if vbose is not None:
+        if vbose != None:
             print("Error in getsslheaders: " + str(e) + str(dest_ip), traceback.format_exc())
         pass
     return
@@ -500,7 +500,7 @@ def getheaders(dest_ip, dport, vbose, info):
 
             elif 'WebServer/1.0 UPnP/1.0' in str(server):
                 get_label = soup.find('label').contents
-                if len(get_label) is not 0:
+                if len(get_label) != 0:
                     for record in get_label:
                         if 'TP-LINK' in record:
                             print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
@@ -679,7 +679,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
         elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents)):
             ocx=soup.body.findAll("object", {"name":"dvrocx"})
-            if len(ocx) is not 0:
+            if len(ocx) != 0:
                 print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
@@ -760,7 +760,7 @@ def getheaders(dest_ip, dport, vbose, info):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
             print(str(dest_ip).rstrip('\r\n)') + ": TP-Link",str(device_model))
-        elif str(server) is "none" and int(e.code) == 401:
+        elif str(server) == "none" and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace("\"", "")
@@ -785,6 +785,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Android Blackeye Web Server")
         elif str(server) == "Keil-EWEB/2.1" and int(e.code) == 401:
             print(str(dest_ip).rstrip('\r\n)') + ": Keil ARM Development Tool Web Server")
+        elif "HuaweiHomeGateway" in str(auth_header) and int(e.code) == 401:
+            print(str(dest_ip).rstrip('\r\n)') + ": Huawei Home Gateway Device (Probably PON)")
 
         else:
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
