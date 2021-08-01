@@ -724,6 +724,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Totolink Device (Modem or Router)")
         elif "SVM-R1" in str(title_contents) and "Apache" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Daikin HVAC SVM/VRV Controller w/ Software Version "+ str(title_contents.pop()))
+        elif str(title_contents.pop()) == "welcome" and "GoAhead-Webs/2.5.0 PeerSec-MatrixSSL/3.4.2-OPEN" in str(server):
+            print(str(dest_ip).rstrip('\r\n)') + ": Fiberhome ONU/OLT (HTML Title and Server Name)")
         else:
             try:
                 try:
