@@ -677,7 +677,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
-        elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents)):
+        #This is a complex signature, due to the widespread use of Raysharp devices. It keys off of the dvrocx in the body OR the existance of the term RSVideoOCX.
+        elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents)) or (len(title_contents) == 0 and server is None) :
             try:
                 ocx=soup.body.findAll("object", {"name":"dvrocx"})
                 if len(ocx) != 0:
@@ -687,7 +688,11 @@ def getheaders(dest_ip, dport, vbose, info):
                     title_stuff = title_contents.pop()
                 except Exception as e:
                     title_stuff = "None"
-
+            try:
+                comment = soup.find(string=lambda tag: isinstance(tag, bs4.Comment))
+                if "RSVideoOcx.cab" in comment:
+                    print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
+            except Exception as E:
                 crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + title_stuff.rstrip(
                     '\r\n)') + " and server is " + str(server)
                 print(str(crap_contents))
@@ -707,10 +712,6 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Reolink DVR Device")
         elif "Network Surveillance" in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen Baichuan Digital Technology CCTV Device")
-        elif len(title_contents) == 0 and server is None:
-            comment = soup.find(string=lambda tag: isinstance(tag, bs4.Comment))
-            if "RSVideoOcx.cab" in comment:
-                print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
         elif "Login Page" in str(title_contents) and str(server) == "httpserver":
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
         elif str(server) == "GNU rsp/1.0" :
