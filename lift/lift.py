@@ -438,7 +438,7 @@ def getheaders(dest_ip, dport, vbose, info):
         dport = 80
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
-        checkheaders = urlopen(hostname, timeout=8)
+        checkheaders = urlopen(hostname, timeout=5)
         try:
             server = checkheaders.info().get('Server')
         except:
