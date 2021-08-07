@@ -678,9 +678,19 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
         elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents)):
-            ocx=soup.body.findAll("object", {"name":"dvrocx"})
-            if len(ocx) != 0:
-                print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
+            try:
+                ocx=soup.body.findAll("object", {"name":"dvrocx"})
+                if len(ocx) != 0:
+                   print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
+            except Exception as e:
+                try:
+                    title_stuff = title_contents.pop()
+                except Exception as e:
+                    title_stuff = "None"
+
+                crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + title_stuff.rstrip(
+                    '\r\n)') + " and server is " + str(server)
+                print(str(crap_contents))
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
         elif str('BEWARD Network HD camera') in str(title_contents) and server == None:
