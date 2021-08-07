@@ -738,7 +738,7 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Daikin HVAC SVM/VRV Controller w/ Software Version "+ str(title_contents.pop()))
         elif str(title_contents) == "welcome" and "GoAhead-Webs/2.5.0 PeerSec-MatrixSSL/3.4.2-OPEN" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Fiberhome ONU/OLT (HTML Title and Server Name)")
-        elif "DVR_H264 ActiveX" in  str(title_contents)  and "thttpd/2.25b 29dec2003" in str(server):
+        elif ("DVR_H264 ActiveX" in  str(title_contents) or "RTDVR ActiveX" in str(title_contents))  and "thttpd/2.25b 29dec2003" in str(server):
             #Added 08_07_2021, multiple points that match including UDROCX and the name "unimo" on the title page
             print(str(dest_ip).rstrip('\r\n)') + ": Unimo AU CCTV Product")
         else:
