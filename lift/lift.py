@@ -452,13 +452,16 @@ def getheaders(dest_ip, dport, vbose, info):
             title = soup.html.head.title
             title_contents = title.contents
 
+
         except:
             title = None
         if title is None:
             try:
+
                 title = soup.html.title
                 title_contents = title.contents
             except:
+
                 title_contents = None
         if checkheaders.getcode() != 200:
             print(str(dest_ip).rstrip('\r\n)') + ": Status Code " + checkheaders.getcode() + " Server: "+ server)
@@ -733,13 +736,14 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Totolink Device (Modem or Router)")
         elif "SVM-R1" in str(title_contents) and "Apache" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Daikin HVAC SVM/VRV Controller w/ Software Version "+ str(title_contents.pop()))
-        elif str(title_contents.pop()) == "welcome" and "GoAhead-Webs/2.5.0 PeerSec-MatrixSSL/3.4.2-OPEN" in str(server):
+        elif str(title_contents) == "welcome" and "GoAhead-Webs/2.5.0 PeerSec-MatrixSSL/3.4.2-OPEN" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Fiberhome ONU/OLT (HTML Title and Server Name)")
         else:
             try:
                 try:
                     title_stuff = title_contents.pop()
-                except:
+                except Exception as e:
+                    print(e)
                     title_stuff = "None"
                 crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + title_stuff.rstrip(
                     '\r\n)') + " and server is " + str(server)
