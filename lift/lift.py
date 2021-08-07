@@ -438,7 +438,7 @@ def getheaders(dest_ip, dport, vbose, info):
         dport = 80
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
-        checkheaders = urlopen(hostname, timeout=5)
+        checkheaders = urlopen(hostname, timeout=8)
         try:
             server = checkheaders.info().get('Server')
         except:
@@ -678,7 +678,7 @@ def getheaders(dest_ip, dport, vbose, info):
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
         #This is a complex signature, due to the widespread use of Raysharp devices. It keys off of the dvrocx in the body OR the existance of the term RSVideoOCX.
-        elif str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents)) or (len(title_contents) == 0 and server is None) :
+        elif (str('Boa/0.94.14rc21') in str(server) and ((len(title_contents) == 0) or "WebClient" in str(title_contents))) or (len(title_contents) == 0 and server is None) :
             try:
                 ocx=soup.body.findAll("object", {"name":"dvrocx"})
                 if len(ocx) != 0:
@@ -689,13 +689,11 @@ def getheaders(dest_ip, dport, vbose, info):
                 except Exception as e:
                     title_stuff = "None"
             try:
-                comment = soup.find(string=lambda tag: isinstance(tag, bs4.Comment))
-                if "RSVideoOcx.cab" in comment:
+                comment = soup.findAll(string=lambda tag: isinstance(tag, bs4.Comment))
+                if "RSVideoOcx.cab" in str(comment):
                     print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
-            except Exception as E:
-                crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + title_stuff.rstrip(
-                    '\r\n)') + " and server is " + str(server)
-                print(str(crap_contents))
+            except Exception as e:
+                print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device Malformed Response Likely (Manually review)")
         elif str('Mini web server 1.0 ZXIC corp 2005') in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Device w/ Model "+ title_contents.pop())
         elif str('BEWARD Network HD camera') in str(title_contents) and server == None:
