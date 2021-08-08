@@ -676,7 +676,8 @@ def getheaders(dest_ip, dport, vbose, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
         elif str('CPPLUS DVR') in str(title_contents) and server == None:
             print(str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
-        elif str("ATHD DVR") in str(title_contents) and server == None:
+        elif (str("ATHD DVR") in str(title_contents) or "AHD DVR" in str(title_contents)) and server == None:
+            #Updated 08_08_2021 to include AHD DVR. The 554 port on these say Altasec as well.
             print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
