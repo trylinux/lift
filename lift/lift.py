@@ -741,6 +741,9 @@ def getheaders(dest_ip, dport, vbose, info):
         elif ("DVR_H264 ActiveX" in  str(title_contents) or "RTDVR ActiveX" in str(title_contents))  and "thttpd/2.25b 29dec2003" in str(server):
             #Added 08_07_2021, multiple points that match including UDROCX and the name "unimo" on the title page
             print(str(dest_ip).rstrip('\r\n)') + ": Unimo AU CCTV Product")
+        elif  str(server) == "lighttpd/1.4.37" and "Intelligent Digital Security System" in str(title_contents):
+            #Added 08_07_2021, The "remove activex" binary has a certificate that has the domain of icctv.co.kr and the address of Ewha in Korea.
+            print(str(dest_ip).rstrip('\r\n)') + ": ICCTV Korea CCTV Product (Now Ewha CNI/KTCCTV)")
         else:
             try:
                 try:
