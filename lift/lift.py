@@ -750,7 +750,6 @@ def getheaders(dest_ip, dport, vbose, info):
                 try:
                     title_stuff = title_contents.pop()
                 except Exception as e:
-                    print(e)
                     title_stuff = "None"
                 crap_contents = "Title on IP " + str(dest_ip).rstrip('\r\n)') + " is " + title_stuff.rstrip(
                     '\r\n)') + " and server is " + str(server)
