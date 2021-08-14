@@ -623,71 +623,105 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif 'Netgear' in title_contents:
             #Verified on 08/09/2021
-            print(str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)")
+            primary_output(output, output_file)
 
 
 
         elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)")
+            #Verified 08/10/2021 -- A very basic signature.
+            output = (str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)")
+            primary_output(output, output_file)
 
         elif "SonicWALL" in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": SonicWALL Device (Server name)")
+            #Confirmed on 08/10/2021, this will trip on anything that has Sonicwall in the server name.
+            output = (str(dest_ip).rstrip('\r\n)') + ": Probable SonicWALL Network Security Appliance (Server name)")
+            primary_output(output, output_file)
 
-        elif "iGate" in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)")
+        #This signature needs to be moved to the 401 group.
+        #elif "iGate" in title_contents:
+            #print(str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)")
 
-        elif 'LG ACSmart Premium' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": LG ACSmart Premium (admin/admin) (Server name)")
+        elif 'LG ACSmart' in str(title_contents):
+            #Modified and removed "premium". Verified 08/10/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": LG ACSmart (admin/admin) (Server name)")
+            primary_output(output, output_file)
 
-        elif 'IFQ360' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)")
+        #Can no longer verify this signature. Removing 08/10/2021
+        #elif 'IFQ360' in str(title_contents):
+        #   print(str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)")
 
-        elif 'Tank Sentinel AnyWare' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)")
+        #Can no longer verify this signature
+        #elif 'Tank Sentinel AnyWare' in str(title_contents):
+        #    print(str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)")
 
-        elif 'Z-World Rabbit' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)")
+        elif 'Z-World Rabbit' in str(server) and "iBoot" in str(title_contents):
+            #Modified this signature to be more specific. Modified and Verified 08/10/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": iBootBar (Server)")
+            primary_output(output, output_file)
 
         elif 'Intellian Aptus Web' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)")
+            #Verified 08/09/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Intellian Device (Title)")
+            primary_output(output, output_file)
 
         elif 'SECURUS' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)")
+            #Verified 08/10/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Securus DVR (Title)")
+            primary_output(output, output_file)
 
         elif str(server) == 'uc-httpd 1.0.0' or "NETSurveillance WEB" in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
+            #Verified 08/10/2021, this one pops out the dynamic title for resellers who set their own title.
+            output = (str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
                 title_contents.pop()), "(Server)")
+            primary_output(output, output_file)
 
         elif 'Boa/0.93.15' in str(server):
-
+        #Verified 08/09/2021. Shenzhen C-Data comes in a variety of different forms, however, they all have the same Boa version. The second signature pops the device name out of the login page.
             if 'Home Gateway' in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
+                output = (str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product")
+                primary_output(output, output_file)
 
             elif str('1GE') in str(title_contents) or str('1FE') in str(title_contents):
-                print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology Model "+str(title_contents.pop()))
+                output = (str(dest_ip).rstrip('\r\n)') + ": Shenzhen C-Data Technology Model "+str(title_contents.pop()))
+                primary_output(output, output_file)
 
         elif '::: Login :::' in str(title_contents) and 'Linux/2.x UPnP/1.0 Avtech/1.0' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)")
+            #Verified 08/10/2021.  This works on a very specific subset of AvTech Cameras
+            output = (str(dest_ip).rstrip('\r\n)') + ": AvTech IP Camera (admin/admin) (Title and Server)")
+            primary_output(output, output_file)
 
         elif 'NetDvrV3' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": NetDvrV3-based DVR (Title)")
+            primary_output(output, output_file)
 
         elif 'Open Webif' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)")
+            #Unable to verify, but my notes have data regarding this. I will leave it in 08/10/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)")
+            primary_output(output, output_file)
 
-        elif 'IVSWeb' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
+        #Removing this one for now, until I can verify again.
+        #elif 'IVSWeb' in str(title_contents):
+
+            #print(str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
 
         elif 'DVRDVS-Webs' in str(server) or 'Hikvision-Webs' in str(server) or 'App-webs/' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)")
+            #Verified 08/10/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Hikvision-Based DVR (Server)")
+            primary_output(output, output_file)
 
         elif 'Router Webserver' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
+            #Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
+            output =  (str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
+            primary_output(output, output_file)
 
         elif '- Info' in str(title_contents) and str(server) in "httpd":
-            print(str(dest_ip).rstrip('\r\n)') + ": DD-WRT Device w/ Title " + str(title_contents.pop()))
+            #Verified 08/10/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": DD-WRT Device w/ Title " + str(title_contents.pop()))
+            primary_output(output, output_file)
 
         elif 'Samsung DVR' in str(title_contents):
+            #Verified
             print(str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
 
         elif 'HtmlAnvView' in str(title_contents):
@@ -709,6 +743,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
 
         elif 'CMS Web Viewer' in str(title_contents) and (server is None or  "lighttpd/1.4.54" in str(server)):
+
             print(str(dest_ip).rstrip('\r\n)') + ": 3R Global DVR -- Unknown Brand")
 
         elif 'WEB SERVICE' in str(title_contents) and server is None:
@@ -788,6 +823,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": EP Technology Corporation CCTV Device")
 
         elif str(server) == "GNU rsp/1.0" :
+            #verified 08/13/2021
             if "XVR LOGIN" in str(title_contents):
                 print(str(dest_ip).rstrip('\r\n)') + ": Cenova XVR Product (OEM Shenzhen Milantek Co)")
             else:
