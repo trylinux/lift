@@ -582,8 +582,8 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif 'IIS' in str(title_contents):
             #This is built off of the title of the webpage. I'm not sure I like it, but I'll keep it for now -- 08/09/2021
-            output = (str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Server (Page Title)")
-            primary_output(output, output_file)
+            output = (str(dest_ip).rstrip('\r\n)') + ": "+ str(title_contents.pop()) + " Server (Page Title)")
+            primary_output(str(output), output_file)
 
         elif 'IIS' in str(server):
             #Built off of the server string, no versioning information. Verified 08/09/2021
@@ -592,7 +592,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif 'Vigor' in str(title_contents):
             #Verified on 08/09/2021
-            output = (str(dest_ip).rstrip('\r\n)') + ":", str(title_contents.pop()), "Switch (Title)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()) + " Switch (Title)")
             primary_output(output, output_file)
 
         elif 'Aethra' in str(title_contents):
