@@ -587,7 +587,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif 'IIS' in str(server):
             #Built off of the server string, no versioning information. Verified 08/09/2021
-            output = str(dest_ip).rstrip('\r\n)') + ":", str(server), "Server (Server Version)"
+            output = str(dest_ip).rstrip('\r\n)') + ": " + str(server) + " Server (Server Version)"
             primary_output(output)
 
         elif 'Vigor' in str(title_contents):
@@ -630,7 +630,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif ('CentOS' or 'Ubuntu' or 'Debian') in str(server):
             #Verified 08/10/2021 -- A very basic signature.
-            output = (str(dest_ip).rstrip('\r\n)') + ":", str(server), "Linux server (Server name)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": " + str(server) + " Linux server (Server name)")
             primary_output(output, output_file)
 
         elif "SonicWALL" in str(server):
@@ -672,8 +672,8 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif str(server) == 'uc-httpd 1.0.0' or "NETSurveillance WEB" in str(title_contents):
             #Verified 08/10/2021, this one pops out the dynamic title for resellers who set their own title.
-            output = (str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title", str(
-                title_contents.pop()), "(Server)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title "+ str(
+                title_contents.pop())+ " (Server)")
             primary_output(output, output_file)
 
         elif 'Boa/0.93.15' in str(server):
@@ -712,7 +712,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif 'Router Webserver' in str(server):
             #Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
-            output =  (str(dest_ip).rstrip('\r\n)') + ": TP-LINK", str(title_contents.pop()), "(Title)")
+            output =  (str(dest_ip).rstrip('\r\n)') + ": TP-LINK "+ str(title_contents.pop())+ " (Title)")
             primary_output(output, output_file)
 
         elif '- Info' in str(title_contents) and str(server) in "httpd":
@@ -728,7 +728,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)")
 
         elif 'ZTE corp' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": ZTE", str(title_contents.pop()), "Router (Title and Server)")
+            print(str(dest_ip).rstrip('\r\n)') + ": ZTE " + str(title_contents.pop())+ " Router (Title and Server)")
 
         elif 'Haier Q7' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)")
@@ -737,7 +737,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)")
 
         elif 'uhttpd/1.0.0' in str(server) and "NETGEAR" in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": ", str(title_contents.pop()), "(Title and server)")
+            print(str(dest_ip).rstrip('\r\n)') + ": "+ str(title_contents.pop())+ " (Title and server)")
 
         elif 'SunGuard' in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
@@ -875,7 +875,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             except Exception as e:
                 if vbose is not None:
                     print(e,str(traceback.format_exc()))
-                print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is empty and server is", server)
+                print("Title on IP", str(dest_ip).rstrip('\r\n)') + "is empty and server is" + server)
         checkheaders.close()
     except HTTPError as e:
         try:
