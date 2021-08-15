@@ -439,12 +439,15 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
         checkheaders = urlopen(hostname, timeout=5)
+
         try:
             server = checkheaders.info().get('Server')
         except:
             server = None
 
         html = checkheaders.read()
+        content_length = len(str(html))
+
         soup = bs4.BeautifulSoup(html,'html.parser')
 
 
@@ -467,14 +470,13 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": Status Code " + checkheaders.getcode() + " Server: "+ server)
         # a = title.contents
         if 'RouterOS' in str(title_contents) and server is None:
-            router_os_version = soup.find('body').h1.contents
             print(str(dest_ip).rstrip('\r\n)') + ": MikroTik RouterOS version", str(
                 soup.find('body').h1.contents.pop()), "(Login Page Title)")
-            soup = bs4.BeautifulSoup(html,'html.parser')
+
         elif ('D-LINK' in str(title_contents) and 'siyou server' in server) or (str(server) == "mini_httpd/1.19 19dec2003"):
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
             print(str(dest_ip).rstrip('\r\n)') + ": D-LINK Router", dlink_model)
-            soup = bs4.BeautifulSoup(html,'html.parser')
+
         elif title_contents is None:
             try:
                 answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
@@ -492,7 +494,8 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
                         title2 = soup2.html.head.title
                         title2_contents = title2.contents
                         if "Airties" in title2_contents.pop():
-                            print(str(dest_ip).rstrip('\r\n)') + ": Airties Modem/Router")
+                            output = (str(dest_ip).rstrip('\r\n)') + ": Airties Modem/Router")
+                            primary_output(output, output_file)
                         else:
                             print(str(dest_ip).rstrip('\r\n)') + ": Device with Title "+title2)
                     else:
@@ -506,11 +509,18 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
                 if len(get_label) != 0:
                     for record in get_label:
                         if 'TP-LINK' in record:
-                            print(str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
+                            output = (str(dest_ip).rstrip('\r\n)') + ": TP-Link Device (Unknown Model)")
+                            primary_output(output, output_file)
             elif 'uc-httpd/1.0.0' in str(server):
-                print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
-            elif 'Boa/0.94.13' in str(server):
-                print(str(dest_ip).rstrip('\r\n)') + ": Macroview KR based CCTV Device ")
+                output = (str(dest_ip).rstrip('\r\n)') + ": Possibly a Dahua DVR")
+                primary_output(output, output_file)
+                #This is a fucked up signature. I"m still working on it 08/15/2021
+                #print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
+
+            elif 'Boa/0.94.13' in str(server) and content_length == 142:
+                #Verified 08/15/2021, the domain that is used pulls back to Macroview. This signature is pretty broad but until I find a better focus, I don't think anything else will work.
+                output = (str(dest_ip).rstrip('\r\n)') + ": Macroview KR based CCTV Device ")
+                primary_output(output, output_file)
 
 
 
