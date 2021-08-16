@@ -733,6 +733,11 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             output = (str(dest_ip).rstrip('\r\n)') + ": DD-WRT Device w/ Title " + str(title_contents.pop()))
             primary_output(output, output_file)
 
+        elif "Polycom SoundPoint IP Telephone HTTPd" in str(server) and "Polycom" in str(title_contents):
+            #added on 08/16/2021, pulled from DDoS data
+            output = (str(dest_ip).rstrip('\r\n)') + ": Polycomm SoundPoint IP Telephone Device")
+            primary_output(output, output_file)
+
         elif 'Samsung DVR' in str(title_contents):
             #Verified
             print(str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
