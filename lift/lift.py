@@ -636,7 +636,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             output = (str(dest_ip).rstrip('\r\n)') + ": Netgear Generic Networking Device (Title)")
             primary_output(output, output_file)
 
-        elif "Index_Page" in title_contents and "Apache" in str(server) and "mod_ssl" in str(server):
+        elif "Index_Page" in title_contents and "Apache" in str(server):
             output = (str(dest_ip).rstrip('\r\n)') + ": Zyxel Device w/ Apache")
             primary_output(output, output_file)
 
