@@ -773,9 +773,21 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             output = (str(dest_ip).rstrip('\r\n)') + ": ZTE " + str(title_contents.pop())+ " Router (Title and Server)")
             primary_output(output, output_file)
 
+        elif 'SyncThru Web Service' in str(title_contents) and server is None:
+            #Added on 08/19/2021, I want to expand this to grab the model number. These printers have weird frames that overlay so I'm trying to figure out how to grab that.
+            output = (str(dest_ip).rstrip('\r\n)') + ": Samsung SyncThru Printer")
+            #model_number = soup.find_all('table', {'class':'sws_home_table_style1'})
+            #print(model_number)
+            primary_output(output, output_file)
+
         elif 'Haier Q7' in str(title_contents):
             #Tested and verified on 08/18/2021
             output = (str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)")
+            primary_output(output, output_file)
+
+        elif 'Web Image Monitor' in str(title_contents) and 'Web-Server/3.0' in str(server):
+            #Added 08/19/2021; Need to
+            output = (str(dest_ip).rstrip('\r\n)') + ": Ricoh Printer Product w/ Web Image Monitor")
             primary_output(output, output_file)
 
         elif 'Cross Web Server' in str(server):
