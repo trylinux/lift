@@ -619,7 +619,8 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
         #    print(str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)")
 
         elif 'NUUO Network Video Recorder Login' in title_contents:
-            print(str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": NUOO Video Recorder (admin/admin) (Title)")
+            primary_output(output, output_file)
 
         elif 'CDE-30364' in title_contents:
             #Verified on 08/09/2021
@@ -740,16 +741,42 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
 
         elif 'Samsung DVR' in str(title_contents):
             #Verified
-            print(str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": Samsung DVR Unknown type (Title)")
+            primary_output(output, output_file)
 
-        elif 'HtmlAnvView' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)")
+        elif 'IC-II' in str(title_contents) and "Hiawatha v9.2" in str(server):
+            #Added and verified on 08/18/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Legrand Vantage InFusion Controller")
+            primary_output(output, output_file)
+
+        elif "Crestron AirMedia" in str(title_contents) and "Crestron Webserver" in str(server):
+            # Added and verified on 08/18/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Crestron AirMedia Device")
+            primary_output(output, output_file)
+
+        elif "Seagate NAS" in str(title_contents) and server == None:
+            # Added and verified on 08/18/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Seagate NAS Device")
+            primary_output(output, output_file)
+
+        elif 'LaCie' in str(title_contents) and 'lighttpd' in str(server):
+            # Added and verified on 08/18/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": LaCie Network Storage Device")
+            primary_output(output, output_file)
+
+        #Removing this signature until I can verify again
+        #elif 'HtmlAnvView' in str(title_contents):
+        #    print(str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)")
 
         elif 'ZTE corp' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": ZTE " + str(title_contents.pop())+ " Router (Title and Server)")
+            #ZTE Devices of various types. This signature dynamically pops the title out so we can get the model number. Tested and Verified on 08/18/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": ZTE " + str(title_contents.pop())+ " Router (Title and Server)")
+            primary_output(output, output_file)
 
         elif 'Haier Q7' in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)")
+            #Tested and verified on 08/18/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Haier Router Q7 Series (Title)")
+            primary_output(output, output_file)
 
         elif 'Cross Web Server' in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": TVT-based DVR/NVR/IP Camera (Server)")
@@ -774,7 +801,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
 
         elif 'gSOAP/2.8' in str(server) and (len(title_contents) == 0 or str('IPCamera Components Download') in str(title_contents)):
-            print(str(dest_ip).rstrip('\r\n)') + ": TVT CCTV Device (Camera or Recorder)")
+            print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen TVT CCTV Device (Camera or Recorder)")
 
         elif 'Milesight Network Camera' in str(title_contents) and server is None:
             print(str(dest_ip).rstrip('\r\n)') + ": Milesight DVR Device")
