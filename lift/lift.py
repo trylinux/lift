@@ -1356,9 +1356,9 @@ def getheaders(dest_ip, dport, output_handler):
                 except:
                     title_stuff = "None"
                 crap_contents = (
-                    "Title on IP "
-                    + str(dest_ip).rstrip("\r\n)")
-                    + " is "
+
+                    str(dest_ip).rstrip("\r\n)")
+                    + ": Title is "
                     + title_stuff.rstrip("\r\n)")
                     + " and server is "
                     + str(server)
