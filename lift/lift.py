@@ -835,14 +835,19 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             primary_output(output, output_file)
 
         elif 'Boa' in str(server) and str('Web Client') in str(title_contents):
-            print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
+            #Verified 08/19/2021: The file ums_plugin.exe contains the domain nadatel.com
+            output = (str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
+            primary_output(output, output_file)
 
         elif str('CPPLUS DVR') in str(title_contents) and server == None:
-            print(str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
+            #Verified 08/19/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": CP PLUS DVR")
+            primary_output(output, output_file)
 
         elif (str("ATHD DVR") in str(title_contents) or "AHD DVR" in str(title_contents)) and server == None:
             #Updated 08_08_2021 to include AHD DVR. The 554 port on these say Altasec as well.
-            print(str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
+            output = (str(dest_ip).rstrip('\r\n)') + ": Altasec DVR")
+            primary_output(output, output_file)
 
         elif str("Network Video Recorder Login") in str(title_contents) and 'lighttpd' in  str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": NUUO CCTV Product")
@@ -852,7 +857,8 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             try:
                 ocx=soup.body.findAll("object", {"name":"dvrocx"})
                 if len(ocx) != 0:
-                   print(str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
+                   output = (str(dest_ip).rstrip('\r\n)') + ": Raysharp CCTV Device (Unknown Downstream Brand)")
+                   primary_output(output, output_file)
             except Exception as e:
                 try:
                     title_stuff = title_contents.pop()
