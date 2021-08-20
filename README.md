@@ -2,10 +2,10 @@
 
 Quietly **"lift"** fingerprints from devices by using their SSL certificates, HTTP headers or other characteristics.
 
-**Requires Python 2.7.10 or higher**
+**Requires Python 3 or higher**
 **BEST IF USED WITH PYTHON 3**
 
-This project requires Python 2.7.10 (Preferrably Python 3) or higher because of the massive changes to the ssl library. Python 2.7.10 introduced the SSLContext class to help sophisticated applications (like lift) manage settings and certificates.
+
 
 ## Table of Contents
 
