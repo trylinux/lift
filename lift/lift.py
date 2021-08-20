@@ -1368,13 +1368,13 @@ def getheaders(dest_ip, dport, output_handler):
                     + title_stuff.rstrip("\r\n)")
                     + " and server is "
                     + str(server)
-                    + "(NOID)"
+                    + " (NOID)"
                 )
                 output_handler.write(str(crap_contents))
             except:
                 # logger.exception(e)
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": Title is empty and server is" + str(server) + "(NOID)"
+                    str(dest_ip).rstrip("\r\n)") + ": Title is empty and server is" + str(server) + " (NOID)"
                 )
                 output_handler.write(output)
         returned_response.close()
