@@ -610,16 +610,16 @@ def getheaders(dest_ip, dport, output_handler):
         # a = title.contents
         if "RouterOS" in str(title_contents) and server is None:
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": MikroTik RouterOS version",
-                str(soup.find("body").h1.contents.pop()),
-                "(Login Page Title)",
+                str(dest_ip).rstrip("\r\n)") + ": MikroTik RouterOS version" +
+                str(soup.find("body").h1.contents.pop()) +
+                "(Login Page Title)"
             )
             output_handler.write(output)
         elif ("D-LINK" in str(title_contents) and "siyou server" in server) or (
             str(server) == "mini_httpd/1.19 19dec2003"
         ):
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
-            output = (str(dest_ip).rstrip("\r\n)") + ": D-LINK Router", dlink_model)
+            output = (str(dest_ip).rstrip("\r\n)") + ": D-LINK Router" + dlink_model)
             output_handler.write(output)
         elif title_contents is None:
             try:
@@ -636,7 +636,7 @@ def getheaders(dest_ip, dport, output_handler):
             elif "js_check" in str(answer):
                 get_login_html = "http://%s:%s/login.html" % (
                     str(dest_ip).rstrip("\r\n)"),
-                    dport,
+                    dport
                 )
                 try:
                     check_login_page = urlopen(get_login_html, timeout=5)
