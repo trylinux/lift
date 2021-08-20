@@ -5,7 +5,7 @@ from datetime import datetime
 class Output:
     def __init__(self, verbosity = 1, output_file = None):
         self.verbosity = verbosity
-        self.output_file = output_file
+        self.output_file = os.path.abspath(output_file)
         if self.output_file:
             output_file_dir = os.path.dirname(self.output_file)
             if not os.path.exists(output_file_dir):
