@@ -1001,7 +1001,7 @@ def getheaders(dest_ip, dport, output_handler):
         else:
             print(str(dest_ip).rstrip('\r\n)')+ ": Server: " + str(e.info().get('Server')) + " with error " + str(e))
     except URLError as e:
-        print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open")
+        logger.exception(print(str(dest_ip).rstrip('\r\n)')+":"+str(dport)+" is not open"))
     except Exception as e:
         try:
             if 'NoneType' in str(e):
