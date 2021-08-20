@@ -691,9 +691,9 @@ def getheaders(dest_ip, dport, output_handler):
 
             else:
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": has server ",
-                    str(server),
-                    " and no viewable title",
+                    str(dest_ip).rstrip("\r\n)") + ": has server " +
+                    str(server) +
+                    " and no viewable title"
                 )
                 output_handler.write(output)
         elif str("WebServer") in str(server) and "D-LINK" in title_contents:
