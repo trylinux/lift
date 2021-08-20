@@ -541,6 +541,7 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
                         fw_version = grab_header[1].lstrip(" ")
             print(str(dest_ip).rstrip('\r\n)') +": D-LINK Model " + model_name + " " + hw_version + " " + fw_version)
 
+
         elif "Synology" in str(title_contents) and str("nginx") in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Synology Device Storage Device")
 
@@ -800,26 +801,38 @@ def getheaders(dest_ip, dport, vbose, info, output_file=None):
             print(str(dest_ip).rstrip('\r\n)') + ": SunGuard.it Device (Title)")
 
         elif 'CMS Web Viewer' in str(title_contents) and (server is None or  "lighttpd/1.4.54" in str(server)):
-
-            print(str(dest_ip).rstrip('\r\n)') + ": 3R Global DVR -- Unknown Brand")
+            #Verified 08/19/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": 3R Global DVR -- Unknown Brand")
+            primary_output(output, output_file)
 
         elif 'WEB SERVICE' in str(title_contents) and server is None:
-            print(str(dest_ip).rstrip('\r\n)') + ": Dahua Product (DVR/NVR/HVR likely)")
+            output = (str(dest_ip).rstrip('\r\n)') + ": Dahua Product (DVR/NVR/HVR likely)")
+            primary_output(output, output_file)
 
         elif 'Brother ' in str(title_contents) and str('debut') in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
+            #Verified 08/19/2021 -- Pops the model out
+            output = (str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
+            primary_output(output, output_file)
 
         elif 'Lexmark' in (str(title_contents)) and (server is None or 'Lexmark' in str(server)):
-            print(str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
+            #Verified 08/19/2021 -- Pops out the model
+            output = (str(dest_ip).rstrip('\r\n)') + ": " + str(title_contents.pop()))
+            primary_output(output, output_file)
 
         elif 'gSOAP/2.8' in str(server) and (len(title_contents) == 0 or str('IPCamera Components Download') in str(title_contents)):
-            print(str(dest_ip).rstrip('\r\n)') + ": Shenzhen TVT CCTV Device (Camera or Recorder)")
+            #Verified 08/19/2021 -- The XML produced by going to port 80 has a link to the TVT website and the correct WSD
+            output = (str(dest_ip).rstrip('\r\n)') + ": Shenzhen TVT CCTV Device (Camera or Recorder)")
+            primary_output(output, output_file)
 
         elif 'Milesight Network Camera' in str(title_contents) and server is None:
-            print(str(dest_ip).rstrip('\r\n)') + ": Milesight DVR Device")
+            #Verified 08/19/2021
+            output = (str(dest_ip).rstrip('\r\n)') + ": Milesight Network Camera")
+            primary_output(output, output_file)
 
         elif 'EPSON_Linux' in str(server):
-            print(str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
+            #Verified 08/19/2021, pops the model out
+            output = (str(dest_ip).rstrip('\r\n)') + ": "+str(title_contents.pop()))
+            primary_output(output, output_file)
 
         elif 'Boa' in str(server) and str('Web Client') in str(title_contents):
             print(str(dest_ip).rstrip('\r\n)') + ": Nadatel Device")
