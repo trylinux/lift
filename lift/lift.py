@@ -82,7 +82,7 @@ def main():
             getheaders(args.ip, dport, output_handler)
 
         else:
-            testips(args.ip, dport, verbose, ssl_only, info)
+            testips(args.ip, dport, ssl_only, output_handler)
     elif args.ifile and not args.recurse:
         ipfile = args.ifile
         dest_ip = args.ip
@@ -92,9 +92,9 @@ def main():
                 for line in f:
                     if dport in [80, 8080, 81, 88, 8000, 8888, 7547]:
                         # print("Skipping SSL test for", dport)
-                        getheaders(str(line).rstrip('\r\n)'), dport, verbose, info)
+                        getheaders(str(line).rstrip('\r\n)'), dport, output_handler)
                     else:
-                        testips(str(line).rstrip('\r\n)'), dport, verbose, ssl_only, info)
+                        testips(str(line).rstrip('\r\n)'), dport, ssl_only, output_handler)
         except KeyboardInterrupt:
             # print("Quitting")
             sys.exit(0)
@@ -107,7 +107,7 @@ def main():
             for ip in netaddr.IPNetwork(str(args.subnet)):
                 try:
                     if dport == 80:
-                        getheaders(str(ip).rstrip('\r\n)'), dport, verbose, info)
+                        getheaders(str(ip).rstrip('\r\n)'), dport, output_handler)
                     elif args.recurse:
                         if dport == 53:
                             recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
@@ -120,7 +120,7 @@ def main():
                             recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
                             ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
                     else:
-                        testips(str(ip), dport, verbose, ssl_only, info)
+                        testips(str(ip), dport, ssl_only, output_handler)
                 except KeyboardInterrupt:
                     print("Quitting from Subnet")
                     sys.exit(0)
@@ -219,7 +219,7 @@ def ishostup(dest_ip, dport, verbose):
         pass
 
 
-def testips(dest_ip, dport, verbose, ssl_only, info):
+def testips(dest_ip, dport, ssl_only, output_handler):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
@@ -326,7 +326,7 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             # elif "matrix_sample_ssl_1":
             #	print(str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)")
             elif a is not None and device is None:
-                getheaders_ssl(dest_ip, dport, a, verbose, ctx, ssl_only, info)
+                getheaders_ssl(dest_ip, dport, a, ctx, ssl_only,output_handler)
             else:
                 print("Something error happened")
 
@@ -335,36 +335,30 @@ def testips(dest_ip, dport, verbose, ssl_only, info):
             print("Quitting")
             sys.exit(0)
         except URLError as e:
-            if verbose is not None:
-                print(str(dest_ip).rstrip('\r\n)') + ":" + str(dport) + " is not open")
-                getheaders(dest_ip, dport, verbose, info)
-            else:
-                getheaders(dest_ip, dport, verbose, info)
-                pass
+                logger.exception(print(str(dest_ip).rstrip('\r\n)') + ":" + str(dport) + " is not open"))
+                getheaders(dest_ip, dport, output_handler)
         except Exception as e:
             s.close()
             if 111 in e and ssl_only == 0:
-                getheaders(dest_ip, dport, verbose, info)
+                getheaders(dest_ip, dport, output_handler)
             elif ("timed out" or 'sslv3' in e) and ssl_only == 0:
-                getheaders(dest_ip, dport, verbose, info)
+                getheaders(dest_ip, dport, output_handler)
                 pass
             else:
-                getheaders(dest_ip, dport, verbose, info)
+                getheaders(dest_ip, dport, output_handler)
             # if verbose is not None:
             #	print( )str(dest_ip).rstrip('\r\n)') + ": had error " + str(e).rstrip('\r\n)'))
-            if verbose is not None:
-                print("Error in testip: " + str(e) + " " + str(dest_ip).rstrip('\r\n)'))
+            print("Error in testip: " + str(e) + " " + str(dest_ip).rstrip('\r\n)'))
     except Exception as e:
         if 'gaierror' in str(e):
             pass
         else:
-            if verbose is not None:
-                print("Error in TestIPs",str(e))
+            logging.logger("Error in TestIPs",str(e))
 
 
 
 
-def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
+def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
     hostname = "https://%s:%s" % (str(dest_ip).rstrip('\r\n)'), dport)
     try:
         checkheaders = urlopen(hostname, context=ctx, timeout=5)
@@ -409,7 +403,7 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             print(str(dest_ip).rstrip('\r\n)') + ": Fiberhome ONU/OLT Device (SSL Cert name)")
         else:
             if ssl_only == 0:
-                getheaders(dest_ip, 80, vbose, info)
+                getheaders(dest_ip, 80, output_handler)
             else:
                 print("Title on IP", str(dest_ip).rstrip('\r\n)'), "is", str(a.pop()).rstrip(), '\r\n)', "and server is", server)
         checkheaders.close()
@@ -423,18 +417,18 @@ def getheaders_ssl(dest_ip, dport, cert, vbose, ctx, ssl_only, info):
             server = "is not available"
         if "AkamaiGHost" in str(server):
             print(str(dest_ip).rstrip('\r\n)') + ": Akamai GHost Server")
-        elif vbose is not None:
-            try:
-                authenticate_header = e.headers.get('WWW-Authenticate')
-            except:
-                authenticate_header = "noauth"
-            print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
+        #elif vbose is not None:
+        #    try:
+        #        authenticate_header = e.headers.get('WWW-Authenticate')
+        #    except:
+        #        authenticate_header = "noauth"
+        #    print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
         else:
             pass
     except Exception as e:
         if dport == 443 and ssl_only == 0:
             dport = 80
-            getheaders(dest_ip, dport, vbose, info)
+            getheaders(dest_ip, dport, output_handler)
 
             logger.exception("Error in getsslheaders: " + str(e) + str(dest_ip))
         pass
