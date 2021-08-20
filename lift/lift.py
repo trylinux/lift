@@ -1054,11 +1054,17 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         elif "SyncThru Web Service" in str(title_contents) and server is None:
-            # Added on 08/19/2021, I want to expand this to grab the model number. These printers have weird frames that overlay so I'm trying to figure out how to grab that.
-            output = str(dest_ip).rstrip("\r\n)") + ": Samsung SyncThru Printer"
-
-            # model_number = soup.find_all('table', {'class':'sws_home_table_style1'})
-            # print(model_number)
+            # Fixed on 08/20/2021 -- Found that the iframe has it's own URL. This pulls that URL and grabs the relevant info. Other information that could be found includes mac address and support email
+            try:
+                hostname = "http://%s:%s/sws.application/home/homeDeviceInfo.sws" % (str(dest_ip).rstrip("\r\n)"), dport)
+                get_response = urlopen(hostname, timeout=5)
+                html = get_response.read()
+                soup = bs4.BeautifulSoup(html, "html.parser")
+                model_number = soup.find('td', {'class':'sws_home_right_table_style2'}).contents.pop()
+                output = str(dest_ip).rstrip("\r\n)") + ": Samsung SyncThru Printer Model " + model_number
+            except Exception as e:
+                logger.exception(e)
+                output = str(dest_ip).rstrip("\r\n)") + ": Samsung SyncThru Printer"
             output_handler.write(output)
 
         elif "Haier Q7" in str(title_contents):
@@ -1362,13 +1368,13 @@ def getheaders(dest_ip, dport, output_handler):
                     + title_stuff.rstrip("\r\n)")
                     + " and server is "
                     + str(server)
+                    + "(NOID)"
                 )
                 output_handler.write(str(crap_contents))
             except:
                 # logger.exception(e)
                 output = (
-                    "Title on IP",
-                    str(dest_ip).rstrip("\r\n)") + "is empty and server is" + server,
+                    str(dest_ip).rstrip("\r\n)") + ": Title is empty and server is" + str(server) + "(NOID)"
                 )
                 output_handler.write(output)
         returned_response.close()
