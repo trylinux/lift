@@ -5,8 +5,9 @@ from datetime import datetime
 class Output:
     def __init__(self, verbosity = 1, output_file = None):
         self.verbosity = verbosity
-        self.output_file = os.path.abspath(output_file)
+        self.output_file = output_file
         if self.output_file:
+            self.output_file = os.path.abspath(self.output_file)
             output_file_dir = os.path.dirname(self.output_file)
             if not os.path.exists(output_file_dir):
                 os.makedirs(output_file_dir)
@@ -17,10 +18,11 @@ class Output:
         if verbosity < self.verbosity:
             return
         now = datetime.utcnow()
-        print(f"{now} {text}")
+        write_format = f"{now} | {text}"
+        print(write_format)
         if self.output_file:
             with open(self.output_file, "a") as f:
-                f.write(f"{now} {text}\n")
+                f.write(f"{write_format}\n")
 
 if __name__ == '__main__':
     output = Output(verbosity=-1,output_file="/tmp/output")
