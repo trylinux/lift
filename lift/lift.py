@@ -599,38 +599,40 @@ def getheaders(dest_ip, dport, output_handler):
         title_contents, soup, content_length = process_html(html)
 
         if returned_response.getcode() != 200:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Status Code "
                 + returned_response.getcode()
                 + " Server: "
                 + server
             )
+            output_handler.write(output)
         # a = title.contents
         if "RouterOS" in str(title_contents) and server is None:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)") + ": MikroTik RouterOS version",
                 str(soup.find("body").h1.contents.pop()),
                 "(Login Page Title)",
             )
-
+            output_handler.write(output)
         elif ("D-LINK" in str(title_contents) and "siyou server" in server) or (
             str(server) == "mini_httpd/1.19 19dec2003"
         ):
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
-            print(str(dest_ip).rstrip("\r\n)") + ": D-LINK Router", dlink_model)
-
+            output = (str(dest_ip).rstrip("\r\n)") + ": D-LINK Router", dlink_model)
+            output_handler.write(output)
         elif title_contents is None:
             try:
                 answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             except Exception as e:
                 answer = None
             if "Serial" in str(server) and "HP" in str(server):
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": HP Product w/ Identifiers -- "
                     + str(server)
                 )
+                output_handler.write(output)
             elif "js_check" in str(answer):
                 get_login_html = "http://%s:%s/login.html" % (
                     str(dest_ip).rstrip("\r\n)"),
@@ -649,18 +651,20 @@ def getheaders(dest_ip, dport, output_handler):
                             )
                             output_handler.write(output)
                         else:
-                            print(
+                            output = (
                                 str(dest_ip).rstrip("\r\n)")
                                 + ": Device with Title "
                                 + title2
                             )
+                            output_handler.write(output)
                     else:
-                        print(
+                        output = (
                             str(dest_ip).rstrip("\r\n)")
                             + ": Possible  KitDuo DVR Found"
                         )
+                        output_handler.write(output)
                 except Exception as e:
-                    print(e)
+                    logging.exception(e)
 
             elif "WebServer/1.0 UPnP/1.0" in str(server):
                 get_label = soup.find("label").contents
@@ -686,11 +690,12 @@ def getheaders(dest_ip, dport, output_handler):
                 output_handler.write(output)
 
             else:
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)") + ": has server ",
                     str(server),
                     " and no viewable title",
                 )
+                output_handler.write(output)
         elif str("WebServer") in str(server) and "D-LINK" in title_contents:
             version_table = soup.find("table", {"id": "versionTable"})
             for row in version_table.find_all("td"):
@@ -704,7 +709,7 @@ def getheaders(dest_ip, dport, output_handler):
                     elif "Firmware" in str(row):
                         grab_header = str(row.text).split(":")
                         fw_version = grab_header[1].lstrip(" ")
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": D-LINK Model "
                 + model_name
@@ -713,9 +718,11 @@ def getheaders(dest_ip, dport, output_handler):
                 + " "
                 + fw_version
             )
+            output_handler.write(output)
 
         elif "Synology" in str(title_contents) and str("nginx") in str(server):
-            print(str(dest_ip).rstrip("\r\n)") + ": Synology Device Storage Device")
+            output = (str(dest_ip).rstrip("\r\n)") + ": Synology Device Storage Device")
+            output_handler.write(output)
 
         elif str(server) in str("ver2.4 rev0"):
             output = (
@@ -1070,9 +1077,10 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         elif "Cross Web Server" in str(server):
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)") + ": TVT-based DVR/NVR/IP Camera (Server)"
             )
+            output_handler.write(output)
 
         elif "uhttpd/1.0.0" in str(server) and "NETGEAR" in str(title_contents):
             output = (
@@ -1084,7 +1092,8 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         elif "SunGuard" in str(title_contents):
-            print(str(dest_ip).rstrip("\r\n)") + ": SunGuard.it Device (Title)")
+            output = (str(dest_ip).rstrip("\r\n)") + ": SunGuard.it Device (Title)")
+            output_handler.write(output)
 
         elif "CMS Web Viewer" in str(title_contents) and (
             server is None or "lighttpd/1.4.54" in str(server)
@@ -1197,77 +1206,92 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         elif str("BEWARD Network HD camera") in str(title_contents) and server == None:
-            print(str(dest_ip).rstrip("\r\n)") + ": Beward IP Camera Device")
+            #Verified on 08/20/2021
+            output = (str(dest_ip).rstrip("\r\n)") + ": Beward IP Camera Device")
+            output_handler.write(output)
 
         elif str("GPON ONT") in str(title_contents) and server == None:
-            print(str(dest_ip).rstrip("\r\n)") + ": VNPT GPON/iGate Device likely")
+            #Verified on 08/20/2021
+            output = (str(dest_ip).rstrip("\r\n)") + ": VNPT GPON/iGate Device likely")
+            output_handler.write(output)
 
         elif str("ZK Web Server") in str(server) and len(title_contents) == 0:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)") + ": ZK Software-based Fingerprint Reader"
             )
+            output_handler.write(output)
 
         elif "Keenetic Web" in str(title_contents):
-            print(str(dest_ip).rstrip("\r\n)") + ": KEENETIC Device")
+            output = (str(dest_ip).rstrip("\r\n)") + ": KEENETIC Device")
+            output_handler.write(output)
 
         elif "uc-httpd/1.0.0" in str(server):
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera w/ Title "
                 + str(title_contents.pop())
             )
+            output_handler.write(output)
 
         elif "Reolink" in title_contents and ("nginx" in str(server) or server == None):
-            print(str(dest_ip).rstrip("\r\n)") + ": Reolink DVR Device")
+            output = (str(dest_ip).rstrip("\r\n)") + ": Reolink DVR Device")
+            output_handler.write(output)
 
         elif "Network Surveillance" in str(title_contents) and server == None:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Shenzhen Baichuan Digital Technology CCTV Device"
             )
+            output_handler.write(output)
 
         elif "Login Page" in str(title_contents) and str(server) == "httpserver":
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)") + ": EP Technology Corporation CCTV Device"
             )
+            output_handler.write(output)
 
         elif str(server) == "GNU rsp/1.0":
             # verified 08/13/2021
             if "XVR LOGIN" in str(title_contents):
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": Cenova XVR Product (OEM Shenzhen Milantek Co)"
                 )
             else:
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": Shenzhen Milantek Co OEM Device (Unknown Downstream)"
                 )
+            output_handler.write(output)
 
         elif "nginx/" in str(server) and "CentOS" in str(title_contents):
-            print(str(dest_ip).rstrip("\r\n)") + ": Centos Server w/ " + str(server))
+            output = (str(dest_ip).rstrip("\r\n)") + ": Centos Server w/ " + str(server))
+            output_handler.write(output)
 
         elif "nginx" in str(server) and "CentOS" not in str(title_contents):
             if "Ubuntu" in str(server):
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": Ubuntu Server w/ "
                     + str(server)
                     + " with title w/ "
                     + str(title_contents.pop())
                 )
+                output_handler.write(output)
 
         elif "Web Application Manager" in str(title_contents) and server is None:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": KongTop Industrial (Shenzhen) CCTV Device"
             )
+            output_handler.write(output)
 
         elif "PON Home Gateway" in str(title_contents) and server is None:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Shenzhen HDV Photoelectron Technology LTD PON Device"
             )
+            output_handler.write(output)
 
         elif (
             "Login" in str(title_contents)
@@ -1275,38 +1299,43 @@ def getheaders(dest_ip, dport, output_handler):
             and "loginN4.js" in str(soup.head)
         ):
             title = str(soup.find("div", {"id": "login-title"}).contents.pop())
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Tridium Niagra Product w/ Title "
                 + str(title)
             )
+            output_handler.write(output)
 
         elif "TOTOLINK" in str(title_contents) and str(server) == "Boa/0.94.14rc21":
-            print(str(dest_ip).rstrip("\r\n)") + ": Totolink Device (Modem or Router)")
+            output = (str(dest_ip).rstrip("\r\n)") + ": Totolink Device (Modem or Router)")
+            output_handler.write(output)
 
         elif "SVM-R1" in str(title_contents) and "Apache" in str(server):
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Daikin HVAC SVM/VRV Controller w/ Software Version "
                 + str(title_contents.pop())
             )
+            output_handler.write(output)
 
         elif str(
             title_contents
         ) == "welcome" and "GoAhead-Webs/2.5.0 PeerSec-MatrixSSL/3.4.2-OPEN" in str(
             server
         ):
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Fiberhome ONU/OLT (HTML Title and Server Name)"
             )
+            output_handler.write(output)
 
         elif (
             "DVR_H264 ActiveX" in str(title_contents)
             or "RTDVR ActiveX" in str(title_contents)
         ) and "thttpd/2.25b 29dec2003" in str(server):
             # Added 08_07_2021, multiple points that match including UDROCX and the name "unimo" on the title page
-            print(str(dest_ip).rstrip("\r\n)") + ": Unimo AU CCTV Product")
+            output = (str(dest_ip).rstrip("\r\n)") + ": Unimo AU CCTV Product")
+            output_handler.write(output)
 
         elif str(
             server
@@ -1314,10 +1343,11 @@ def getheaders(dest_ip, dport, output_handler):
             title_contents
         ):
             # Added 08_07_2021, The "remove activex" binary has a certificate that has the domain of icctv.co.kr and the address of Ewha in Korea.
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": ICCTV Korea CCTV Product (Now Ewha CNI/KTCCTV)"
             )
+            output_handler.write(output)
 
         else:
             try:
@@ -1333,13 +1363,14 @@ def getheaders(dest_ip, dport, output_handler):
                     + " and server is "
                     + str(server)
                 )
-                print(str(crap_contents))
+                output_handler.write(str(crap_contents))
             except:
                 # logger.exception(e)
-                print(
+                output = (
                     "Title on IP",
                     str(dest_ip).rstrip("\r\n)") + "is empty and server is" + server,
                 )
+                output_handler.write(output)
         returned_response.close()
     except HTTPError as e:
         try:
@@ -1362,39 +1393,46 @@ def getheaders(dest_ip, dport, output_handler):
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": D-Link Device Model "
                 + str(device_model)
             )
+            output_handler.write(output)
         elif (
             auth_header is not None
             and (str(server) == "PDR-M800/1.0")
             and int(e.code) == 401
         ):
-            print(str(dest_ip).rstrip("\r\n)") + ": LiLin PDR-800 DVR")
+            output = (str(dest_ip).rstrip("\r\n)") + ": LiLin PDR-800 DVR")
+            output_handler.write(output)
         elif "mini_httpd/1.19 19dec2003" in str(server) and int(e.code) == 401:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": iCatch OEM H/D/NVR Device (Server and headers)"
             )
+            output_handler.write(output)
         elif "Router" in str(server) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            print(str(dest_ip).rstrip("\r\n)") + ": TP-Link" + str(device_model))
+            output = (str(dest_ip).rstrip("\r\n)") + ": TP-Link" + str(device_model))
+            output_handler.write(output)
         elif str(server) == "none" and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            print(str(dest_ip).rstrip("\r\n)") + ": Device model " + str(device_model))
+            output = (str(dest_ip).rstrip("\r\n)") + ": Device model " + str(device_model))
+            output_handler.write(output)
         elif "WebServer/1.0 UPnP/1.0" in str(server) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            print(str(dest_ip).rstrip("\r\n)") + ": ZTE Device " + str(device_model))
+            output = (str(dest_ip).rstrip("\r\n)") + ": ZTE Device " + str(device_model))
+            output_handler.write(output)
         elif "cpe@zte.com" in str(auth_header) and int(e.code) == 401:
-            print(str(dest_ip).rstrip("\r\n)") + ": ZTE ONU/ONT Device")
+            output = (str(dest_ip).rstrip("\r\n)") + ": ZTE ONU/ONT Device")
+            output_handler.write(output)
         elif (
             "everfocus" in str(auth_header)
             or "ELUX" in str(auth_header)
@@ -1405,45 +1443,52 @@ def getheaders(dest_ip, dport, output_handler):
                 auth_header_split = auth_header.split(",")
                 auth_header_realm = auth_header_split[0].split("=")
                 device_model = str(auth_header_realm[1]).replace('"', "")
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": Everfocus CCTV Device Model "
                     + str(device_model)
                 )
+
             else:
 
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": Everfocus CCTV Device (admin/111111)"
                 )
+            output_handler.write(output)
         elif (
             str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server"
             and int(e.code) == 401
         ):
-            print(str(dest_ip).rstrip("\r\n)") + ": Android Blackeye Web Server")
+            output = (str(dest_ip).rstrip("\r\n)") + ": Android Blackeye Web Server")
+            output_handler.write(output)
         elif str(server) == "Keil-EWEB/2.1" and int(e.code) == 401:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)") + ": Keil ARM Development Tool Web Server"
             )
+            output_handler.write(output)
         elif "HuaweiHomeGateway" in str(auth_header) and int(e.code) == 401:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Huawei Home Gateway Device (Probably PON)"
             )
+            output_handler.write(output)
         elif int(e.code) == 302:
             if "/login.rsp" in str(e.headers):
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)") + ": Exacq Technologies CCTV Product"
                 )
+                output_handler.write(output)
 
         else:
-            print(
+            output = (
                 str(dest_ip).rstrip("\r\n)")
                 + ": Server: "
                 + str(e.info().get("Server"))
                 + " with error "
                 + str(e)
             )
+            output_handler.write(output)
     except URLError as e:
         logger.exception(
             (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " is not open")
@@ -1461,10 +1506,11 @@ def getheaders(dest_ip, dport, output_handler):
                 rtsp_server = str(output).rstrip("\r\n)")
                 # print(rtsp_server)
                 if "Dahua" in str(rtsp_server):
-                    print(
+                    output = (
                         str(dest_ip).rstrip("\r\n)")
                         + ": Dahua RTSP Server Detected (RTSP Server)"
                     )
+                    output_handler.write(output)
         except Exception as t:
             logger.exception(
                 "Error in getheaders(): ", str(dest_ip).rstrip("\r\n)"), ":", str(e)
