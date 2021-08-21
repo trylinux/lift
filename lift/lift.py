@@ -119,7 +119,7 @@ def main():
             sys.exit(0)
         except Exception as e:
             sys.exc_info()[0]
-            print("error in first try", e, traceback.format_exc())
+            logger.exception("error in first try", e, traceback.format_exc())
             pass
     elif args.subnet:
         try:
@@ -523,7 +523,7 @@ def testips(dest_ip, dport, ssl_only, output_handler):
         if "gaierror" in str(e):
             pass
         else:
-            logging.exception("Error in TestIPs", str(e))
+            logger.exception("Error in TestIPs", str(e))
 
 
 def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
@@ -532,10 +532,11 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
         checkheaders = urlopen(hostname, context=ctx, timeout=5)
         try:
             if ("ubnt.com", "UBNT") in cert:
-                print(
+                output = (
                     str(dest_ip).rstrip("\r\n)")
                     + ": Ubiquity airOS Device non-default cert (SSL)"
                 )
+                output_handler.write(output)
         except:
             pass
         server = checkheaders.info().get("Server")
