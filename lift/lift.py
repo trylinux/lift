@@ -1534,6 +1534,8 @@ def getheaders(dest_ip, dport, output_handler):
                 + str(e.info().get("Server"))
                 + " with error "
                 + str(e)
+                + " (NOID) "
+
             )
             output_handler.write(output)
     except URLError as e:
