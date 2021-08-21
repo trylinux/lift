@@ -705,7 +705,7 @@ def getheaders(dest_ip, dport, output_handler):
                         )
                         output_handler.write(output)
                 except Exception as e:
-                    logging.exception(e)
+                    logger.exception(e)
 
             elif "WebServer/1.0 UPnP/1.0" in str(server):
                 get_label = soup.find("label").contents
