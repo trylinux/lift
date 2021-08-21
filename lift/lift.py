@@ -118,9 +118,7 @@ def main():
             # print("Quitting")
             sys.exit(0)
         except Exception as e:
-            sys.exc_info()[0]
-            logger.exception("error in first try", e, traceback.format_exc())
-            pass
+            logger.exception(e)
     elif args.subnet:
         try:
             for ip in netaddr.IPNetwork(str(args.subnet)):
