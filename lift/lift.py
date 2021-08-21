@@ -521,7 +521,7 @@ def testips(dest_ip, dport, ssl_only, output_handler):
         if "gaierror" in str(e):
             pass
         else:
-            logger.exception("Error in TestIPs", str(e))
+            logger.exception(e)
 
 
 def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
