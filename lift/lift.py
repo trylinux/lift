@@ -730,6 +730,12 @@ def getheaders(dest_ip, dport, output_handler):
                 )
                 output_handler.write(output)
 
+            elif "RG/Device 10.x" in str(server):
+                output = (
+                    str(dest_ip).rstrip("\r\n)") + ": RUIJIE Networks CPE Device (port 7547)"
+                )
+                output_handler.write(output)
+
             else:
                 output = (
                     str(dest_ip).rstrip("\r\n)") + ": has server " +
@@ -1425,6 +1431,7 @@ def getheaders(dest_ip, dport, output_handler):
         except:
             server = None
 
+
         auth_header = e.headers.get("WWW-Authenticate")
 
         if (
@@ -1480,6 +1487,9 @@ def getheaders(dest_ip, dport, output_handler):
         elif "cpe@zte.com" in str(auth_header) and int(e.code) == 401:
             output = (str(dest_ip).rstrip("\r\n)") + ": ZTE ONU/ONT Device")
             output_handler.write(output)
+        #elif "nginx" in str(server) and int(e.code) == 401:
+           # print("hi")
+
         elif (
             "everfocus" in str(auth_header)
             or "ELUX" in str(auth_header)
