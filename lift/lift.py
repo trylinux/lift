@@ -767,7 +767,7 @@ def getheaders(dest_ip, dport, output_handler):
             )
             output_handler.write(output)
 
-        elif "Synology" in str(title_contents) and str("nginx") in str(server):
+        elif "Synology" in str(title_contents) and (str("nginx") in str(server) or str("Apache") in str(server)):
             output = (str(dest_ip).rstrip("\r\n)") + ": Synology Device Storage Device")
             output_handler.write(output)
 
