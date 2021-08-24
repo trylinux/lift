@@ -992,7 +992,7 @@ def getheaders(dest_ip, dport, output_handler):
                 )
                 output_handler.write(output)
 
-        elif " ::: Login :::" in str(
+        elif "::: Login :::" in str(
             title_contents
         ) and "Linux/2.x UPnP/1.0 Avtech/1.0" in str(server):
             # Verified 08/10/2021.  This works on a very specific subset of AvTech Cameras
