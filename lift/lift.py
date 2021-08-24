@@ -256,241 +256,241 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                 if device == "ubiquiti":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Ubiquiti AirMax or AirFiber Device (SSL)"
+                        + " | Ubiquiti AirMax or AirFiber Device (SSL)"
                     )
                     output_handler.write(output)
                 if "UBNT" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Ubiquiti AirMax or AirFiber Device (SSL)"
+                        + " | Ubiquiti AirMax or AirFiber Device (SSL)"
                     )
                     output_handler.write(output)
                 elif "samsung" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)") + ": Unknown Samsung Device (SSL)"
+                        str(dest_ip).rstrip("\r\n)") + " | Unknown Samsung Device (SSL)"
                     )
                     output_handler.write(output)
                 elif "qnap" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": QNAP NAS TS series detected (SSL)"
+                        + " | QNAP NAS TS series detected (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "hikvision":
-                    output = (str(dest_ip).rstrip("\r\n)") + ": Hikvision Default Cert")
+                    output = (str(dest_ip).rstrip("\r\n)") + " | Hikvision Default Cert")
                     output_handler.write(output)
                 elif device == "avigilon":
                     output = (
-                        str(dest_ip).rstrip("\r\n)") + ": Aviligon Gateway Default cert"
+                        str(dest_ip).rstrip("\r\n)") + " | Aviligon Gateway Default cert"
                     )
                     output_handler.write(output)
                 elif device == "netgear_1":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": NetGear Default cert UTM  (SSL)"
+                        + " | NetGear Default cert UTM  (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "verifone_sapphire":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Verifone Sapphire Device (SSL)"
+                        + " | Verifone Sapphire Device (SSL)"
                     )
                     output_handler.write(output)
                 elif "Vigor" == device:
-                    output = (str(dest_ip).rstrip("\r\n)") + ": DrayTek Vigor Device (SSL)")
+                    output = (str(dest_ip).rstrip("\r\n)") + " | DrayTek Vigor Device (SSL)")
                     output_handler.write(output)
                 elif device == "lifesize_1":
-                    output = (str(dest_ip).rstrip("\r\n)") + ": Lifesize Product (SSL)")
+                    output = (str(dest_ip).rstrip("\r\n)") + " | Lifesize Product (SSL)")
                     output_handler.write(output)
                 elif "filemaker" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Filemaker Secure Database Website (SSL)"
+                        + " | Filemaker Secure Database Website (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "verizon_jungo":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Verizon Jungo OpenRG product (SSL/8443)"
+                        + " | Verizon Jungo OpenRG product (SSL/8443)"
                     )
                     output_handler.write(output)
                 elif device == "canon_iradv":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Canon IR-ADV Login Page (SSL/8443)"
+                        + " | Canon IR-ADV Login Page (SSL/8443)"
                     )
                     output_handler.write(output)
                 elif "colubris" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)") + ": HPE MSM Series Device (SSL)"
+                        str(dest_ip).rstrip("\r\n)") + " | HPE MSM Series Device (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "ecessa":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Ecessa PowerLink Wan Optimizer (SSL)"
+                        + " | Ecessa PowerLink Wan Optimizer (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "nomadix_ag_1":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Nomadix AG series Gateway (SSL)"
+                        + " | Nomadix AG series Gateway (SSL)"
                     )
                     output_handler.write(output)
                 elif "netvanta" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": ADTRAN NetVanta Total Access Device (SSL)"
+                        + " | ADTRAN NetVanta Total Access Device (SSL)"
                     )
                     output_handler.write(output)
                 elif "valuepoint_gwc_1" == device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": ValuePoint Networks Gateway Controller Series (SSL)"
+                        + " | ValuePoint Networks Gateway Controller Series (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "broadcom_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)") + ": Broadcom Generic Modem (SSL)"
+                        str(dest_ip).rstrip("\r\n)") + " | Broadcom Generic Modem (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "lg_nas_1":
-                    output = (str(dest_ip).rstrip("\r\n)") + ": LG NAS Device (SSL)")
+                    output = (str(dest_ip).rstrip("\r\n)") + " | LG NAS Device (SSL)")
                     output_handler.write(output)
                 elif device == "edgewater_1":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": EdgeWater Networks VOIP Solution (SSL)"
+                        + " | EdgeWater Networks VOIP Solution (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "foscam_cam":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Foscam IPcam Client Login (SSL)"
+                        + " | Foscam IPcam Client Login (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "lacie_1":
-                    output = (str(dest_ip).rstrip("\r\n)") + ": LaCie CloudBox (SSL)")
+                    output = (str(dest_ip).rstrip("\r\n)") + " | LaCie CloudBox (SSL)")
                     output_handler.write(output)
                 elif device == "huawei_hg658":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Huawei Home Gateway HG658d (SSL)"
+                        + " | Huawei Home Gateway HG658d (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "interpeak_device":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Something made by interpeak (SSL)"
+                        + " | Something made by interpeak (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "fujistu_celvin":
-                    output = (str(dest_ip).rstrip("\r\n)") + ": Fujitsu Celvin NAS (SSL)")
+                    output = (str(dest_ip).rstrip("\r\n)") + " | Fujitsu Celvin NAS (SSL)")
                     output_handler.write(output)
                 elif device == "opengear_default_cert":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Opengear Management Console Default cert (SSL)"
+                        + " | Opengear Management Console Default cert (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "zyxel_pk5001z":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Zyxel PK5001Z default cert (SSL)"
+                        + " | Zyxel PK5001Z default cert (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "audiocodecs_8443":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": AudioCodecs MP serices 443/8443 Default Cert (SSL)"
+                        + " | AudioCodecs MP serices 443/8443 Default Cert (SSL)"
                     )
                     output_handler.write(output)
                 elif "supermicro_ipmi" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Supermicro IPMI Default Certs (SSL)"
+                        + " | Supermicro IPMI Default Certs (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "enco_player_1":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Enco Enplayer Default Cert (SSL)"
+                        + " | Enco Enplayer Default Cert (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "ami_megarac":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": AMI MegaRac Remote Management Default Cert (SSL)"
+                        + " | AMI MegaRac Remote Management Default Cert (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "avocent_1":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Avocent Default cert (unknown device) (SSL)"
+                        + " | Avocent Default cert (unknown device) (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "ligowave_1":
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": LigoWave Default Cert (probably APC Propeller 5) (SSL)"
+                        + " | LigoWave Default Cert (probably APC Propeller 5) (SSL)"
                     )
                     output_handler.write(output)
                 elif "intelbras_wom500" == device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": IntelBras Wom500 (admin/admin) (SSL)"
+                        + " | IntelBras Wom500 (admin/admin) (SSL)"
                     )
                     output_handler.write(output)
                 elif "netgear_2" == device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Netgear Default Cert Home Router (8443/SSL)"
+                        + " | Netgear Default Cert Home Router (8443/SSL)"
                     )
                     output_handler.write(output)
                 elif "buffalo_1" == device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Buffalo Default Cert (443/SSL)"
+                        + " | Buffalo Default Cert (443/SSL)"
                     )
                     output_handler.write(output)
                 elif "digi_int_1" == device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Digi Passport Default Cert (443/SSL)"
+                        + " | Digi Passport Default Cert (443/SSL)"
                     )
                     output_handler.write(output)
                 elif "prtg_network_monitor_1" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Paessler PTRG Monitoring Default Cert(443/SSL)"
+                        + " | Paessler PTRG Monitoring Default Cert(443/SSL)"
                     )
                     output_handler.write(output)
                 elif "axentra_1" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)"
+                        + " | Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)"
                     )
                     output_handler.write(output)
                 elif "ironport_device" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Cisco IronPort Device Default SSL (443/SSL)"
+                        + " | Cisco IronPort Device Default SSL (443/SSL)"
                     )
                     output_handler.write(output)
                 elif "meru_net_1" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Meru Network Management Device  (443/SSL)"
+                        + " | Meru Network Management Device  (443/SSL)"
                     )
                     output_handler.write(output)
                 elif "bticino_1" in device:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": BTcinino My Home Device w/ Default Cert  (443/SSL)"
+                        + " | BTcinino My Home Device w/ Default Cert  (443/SSL)"
                     )
                     output_handler.write(output)
             # elif "matrix_sample_ssl_1":
-            # 	print(str(dest_ip).rstrip('\r\n)') + ": Matrix SSL default server for WiMax Devices(443/SSL)")
+            # 	print(str(dest_ip).rstrip('\r\n)') + " | Matrix SSL default server for WiMax Devices(443/SSL)")
             elif a is not None and device is None:
                 getheaders_ssl(dest_ip, dport, a, ctx, ssl_only, output_handler)
             else:
@@ -502,7 +502,7 @@ def testips(dest_ip, dport, ssl_only, output_handler):
             sys.exit(0)
         except URLError as e:
             logger.exception(
-                (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " is not open")
+                (str(dest_ip).rstrip("\r\n)") + " |" + str(dport) + " is not open")
             )
             getheaders(dest_ip, dport, output_handler)
         except Exception as e:
@@ -515,7 +515,7 @@ def testips(dest_ip, dport, ssl_only, output_handler):
             else:
                 getheaders(dest_ip, dport, output_handler)
             # if verbose is not None:
-            # 	print( )str(dest_ip).rstrip('\r\n)') + ": had error " + str(e).rstrip('\r\n)'))
+            # 	print( )str(dest_ip).rstrip('\r\n)') + " | had error " + str(e).rstrip('\r\n)'))
             logger.exception("Error in testip: " + str(e) + " " + str(dest_ip).rstrip("\r\n)"))
     except Exception as e:
         if "gaierror" in str(e):
@@ -532,7 +532,7 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
             if ("ubnt.com", "UBNT") in cert:
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Ubiquity airOS Device non-default cert (SSL)"
+                    + " | Ubiquity airOS Device non-default cert (SSL)"
                 )
                 output_handler.write(output)
         except:
@@ -545,41 +545,41 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
         title_contents, soup, content_length = process_html(html)
         if "EdgeOS" in str(title_contents) and "Ubiquiti" in cert:
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": EdgeOS Device (SSL + Server header)"
+                str(dest_ip).rstrip("\r\n)") + " | EdgeOS Device (SSL + Server header)"
             )
             output_handler.write(output)
         # if ('ubnt.com','UBNT') in cert:
-        # 	print(str(dest_ip).rstrip('\r\n)') + ": Ubiquity airOS Device non-default cert (SSL)")
+        # 	print(str(dest_ip).rstrip('\r\n)') + " | Ubiquity airOS Device non-default cert (SSL)")
         elif "iR-ADV" in str(cert) and "Catwalk" in str(title_contents):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Canon iR-ADV Login Page (SSL + Server header)"
+                + " | Canon iR-ADV Login Page (SSL + Server header)"
             )
             output_handler.write(output)
         elif "Cyberoam" in str(cert):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Cyberoam Device (SSL)")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Cyberoam Device (SSL)")
             output_handler.write(output)
         elif "TG582n" in str(cert):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Technicolor TG582n (SSL)")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Technicolor TG582n (SSL)")
             output_handler.write(output)
         elif "RouterOS" in str(title_contents):
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": MikroTik RouterOS (Login Page Title)"
+                str(dest_ip).rstrip("\r\n)") + " | MikroTik RouterOS (Login Page Title)"
             )
             output_handler.write(output)
         elif "axhttpd/1.4.0" in str(server):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+                + " | IntelBras WOM500 (Probably admin/admin) (Server string)"
             )
             output_handler.write(output)
         elif "ZeroShell" in str(cert):
-            output = (str(dest_ip).rstrip("\r\n)") + ": ZeroShell Firewall")
+            output = (str(dest_ip).rstrip("\r\n)") + " | ZeroShell Firewall")
             output_handler.write(output)
         elif "FIBERHOME.COM.CN" in str(cert):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Fiberhome ONU/OLT Device (SSL Cert name)"
+                + " | Fiberhome ONU/OLT Device (SSL Cert name)"
             )
             output_handler.write(output)
         else:
@@ -605,14 +605,14 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
         else:
             server = "is not available"
         if "AkamaiGHost" in str(server):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Akamai GHost Server")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Akamai GHost Server")
             output_handler.write(output)
         # elif vbose is not None:
         #    try:
         #        authenticate_header = e.headers.get('WWW-Authenticate')
         #    except:
         #        authenticate_header = "noauth"
-        #    print(str(dest_ip).rstrip('\r\n)') + ": has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
+        #    print(str(dest_ip).rstrip('\r\n)') + " | has HTTP status " + str(e.code) + " and server " + str(server) + " " + authenticate_header)
         else:
             pass
     except Exception as e:
@@ -642,7 +642,7 @@ def getheaders(dest_ip, dport, output_handler):
         if returned_response.getcode() != 200:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Status Code "
+                + " | Status Code "
                 + returned_response.getcode()
                 + " Server: "
                 + server
@@ -651,7 +651,7 @@ def getheaders(dest_ip, dport, output_handler):
         # a = title.contents
         if "RouterOS" in str(title_contents) and server is None:
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": MikroTik RouterOS version" +
+                str(dest_ip).rstrip("\r\n)") + " | MikroTik RouterOS version" +
                 str(soup.find("body").h1.contents.pop()) +
                 "(Login Page Title)"
             )
@@ -660,7 +660,7 @@ def getheaders(dest_ip, dport, output_handler):
             str(server) == "mini_httpd/1.19 19dec2003"
         ):
             dlink_model = str(soup.find("div", {"class": "modelname"}).contents.pop())
-            output = (str(dest_ip).rstrip("\r\n)") + ": D-LINK Router" + dlink_model)
+            output = (str(dest_ip).rstrip("\r\n)") + " | D-LINK Router" + dlink_model)
             output_handler.write(output)
         elif title_contents is None:
             try:
@@ -670,7 +670,7 @@ def getheaders(dest_ip, dport, output_handler):
             if "Serial" in str(server) and "HP" in str(server):
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": HP Product w/ Identifiers -- "
+                    + " | HP Product w/ Identifiers -- "
                     + str(server)
                 )
                 output_handler.write(output)
@@ -688,20 +688,20 @@ def getheaders(dest_ip, dport, output_handler):
                         title2_contents = title2.contents
                         if "Airties" in title2_contents.pop():
                             output = (
-                                str(dest_ip).rstrip("\r\n)") + ": Airties Modem/Router"
+                                str(dest_ip).rstrip("\r\n)") + " | Airties Modem/Router"
                             )
                             output_handler.write(output)
                         else:
                             output = (
                                 str(dest_ip).rstrip("\r\n)")
-                                + ": Device with Title "
+                                + " | Device with Title "
                                 + title2
                             )
                             output_handler.write(output)
                     else:
                         output = (
                             str(dest_ip).rstrip("\r\n)")
-                            + ": Possible  KitDuo DVR Found"
+                            + " | Possible  KitDuo DVR Found"
                         )
                         output_handler.write(output)
                 except Exception as e:
@@ -714,31 +714,31 @@ def getheaders(dest_ip, dport, output_handler):
                         if "TP-LINK" in record:
                             output = (
                                 str(dest_ip).rstrip("\r\n)")
-                                + ": TP-Link Device (Unknown Model)"
+                                + " | TP-Link Device (Unknown Model)"
                             )
                             output_handler.write(output)
             elif "uc-httpd/1.0.0" in str(server):
-                output = str(dest_ip).rstrip("\r\n)") + ": Possibly a Dahua DVR"
+                output = str(dest_ip).rstrip("\r\n)") + " | Possibly a Dahua DVR"
                 output_handler.write(output)
                 # This is a fucked up signature. I"m still working on it 08/15/2021
-                # print(str(dest_ip).rstrip('\r\n)') + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
+                # print(str(dest_ip).rstrip('\r\n)') + " | Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
 
             elif "Boa/0.94.13" in str(server) and content_length == 142:
                 # Verified 08/15/2021, the domain that is used pulls back to Macroview. This signature is pretty broad but until I find a better focus, I don't think anything else will work.
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": Macroview KR based CCTV Device "
+                    str(dest_ip).rstrip("\r\n)") + " | Macroview KR based CCTV Device "
                 )
                 output_handler.write(output)
 
             elif "RG/Device 10.x" in str(server):
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": RUIJIE Networks CPE Device (port 7547)"
+                    str(dest_ip).rstrip("\r\n)") + " | RUIJIE Networks CPE Device (port 7547)"
                 )
                 output_handler.write(output)
 
             else:
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": has server " +
+                    str(dest_ip).rstrip("\r\n)") + " | has server " +
                     str(server) +
                     " and no viewable title (NOID)"
                 )
@@ -758,7 +758,7 @@ def getheaders(dest_ip, dport, output_handler):
                         fw_version = grab_header[1].lstrip(" ")
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": D-LINK Model "
+                + " | D-LINK Model "
                 + model_name
                 + " "
                 + hw_version
@@ -768,19 +768,19 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         elif "Synology" in str(title_contents) and (str("nginx") in str(server) or str("Apache") in str(server) or server == None):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Synology Device Storage Device w/ title " + title_contents.pop())
+            output = (str(dest_ip).rstrip("\r\n)") + " | Synology Device Storage Device w/ title " + title_contents.pop())
             output_handler.write(output)
 
         elif str(server) in str("ver2.4 rev0"):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Panasonic IP Camera/NVR Model: "
+                + " | Panasonic IP Camera/NVR Model: "
                 + str(title_contents.pop())
             )
             output_handler.write(output)
 
         elif "Inicio" in str(title_contents):
-            output = str(dest_ip).rstrip("\r\n)") + ": Technicolor TG series modem"
+            output = str(dest_ip).rstrip("\r\n)") + " | Technicolor TG series modem"
             output_handler.write(output)
 
         elif str("WV-NS202A Network Camera") in str(title_contents) and server is str(
@@ -788,7 +788,7 @@ def getheaders(dest_ip, dport, output_handler):
         ):
             # This signature was confirmed on 08_09_2021
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": Panasonic WV-NS202A Network Camera"
+                str(dest_ip).rstrip("\r\n)") + " | Panasonic WV-NS202A Network Camera"
             )
             output_handler.write(output)
 
@@ -798,46 +798,46 @@ def getheaders(dest_ip, dport, output_handler):
             # I have no way to verify this signature as of 08_09_2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Probable Radiant RM1121 Series Monitor"
+                + " | Probable Radiant RM1121 Series Monitor"
             )
             output_handler.write(output)
 
         elif "VCS-VideoJet-Webserver" in str(server):
             # Verified on 08_09_2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Bosch AutoDome Camera"
+            output = str(dest_ip).rstrip("\r\n)") + " | Bosch AutoDome Camera"
             output_handler.write(output)
 
         elif "axhttpd/1.4.0" in str(server):
             # Verified on 08_09_2021 and added to notedeck
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": IntelBras WOM500 (Probably admin/admin) (Server string)"
+                + " | IntelBras WOM500 (Probably admin/admin) (Server string)"
             )
             output_handler.write(output)
 
         elif "ePMP" in str(title_contents):
             # Updated the signature on 08/09/2021 to dynamically pop the contents of the title.
-            output = str(dest_ip).rstrip("\r\n)") + ": Cambium " + title_contents.pop()
+            output = str(dest_ip).rstrip("\r\n)") + " | Cambium " + title_contents.pop()
             output_handler.write(output)
 
         # Removed from signature chain on 08/09/2021, unable to verify again
         # elif 'Wimax CPE Configuration' in str(title_contents):
-        #    print(str(dest_ip).rstrip('\r\n)') + ": Wimax Device (PointRed, Mediatek etc) (Server type + title)")
+        #    print(str(dest_ip).rstrip('\r\n)') + " | Wimax Device (PointRed, Mediatek etc) (Server type + title)")
 
         elif "NXC2500" in str(title_contents) and server == None:
             # Verified on 08/09/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Zyxel NXC2500 (Page Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Zyxel NXC2500 (Page Title)"
             output_handler.write(output)
 
         # Removing this signature on 08/09/2021 -- unable to verify
         # elif server is not None and 'MiniServ/1.580' in str(server):
-        # print(str(dest_ip).rstrip('\r\n)') + ": Multichannel Power Supply System SY4527 (Server Version)")
+        # print(str(dest_ip).rstrip('\r\n)') + " | Multichannel Power Supply System SY4527 (Server Version)")
 
         elif "IIS" in str(title_contents):
             # This is built off of the title of the webpage. I'm not sure I like it, but I'll keep it for now -- 08/09/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": "
+                + " | "
                 + str(title_contents.pop())
                 + " Server (Page Title)"
             )
@@ -847,7 +847,7 @@ def getheaders(dest_ip, dport, output_handler):
             # Built off of the server string, no versioning information. Verified 08/09/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": "
+                + " | "
                 + str(server)
                 + " Server (Server Version)"
             )
@@ -857,7 +857,7 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified on 08/09/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": "
+                + " | "
                 + str(title_contents.pop())
                 + " Switch (Title)"
             )
@@ -867,34 +867,34 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified 08/09/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Aethra Telecommunications Device (Title)"
+                + " | Aethra Telecommunications Device (Title)"
             )
             output_handler.write(output)
 
         # I'm removing this signature on 08/09/2021
         # elif 'Industrial Ethernet Switch' in str(title_contents):
-        #   print(str(dest_ip).rstrip('\r\n)') + ": Industrial Ethernet Switch (Title)")
+        #   print(str(dest_ip).rstrip('\r\n)') + " | Industrial Ethernet Switch (Title)")
 
         # Removing the following line due to some weirdness with bytes
         # elif title_contents.count(1) == 0 and "UI_ADMIN_USERNAME" in html:
-        #    print(str(dest_ip).rstrip('\r\n)') + ": Greenpacket device Wimax Device (Empty title w/ Content)")
+        #    print(str(dest_ip).rstrip('\r\n)') + " | Greenpacket device Wimax Device (Empty title w/ Content)")
 
         elif "NUUO Network Video Recorder Login" in title_contents:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": NUOO Video Recorder (admin/admin) (Title)"
+                + " | NUOO Video Recorder (admin/admin) (Title)"
             )
             output_handler.write(output)
 
         elif "CDE-30364" in title_contents:
             # Verified on 08/09/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Hitron Technologies CDE (Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Hitron Technologies CDE (Title)"
             output_handler.write(output)
 
         elif "BUFFALO" in title_contents:
             # Verified 08/09/2021 -- I need to add another signature for 401s.
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": Buffalo Networking Device (Title)"
+                str(dest_ip).rstrip("\r\n)") + " | Buffalo Networking Device (Title)"
             )
             output_handler.write(output)
 
@@ -902,19 +902,19 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified on 08/09/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Netgear Generic Networking Device (Title)"
+                + " | Netgear Generic Networking Device (Title)"
             )
             output_handler.write(output)
 
         elif "Index_Page" in title_contents and "Apache" in str(server):
-            output = str(dest_ip).rstrip("\r\n)") + ": Zyxel Device w/ Apache"
+            output = str(dest_ip).rstrip("\r\n)") + " | Zyxel Device w/ Apache"
             output_handler.write(output)
 
         elif ("CentOS" or "Ubuntu" or "Debian") in str(server):
             # Verified 08/10/2021 -- A very basic signature.
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": "
+                + " | "
                 + str(server)
                 + " Linux server (Server name)"
             )
@@ -924,43 +924,43 @@ def getheaders(dest_ip, dport, output_handler):
             # Confirmed on 08/10/2021, this will trip on anything that has Sonicwall in the server name.
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Probable SonicWALL Network Security Appliance (Server name)"
+                + " | Probable SonicWALL Network Security Appliance (Server name)"
             )
             output_handler.write(output)
 
         # This signature needs to be moved to the 401 group.
         # elif "iGate" in title_contents:
-        # print(str(dest_ip).rstrip('\r\n)') + ": iGate Router or Modem (Server name)")
+        # print(str(dest_ip).rstrip('\r\n)') + " | iGate Router or Modem (Server name)")
 
         elif "LG ACSmart" in str(title_contents):
             # Modified and removed "premium". Verified 08/10/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": LG ACSmart (admin/admin) (Server name)"
+                + " | LG ACSmart (admin/admin) (Server name)"
             )
             output_handler.write(output)
 
         # Can no longer verify this signature. Removing 08/10/2021
         # elif 'IFQ360' in str(title_contents):
-        #   print(str(dest_ip).rstrip('\r\n)') + ": Sencore IFQ360 Edge QAM (Title)")
+        #   print(str(dest_ip).rstrip('\r\n)') + " | Sencore IFQ360 Edge QAM (Title)")
 
         # Can no longer verify this signature
         # elif 'Tank Sentinel AnyWare' in str(title_contents):
-        #    print(str(dest_ip).rstrip('\r\n)') + ": Franklin Fueling Systems Tank Sentinel System (Title)")
+        #    print(str(dest_ip).rstrip('\r\n)') + " | Franklin Fueling Systems Tank Sentinel System (Title)")
 
         elif "Z-World Rabbit" in str(server) and "iBoot" in str(title_contents):
             # Modified this signature to be more specific. Modified and Verified 08/10/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": iBootBar (Server)"
+            output = str(dest_ip).rstrip("\r\n)") + " | iBootBar (Server)"
             output_handler.write(output)
 
         elif "Intellian Aptus Web" in str(title_contents):
             # Verified 08/09/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Intellian Device (Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Intellian Device (Title)"
             output_handler.write(output)
 
         elif "SECURUS" in str(title_contents):
             # Verified 08/10/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Securus DVR (Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Securus DVR (Title)"
             output_handler.write(output)
 
         elif str(server) == "uc-httpd 1.0.0" or "NETSurveillance WEB" in str(
@@ -969,7 +969,7 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified 08/10/2021, this one pops out the dynamic title for resellers who set their own title.
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": XiongMai Technologies-based DVR/NVR/IP Camera w/ title "
+                + " | XiongMai Technologies-based DVR/NVR/IP Camera w/ title "
                 + str(title_contents.pop())
                 + " (Server)"
             )
@@ -980,44 +980,44 @@ def getheaders(dest_ip, dport, output_handler):
             if "Home Gateway" in str(title_contents):
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product"
+                    + " | Shenzhen C-Data Technology GPON/ONU/EPON Home Gateway Product"
                 )
                 output_handler.write(output)
 
             elif str("1GE") in str(title_contents) or str("1FE") in str(title_contents):
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Shenzhen C-Data Technology Model "
+                    + " | Shenzhen C-Data Technology Model "
                     + str(title_contents.pop())
                 )
                 output_handler.write(output)
 
-        elif "::: Login :::" in str(
+        elif " |:: Login :::" in str(
             title_contents
         ) and "Linux/2.x UPnP/1.0 Avtech/1.0" in str(server):
             # Verified 08/10/2021.  This works on a very specific subset of AvTech Cameras
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": AvTech IP Camera (admin/admin) (Title and Server)"
+                + " | AvTech IP Camera (admin/admin) (Title and Server)"
             )
             output_handler.write(output)
 
         elif "NetDvrV3" in str(title_contents):
-            output = str(dest_ip).rstrip("\r\n)") + ": NetDvrV3-based DVR (Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | NetDvrV3-based DVR (Title)"
             output_handler.write(output)
 
         elif "Open Webif" in str(title_contents):
             # Unable to verify, but my notes have data regarding this. I will leave it in 08/10/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
+                + " | Open Web Interface DVR system (OpenWebIF) (root/nopassword) (Title)"
             )
             output_handler.write(output)
 
         # Removing this one for now, until I can verify again.
         # elif 'IVSWeb' in str(title_contents):
 
-        # print(str(dest_ip).rstrip('\r\n)') + ": IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
+        # print(str(dest_ip).rstrip('\r\n)') + " | IVSWeb-based DVR (Possibly zenotinel ltd) (Title)")
 
         elif (
             "DVRDVS-Webs" in str(server)
@@ -1025,14 +1025,14 @@ def getheaders(dest_ip, dport, output_handler):
             or "App-webs/" in str(server)
         ):
             # Verified 08/10/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Hikvision-Based DVR (Server)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Hikvision-Based DVR (Server)"
             output_handler.write(output)
 
         elif "Router Webserver" in str(server):
             # Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": TP-LINK "
+                + " | TP-LINK "
                 + str(title_contents.pop())
                 + " (Title)"
             )
@@ -1042,7 +1042,7 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified 08/10/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": DD-WRT Device w/ Title "
+                + " | DD-WRT Device w/ Title "
                 + str(title_contents.pop())
             )
             output_handler.write(output)
@@ -1053,19 +1053,19 @@ def getheaders(dest_ip, dport, output_handler):
             # added on 08/16/2021, pulled from DDoS data
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Polycomm SoundPoint IP Telephone Device"
+                + " | Polycomm SoundPoint IP Telephone Device"
             )
             output_handler.write(output)
 
         elif "Samsung DVR" in str(title_contents):
             # Verified
-            output = str(dest_ip).rstrip("\r\n)") + ": Samsung DVR Unknown type (Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Samsung DVR Unknown type (Title)"
             output_handler.write(output)
 
         elif "IC-II" in str(title_contents) and "Hiawatha v9.2" in str(server):
             # Added and verified on 08/18/2021
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": Legrand Vantage InFusion Controller"
+                str(dest_ip).rstrip("\r\n)") + " | Legrand Vantage InFusion Controller"
             )
             output_handler.write(output)
 
@@ -1073,28 +1073,28 @@ def getheaders(dest_ip, dport, output_handler):
             server
         ):
             # Added and verified on 08/18/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Crestron AirMedia Device"
+            output = str(dest_ip).rstrip("\r\n)") + " | Crestron AirMedia Device"
             output_handler.write(output)
 
         elif "Seagate NAS" in str(title_contents) and server == None:
             # Added and verified on 08/18/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Seagate NAS Device"
+            output = str(dest_ip).rstrip("\r\n)") + " | Seagate NAS Device"
             output_handler.write(output)
 
         elif "LaCie" in str(title_contents) and "lighttpd" in str(server):
             # Added and verified on 08/18/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": LaCie Network Storage Device"
+            output = str(dest_ip).rstrip("\r\n)") + " | LaCie Network Storage Device"
             output_handler.write(output)
 
         # Removing this signature until I can verify again
         # elif 'HtmlAnvView' in str(title_contents):
-        #    print(str(dest_ip).rstrip('\r\n)') + ": Possible Shenzhen Baoxinsheng Electric DVR (Title)")
+        #    print(str(dest_ip).rstrip('\r\n)') + " | Possible Shenzhen Baoxinsheng Electric DVR (Title)")
 
         elif "ZTE corp" in str(server):
             # ZTE Devices of various types. This signature dynamically pops the title out so we can get the model number. Tested and Verified on 08/18/2021
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": ZTE "
+                + " | ZTE "
                 + str(title_contents.pop())
                 + " Router (Title and Server)"
             )
@@ -1108,15 +1108,15 @@ def getheaders(dest_ip, dport, output_handler):
                 html = get_response.read()
                 soup = bs4.BeautifulSoup(html, "html.parser")
                 model_number = soup.find('td', {'class':'sws_home_right_table_style2'}).contents.pop()
-                output = str(dest_ip).rstrip("\r\n)") + ": Samsung SyncThru Printer Model " + model_number
+                output = str(dest_ip).rstrip("\r\n)") + " | Samsung SyncThru Printer Model " + model_number
             except Exception as e:
                 logger.exception(e)
-                output = str(dest_ip).rstrip("\r\n)") + ": Samsung SyncThru Printer"
+                output = str(dest_ip).rstrip("\r\n)") + " | Samsung SyncThru Printer"
             output_handler.write(output)
 
         elif "Haier Q7" in str(title_contents):
             # Tested and verified on 08/18/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Haier Router Q7 Series (Title)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Haier Router Q7 Series (Title)"
             output_handler.write(output)
 
         elif "Web Image Monitor" in str(title_contents) and "Web-Server/3.0" in str(
@@ -1125,52 +1125,52 @@ def getheaders(dest_ip, dport, output_handler):
             # Added 08/19/2021; Need to
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Ricoh Printer Product w/ Web Image Monitor"
+                + " | Ricoh Printer Product w/ Web Image Monitor"
             )
             output_handler.write(output)
 
         elif "Cross Web Server" in str(server):
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": TVT-based DVR/NVR/IP Camera (Server)"
+                str(dest_ip).rstrip("\r\n)") + " | TVT-based DVR/NVR/IP Camera (Server)"
             )
             output_handler.write(output)
 
         elif "uhttpd/1.0.0" in str(server) and "NETGEAR" in str(title_contents):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": "
+                + " | "
                 + str(title_contents.pop())
                 + " (Title and server)"
             )
             output_handler.write(output)
 
         elif "SunGuard" in str(title_contents):
-            output = (str(dest_ip).rstrip("\r\n)") + ": SunGuard.it Device (Title)")
+            output = (str(dest_ip).rstrip("\r\n)") + " | SunGuard.it Device (Title)")
             output_handler.write(output)
 
         elif "CMS Web Viewer" in str(title_contents) and (
             server is None or "lighttpd/1.4.54" in str(server)
         ):
             # Verified 08/19/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": 3R Global DVR -- Unknown Brand"
+            output = str(dest_ip).rstrip("\r\n)") + " | 3R Global DVR -- Unknown Brand"
             output_handler.write(output)
 
         elif "WEB SERVICE" in str(title_contents) and server is None:
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": Dahua Product (DVR/NVR/HVR likely)"
+                str(dest_ip).rstrip("\r\n)") + " | Dahua Product (DVR/NVR/HVR likely)"
             )
             output_handler.write(output)
 
         elif "Brother " in str(title_contents) and str("debut") in str(server):
             # Verified 08/19/2021 -- Pops the model out
-            output = str(dest_ip).rstrip("\r\n)") + ": " + str(title_contents.pop())
+            output = str(dest_ip).rstrip("\r\n)") + " | " + str(title_contents.pop())
             output_handler.write(output)
 
         elif "Lexmark" in (str(title_contents)) and (
             server is None or "Lexmark" in str(server)
         ):
             # Verified 08/19/2021 -- Pops out the model
-            output = str(dest_ip).rstrip("\r\n)") + ": " + str(title_contents.pop())
+            output = str(dest_ip).rstrip("\r\n)") + " | " + str(title_contents.pop())
             output_handler.write(output)
 
         elif "gSOAP/2.8" in str(server) and (
@@ -1180,41 +1180,41 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified 08/19/2021 -- The XML produced by going to port 80 has a link to the TVT website and the correct WSD
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Shenzhen TVT CCTV Device (Camera or Recorder)"
+                + " | Shenzhen TVT CCTV Device (Camera or Recorder)"
             )
             output_handler.write(output)
 
         elif "Milesight Network Camera" in str(title_contents) and server is None:
             # Verified 08/19/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": Milesight Network Camera"
+            output = str(dest_ip).rstrip("\r\n)") + " | Milesight Network Camera"
             output_handler.write(output)
 
         elif "EPSON_Linux" in str(server):
             # Verified 08/19/2021, pops the model out
-            output = str(dest_ip).rstrip("\r\n)") + ": " + str(title_contents.pop())
+            output = str(dest_ip).rstrip("\r\n)") + " | " + str(title_contents.pop())
             output_handler.write(output)
 
         elif "Boa" in str(server) and str("Web Client") in str(title_contents):
             # Verified 08/19/2021: The file ums_plugin.exe contains the domain nadatel.com
-            output = str(dest_ip).rstrip("\r\n)") + ": Nadatel Device"
+            output = str(dest_ip).rstrip("\r\n)") + " | Nadatel Device"
             output_handler.write(output)
 
         elif str("CPPLUS DVR") in str(title_contents) and server == None:
             # Verified 08/19/2021
-            output = str(dest_ip).rstrip("\r\n)") + ": CP PLUS DVR"
+            output = str(dest_ip).rstrip("\r\n)") + " | CP PLUS DVR"
             output_handler.write(output)
 
         elif (
             str("ATHD DVR") in str(title_contents) or "AHD DVR" in str(title_contents)
         ) and server == None:
             # Updated 08_08_2021 to include AHD DVR. The 554 port on these say Altasec as well.
-            output = str(dest_ip).rstrip("\r\n)") + ": Altasec DVR"
+            output = str(dest_ip).rstrip("\r\n)") + " | Altasec DVR"
             output_handler.write(output)
 
         elif str("Network Video Recorder Login") in str(
             title_contents
         ) and "lighttpd" in str(server):
-            output = str(dest_ip).rstrip("\r\n)") + ": NUUO CCTV Product"
+            output = str(dest_ip).rstrip("\r\n)") + " | NUUO CCTV Product"
             output_handler.write(output)
 
         # This is a complex signature, due to the widespread use of Raysharp devices. It keys off of the dvrocx in the body OR the existance of the term RSVideoOCX.
@@ -1227,7 +1227,7 @@ def getheaders(dest_ip, dport, output_handler):
                 if len(ocx) != 0:
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Raysharp CCTV Device (Unknown Downstream Brand)"
+                        + " | Raysharp CCTV Device (Unknown Downstream Brand)"
                     )
                     output_handler.write(output)
             except:
@@ -1240,66 +1240,66 @@ def getheaders(dest_ip, dport, output_handler):
                 if "RSVideoOcx.cab" in str(comment):
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Raysharp CCTV Device (Unknown Downstream Brand)"
+                        + " | Raysharp CCTV Device (Unknown Downstream Brand)"
                     )
                     output_handler.write(output)
             except:
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Raysharp CCTV Device Malformed Response Likely (Manually review)"
+                    + " | Raysharp CCTV Device Malformed Response Likely (Manually review)"
                 )
                 output_handler.write(output)
 
         elif str("Mini web server 1.0 ZXIC corp 2005") in str(server):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Shenzhen C-Data Device w/ Model "
+                + " | Shenzhen C-Data Device w/ Model "
                 + title_contents.pop()
             )
             output_handler.write(output)
 
         elif str("BEWARD Network HD camera") in str(title_contents) and server == None:
             #Verified on 08/20/2021
-            output = (str(dest_ip).rstrip("\r\n)") + ": Beward IP Camera Device")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Beward IP Camera Device")
             output_handler.write(output)
 
         elif str("GPON ONT") in str(title_contents) and server == None:
             #Verified on 08/20/2021
-            output = (str(dest_ip).rstrip("\r\n)") + ": VNPT GPON/iGate Device likely")
+            output = (str(dest_ip).rstrip("\r\n)") + " | VNPT GPON/iGate Device likely")
             output_handler.write(output)
 
         elif str("ZK Web Server") in str(server) and len(title_contents) == 0:
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": ZK Software-based Fingerprint Reader"
+                str(dest_ip).rstrip("\r\n)") + " | ZK Software-based Fingerprint Reader"
             )
             output_handler.write(output)
 
         elif "Keenetic Web" in str(title_contents):
-            output = (str(dest_ip).rstrip("\r\n)") + ": KEENETIC Device")
+            output = (str(dest_ip).rstrip("\r\n)") + " | KEENETIC Device")
             output_handler.write(output)
 
         elif "uc-httpd/1.0.0" in str(server):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera w/ Title "
+                + " | Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera w/ Title "
                 + str(title_contents.pop())
             )
             output_handler.write(output)
 
         elif "Reolink" in title_contents and ("nginx" in str(server) or server == None):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Reolink DVR Device")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Reolink DVR Device")
             output_handler.write(output)
 
         elif "Network Surveillance" in str(title_contents) and server == None:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Shenzhen Baichuan Digital Technology CCTV Device"
+                + " | Shenzhen Baichuan Digital Technology CCTV Device"
             )
             output_handler.write(output)
 
         elif "Login Page" in str(title_contents) and str(server) == "httpserver":
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": EP Technology Corporation CCTV Device"
+                str(dest_ip).rstrip("\r\n)") + " | EP Technology Corporation CCTV Device"
             )
             output_handler.write(output)
 
@@ -1308,24 +1308,24 @@ def getheaders(dest_ip, dport, output_handler):
             if "XVR LOGIN" in str(title_contents):
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Cenova XVR Product (OEM Shenzhen Milantek Co)"
+                    + " | Cenova XVR Product (OEM Shenzhen Milantek Co)"
                 )
             else:
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Shenzhen Milantek Co OEM Device (Unknown Downstream)"
+                    + " | Shenzhen Milantek Co OEM Device (Unknown Downstream)"
                 )
             output_handler.write(output)
 
         elif "nginx/" in str(server) and "CentOS" in str(title_contents):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Centos Server w/ " + str(server))
+            output = (str(dest_ip).rstrip("\r\n)") + " | Centos Server w/ " + str(server))
             output_handler.write(output)
 
         elif "nginx" in str(server) and "CentOS" not in str(title_contents):
             if "Ubuntu" in str(server):
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Ubuntu Server w/ "
+                    + " | Ubuntu Server w/ "
                     + str(server)
                     + " with title w/ "
                     + str(title_contents.pop())
@@ -1335,14 +1335,14 @@ def getheaders(dest_ip, dport, output_handler):
         elif "Web Application Manager" in str(title_contents) and server is None:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": KongTop Industrial (Shenzhen) CCTV Device"
+                + " | KongTop Industrial (Shenzhen) CCTV Device"
             )
             output_handler.write(output)
 
         elif "PON Home Gateway" in str(title_contents) and server is None:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Shenzhen HDV Photoelectron Technology LTD PON Device"
+                + " | Shenzhen HDV Photoelectron Technology LTD PON Device"
             )
             output_handler.write(output)
 
@@ -1354,19 +1354,19 @@ def getheaders(dest_ip, dport, output_handler):
             title = str(soup.find("div", {"id": "login-title"}).contents.pop())
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Tridium Niagra Product w/ Title "
+                + " | Tridium Niagra Product w/ Title "
                 + str(title)
             )
             output_handler.write(output)
 
         elif "TOTOLINK" in str(title_contents) and str(server) == "Boa/0.94.14rc21":
-            output = (str(dest_ip).rstrip("\r\n)") + ": Totolink Device (Modem or Router)")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Totolink Device (Modem or Router)")
             output_handler.write(output)
 
         elif "SVM-R1" in str(title_contents) and "Apache" in str(server):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Daikin HVAC SVM/VRV Controller w/ Software Version "
+                + " | Daikin HVAC SVM/VRV Controller w/ Software Version "
                 + str(title_contents.pop())
             )
             output_handler.write(output)
@@ -1378,7 +1378,7 @@ def getheaders(dest_ip, dport, output_handler):
         ):
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Fiberhome ONU/OLT (HTML Title and Server Name)"
+                + " | Fiberhome ONU/OLT (HTML Title and Server Name)"
             )
             output_handler.write(output)
 
@@ -1387,7 +1387,7 @@ def getheaders(dest_ip, dport, output_handler):
             or "RTDVR ActiveX" in str(title_contents)
         ) and "thttpd/2.25b 29dec2003" in str(server):
             # Added 08_07_2021, multiple points that match including UDROCX and the name "unimo" on the title page
-            output = (str(dest_ip).rstrip("\r\n)") + ": Unimo AU CCTV Product")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Unimo AU CCTV Product")
             output_handler.write(output)
 
         elif str(
@@ -1398,7 +1398,7 @@ def getheaders(dest_ip, dport, output_handler):
             # Added 08_07_2021, The "remove activex" binary has a certificate that has the domain of icctv.co.kr and the address of Ewha in Korea.
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": ICCTV Korea CCTV Product (Now Ewha CNI/KTCCTV)"
+                + " | ICCTV Korea CCTV Product (Now Ewha CNI/KTCCTV)"
             )
             output_handler.write(output)
 
@@ -1411,7 +1411,7 @@ def getheaders(dest_ip, dport, output_handler):
                 crap_contents = (
 
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Title is "
+                    + " | Title is "
                     + title_stuff.rstrip("\r\n)")
                     + " and server is "
                     + str(server)
@@ -1421,7 +1421,7 @@ def getheaders(dest_ip, dport, output_handler):
             except:
                 # logger.exception(e)
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": Title is empty and server is" + str(server) + " (NOID)"
+                    str(dest_ip).rstrip("\r\n)") + " | Title is empty and server is" + str(server) + " (NOID)"
                 )
                 output_handler.write(output)
         returned_response.close()
@@ -1449,7 +1449,7 @@ def getheaders(dest_ip, dport, output_handler):
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": D-Link Device Model "
+                + " | D-Link Device Model "
                 + str(device_model)
             )
             output_handler.write(output)
@@ -1458,34 +1458,34 @@ def getheaders(dest_ip, dport, output_handler):
             and (str(server) == "PDR-M800/1.0")
             and int(e.code) == 401
         ):
-            output = (str(dest_ip).rstrip("\r\n)") + ": LiLin PDR-800 DVR")
+            output = (str(dest_ip).rstrip("\r\n)") + " | LiLin PDR-800 DVR")
             output_handler.write(output)
         elif "mini_httpd/1.19 19dec2003" in str(server) and int(e.code) == 401:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": iCatch OEM H/D/NVR Device (Server and headers)"
+                + " | iCatch OEM H/D/NVR Device (Server and headers)"
             )
             output_handler.write(output)
         elif "Router" in str(server) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            output = (str(dest_ip).rstrip("\r\n)") + ": TP-Link" + str(device_model))
+            output = (str(dest_ip).rstrip("\r\n)") + " | TP-Link" + str(device_model))
             output_handler.write(output)
         elif str(server) == "none" and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            output = (str(dest_ip).rstrip("\r\n)") + ": Device model " + str(device_model))
+            output = (str(dest_ip).rstrip("\r\n)") + " | Device model " + str(device_model))
             output_handler.write(output)
         elif "WebServer/1.0 UPnP/1.0" in str(server) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
-            output = (str(dest_ip).rstrip("\r\n)") + ": ZTE Device " + str(device_model))
+            output = (str(dest_ip).rstrip("\r\n)") + " | ZTE Device " + str(device_model))
             output_handler.write(output)
         elif "cpe@zte.com" in str(auth_header) and int(e.code) == 401:
-            output = (str(dest_ip).rstrip("\r\n)") + ": ZTE ONU/ONT Device")
+            output = (str(dest_ip).rstrip("\r\n)") + " | ZTE ONU/ONT Device")
             output_handler.write(output)
         #elif "nginx" in str(server) and int(e.code) == 401:
            # print("hi")
@@ -1502,7 +1502,7 @@ def getheaders(dest_ip, dport, output_handler):
                 device_model = str(auth_header_realm[1]).replace('"', "")
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Everfocus CCTV Device Model "
+                    + " | Everfocus CCTV Device Model "
                     + str(device_model)
                 )
 
@@ -1510,37 +1510,37 @@ def getheaders(dest_ip, dport, output_handler):
 
                 output = (
                     str(dest_ip).rstrip("\r\n)")
-                    + ": Everfocus CCTV Device (admin/111111)"
+                    + " | Everfocus CCTV Device (admin/111111)"
                 )
             output_handler.write(output)
         elif (
             str(server) == "lighttpd/1.4.32 - Android Blackeye Web Server"
             and int(e.code) == 401
         ):
-            output = (str(dest_ip).rstrip("\r\n)") + ": Android Blackeye Web Server")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Android Blackeye Web Server")
             output_handler.write(output)
         elif str(server) == "Keil-EWEB/2.1" and int(e.code) == 401:
             output = (
-                str(dest_ip).rstrip("\r\n)") + ": Keil ARM Development Tool Web Server"
+                str(dest_ip).rstrip("\r\n)") + " | Keil ARM Development Tool Web Server"
             )
             output_handler.write(output)
         elif "HuaweiHomeGateway" in str(auth_header) and int(e.code) == 401:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Huawei Home Gateway Device (Probably PON)"
+                + " | Huawei Home Gateway Device (Probably PON)"
             )
             output_handler.write(output)
         elif int(e.code) == 302:
             if "/login.rsp" in str(e.headers):
                 output = (
-                    str(dest_ip).rstrip("\r\n)") + ": Exacq Technologies CCTV Product"
+                    str(dest_ip).rstrip("\r\n)") + " | Exacq Technologies CCTV Product"
                 )
                 output_handler.write(output)
 
         else:
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + ": Server: "
+                + " | Server: "
                 + str(e.info().get("Server"))
                 + " with error "
                 + str(e)
@@ -1550,7 +1550,7 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
     except URLError as e:
         logger.exception(
-            (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " is not open")
+            (str(dest_ip).rstrip("\r\n)") + " |" + str(dport) + " is not open")
         )
     except Exception as e:
         try:
@@ -1567,12 +1567,12 @@ def getheaders(dest_ip, dport, output_handler):
                 if "Dahua" in str(rtsp_server):
                     output = (
                         str(dest_ip).rstrip("\r\n)")
-                        + ": Dahua RTSP Server Detected (RTSP Server)"
+                        + " | Dahua RTSP Server Detected (RTSP Server)"
                     )
                     output_handler.write(output)
         except Exception as t:
             logger.exception(
-                "Error in getheaders(): ", str(dest_ip).rstrip("\r\n)"), ":", str(e)
+                "Error in getheaders(): ", str(dest_ip).rstrip("\r\n)"), " |", str(e)
             )
 
 
