@@ -651,7 +651,7 @@ def getheaders(dest_ip, dport, output_handler):
         # a = title.contents
         if "RouterOS" in str(title_contents) and server is None:
             output = (
-                str(dest_ip).rstrip("\r\n)") + " | MikroTik RouterOS version" +
+                str(dest_ip).rstrip("\r\n)") + " | MikroTik RouterOS version " +
                 str(soup.find("body").h1.contents.pop()) +
                 "(Login Page Title)"
             )
@@ -663,6 +663,7 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | D-LINK Router" + dlink_model)
             output_handler.write(output)
         elif title_contents is None:
+            print(soup)
             try:
                 answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             except Exception as e:
@@ -674,6 +675,7 @@ def getheaders(dest_ip, dport, output_handler):
                     + str(server)
                 )
                 output_handler.write(output)
+
             elif "js_check" in str(answer):
                 get_login_html = "http://%s:%s/login.html" % (
                     str(dest_ip).rstrip("\r\n)"),
@@ -1027,6 +1029,13 @@ def getheaders(dest_ip, dport, output_handler):
             # Verified 08/10/2021
             output = str(dest_ip).rstrip("\r\n)") + " | Hikvision-Based DVR (Server)"
             output_handler.write(output)
+
+        elif str(server) == "web":
+            #Added 08/28/2021 -- This is a very specific signature for hikvision.
+            find_location = soup.find_all('script')
+            if "login.asp" in str(find_location):
+                output = str(dest_ip).rstrip("\r\n)") + " | Hikvision-Based DVR (Server)"
+                output_handler.write(output)
 
         elif "Router Webserver" in str(server):
             # Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
