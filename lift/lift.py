@@ -1570,6 +1570,17 @@ def getheaders(dest_ip, dport, output_handler):
                 )
                 output_handler.write(output)
 
+        elif int(e.code) == 401:
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Server: "
+                + str(e.info().get("Server"))
+                + " with auth header "
+                + str(auth_header)
+                + " (NOID) "
+            )
+            output_handler.write(output)
+
         else:
             output = (
                 str(dest_ip).rstrip("\r\n)")
