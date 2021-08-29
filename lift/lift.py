@@ -739,6 +739,7 @@ def getheaders(dest_ip, dport, output_handler):
                 output_handler.write(output)
 
             elif "lighttpd/1.4.28" in str(server):
+                #Added 08292021 -- This was a complicated one. The web interface looks like DD-WRT, and they appear to be an upstream of Ricon. The devices have the same SSL cert serial of d605caee59a2fce9
                 find_redirect = soup.find_all('script')
                 if "/gui/" in str(find_redirect):
                     output = (
@@ -1514,6 +1515,11 @@ def getheaders(dest_ip, dport, output_handler):
         elif "cpe@zte.com" in str(auth_header) and int(e.code) == 401:
             output = (str(dest_ip).rstrip("\r\n)") + " | ZTE ONU/ONT Device")
             output_handler.write(output)
+        elif "uhttpd/1.0.0" in str(server) and "NETGEAR Orbi" in str(auth_header) and int(e.code) == 401:
+            #Added 08/29/2021 -- The Auth header says Netgear ORBI
+            output = (str(dest_ip).rstrip("\r\n)") + " | Netgear Orbi " )
+            output_handler.write(output)
+
         #elif "nginx" in str(server) and int(e.code) == 401:
            # print("hi")
 
