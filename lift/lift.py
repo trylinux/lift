@@ -663,7 +663,7 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | D-LINK Router" + dlink_model)
             output_handler.write(output)
         elif title_contents is None:
-            print(soup)
+
             try:
                 answer = soup.find("meta", {"content": "0; url=/js/.js_check.html"})
             except Exception as e:
@@ -737,6 +737,15 @@ def getheaders(dest_ip, dport, output_handler):
                     str(dest_ip).rstrip("\r\n)") + " | RUIJIE Networks CPE Device (port 7547)"
                 )
                 output_handler.write(output)
+
+            elif "lighttpd/1.4.28" in str(server):
+                find_redirect = soup.find_all('script')
+                if "/gui/" in str(find_redirect):
+                    output = (
+                            str(dest_ip).rstrip("\r\n)")
+                            + " | Hongdian Cellular Wifi Router (e.g. H8956)"
+                    )
+                    output_handler.write(output)
 
             else:
                 output = (
@@ -1256,6 +1265,15 @@ def getheaders(dest_ip, dport, output_handler):
                 output = (
                     str(dest_ip).rstrip("\r\n)")
                     + " | Raysharp CCTV Device Malformed Response Likely (Manually review)"
+                )
+                output_handler.write(output)
+
+        elif content_length == 79 and str(server) == "lighttpd/1.4.28":
+            find_redirect = soup.findAll('script')
+            if "/gui/status_main.cgi" in find_redirect:
+                output = (
+                        str(dest_ip).rstrip("\r\n)")
+                        + " | Hongdian Cellular Wifi Router (e.g. H8956)"
                 )
                 output_handler.write(output)
 
