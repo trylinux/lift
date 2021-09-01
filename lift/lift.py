@@ -57,6 +57,7 @@ def main():
         default=1,
         help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION",
     )
+    parser.add_argument("-u","--rfile", help="Use ports from file", action="store_true")
     argroup.add_argument("-s", "--subnet", help="A subnet!")
     # argroup.add_argument("-a", "--asn", help="ASN number. WARNING: This will take a while")
     parser.add_argument("-r", "--recurse", help="Test Recursion", action="store_true")
@@ -107,12 +108,18 @@ def main():
             active_futures = []
             with open(ipfile) as f:
                 for line in f:
-                    if dport in [80, 8080, 81, 88, 8000, 8888, 7547]:
+                    if args.rfile:
+                        line_split = re.split('[-:]', line.rstrip("\r\n)"))
+                        ip = line_split[0]
+                        dport = line_split[1]
+                    else:
+                        ip = str(line).rstrip("\r\n)")
+                    if int(dport) in [80, 8080, 81, 88, 8000, 8888, 7547]:
                         # print("Skipping SSL test for", dport)
-                        getheaders(str(line).rstrip("\r\n)"), dport, output_handler)
+                        getheaders(ip, dport, output_handler)
                     else:
                         testips(
-                            str(line).rstrip("\r\n)"), dport, ssl_only, output_handler
+                            ip, dport, ssl_only, output_handler
                         )
         except KeyboardInterrupt:
             # print("Quitting")
