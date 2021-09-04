@@ -81,14 +81,15 @@ $ pip install -r requirements.txt
 The best way to use this tool is to run 
 
 ```
-$ python lift.py -f <file_with_one_ip_per_line> -I 
+$ python lift.py -f <file_with_one_ip_per_line>  
 ```
 
-If you want to get the full debug output (noisy)
+For shodan input and to send to an output file 
 
 ```
-$ python lift.py -v1 -I -f <file_with_one_ip_per_line>
+$ python lift.py -f <shodan_json_file> -t shodan -o outputfile.txt
 ```
+
 
 Only one of the required arguments can be supplied when running the lift tool.
 
@@ -99,13 +100,12 @@ Only one of the required arguments can be supplied when running the lift tool.
 - **-i** &nbsp;&nbsp; or &nbsp;&nbsp; **--ip** &nbsp;&nbsp;&nbsp;&nbsp;`string` - a single IP address
 
 **Optional Arguments**:
-- **--I** &nbsp;&nbsp; or &nbsp;&nbsp; **--info**  - Get more info about operations
 - **--p** &nbsp;&nbsp; or &nbsp;&nbsp; **--port**  `integer` - The port number at the supplied IP address that lift should connect to.
-- **--recurse** - Test Recursion
-- **--recon**   - Gather information about a given device.
-- **--v** &nbsp;&nbsp; or  **--verbose** - ****WARNING**** DO NOT USE `-v` UNLESS YOU WANT ALL THE REASONS WHY SOMETHING IS FAILING.
+- **-o** &nbsp;&nbsp; or &nbsp;&nbsp; **--ofile**  `filename` - The output file for the results. If it does exist, it'll be overwritten. If it doesn't exist, it'll be created
+- **-t** &nbsp;&nbsp; or &nbsp;&nbsp; **--filetype** `file type` - This is the format of the input file. LIFT takes a list of IPs (one per line) by default, but understands Shodan json files and files with <ip>:<port> (still one per line)
 
 
+Several arguments have been removed for the time being, including -v, -I and -r. 
 
 
 ## Documentation and Support
@@ -140,15 +140,6 @@ If you want more signatures added to lift's collection of certificates, please n
 - Apply asynchronous programming concepts and/or parallelization techniques (multi-threading) to speed up the slow task of checking each IP address.
 
 - Write a tool for adding signatures in a standard fashion. In doing so, users of lift can supply their own list of indicators against which lift will compare the devices that it checks.
-
-- Design ways to implement the features that are presently not used -- testing for UDP, DNS, SSDP and NTP amplification abilities on remote devices.
-
-- Modify lift to be compatible with [nmap](https://nmap.org/)
-
-
-#### Bugs
-
-- There are some weird bugs with some of the recursive checks.
 
 
 ## License
