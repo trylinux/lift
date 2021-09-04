@@ -114,7 +114,7 @@ def main():
                         ip = line_split[0]
                         dport = line_split[1]
                     elif args.filetype == 'shodan':
-                        get_ip = json.dumps(line)
+                        get_ip = json.loads(line)
                         ip = get_ip['ip_str']
                         print(ip)
                     else:
