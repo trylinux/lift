@@ -116,7 +116,6 @@ def main():
                     elif args.filetype == 'shodan':
                         get_ip = json.loads(line)
                         ip = get_ip['ip_str']
-                        print(ip)
                     else:
                         ip = str(line).rstrip("\r\n)")
                     if int(dport) in [80, 8080, 81, 88, 8000, 8888, 7547]:
