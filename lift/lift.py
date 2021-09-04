@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import re
+import json
 
 if "threading" in sys.modules:
     del sys.modules["threading"]
@@ -57,7 +58,7 @@ def main():
         default=1,
         help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION",
     )
-    parser.add_argument("-u","--rfile", help="Use ports from file", action="store_true")
+    parser.add_argument("-t","--filetype", help="Use ports from file", choices = ['standard','shodan','withport'], default = 'standard')
     argroup.add_argument("-s", "--subnet", help="A subnet!")
     # argroup.add_argument("-a", "--asn", help="ASN number. WARNING: This will take a while")
     parser.add_argument("-r", "--recurse", help="Test Recursion", action="store_true")
@@ -108,10 +109,14 @@ def main():
             active_futures = []
             with open(ipfile) as f:
                 for line in f:
-                    if args.rfile:
+                    if args.filetype == 'withport':
                         line_split = re.split('[-:]', line.rstrip("\r\n)"))
                         ip = line_split[0]
                         dport = line_split[1]
+                    elif args.filetype == 'shodan':
+                        get_ip = json.dumps(line)
+                        ip = get_ip['ip_str']
+                        print(ip)
                     else:
                         ip = str(line).rstrip("\r\n)")
                     if int(dport) in [80, 8080, 81, 88, 8000, 8888, 7547]:
