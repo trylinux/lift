@@ -1440,6 +1440,21 @@ def getheaders(dest_ip, dport, output_handler):
                 + " | ICCTV Korea CCTV Product (Now Ewha CNI/KTCCTV)"
             )
             output_handler.write(output)
+        elif "Ubiquiti" in str(title_contents) and (server == "lighttpd/1.4.39" or server == "lighttpd/1.4.54"):
+            #added 09052021 -- Makes a second request to grab the API info page and pulls the model number.
+            url = "http://%s:%s/api/info/public?include_langs=true&lang=" % (str(dest_ip).rstrip("\r\n)"), dport)
+            get_response = urlopen(url, timeout=5)
+            json_unload = json.loads(get_response.read())
+            model_number = json_unload['product_name']
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Ubiquiti "
+                + str(model_number)
+            )
+            output_handler.write(output)
+
+
+
 
         else:
             try:
