@@ -2,3 +2,6 @@
 venv/
 .idea
 *.error
+build/
+dist/
+*.egg-info
