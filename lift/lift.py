@@ -1452,7 +1452,12 @@ def getheaders(dest_ip, dport, output_handler):
                 + str(model_number)
             )
             output_handler.write(output)
-
+        elif "Linksys Smart Wifi" in str(title_contents) and server == "lighttpd/1.4.39":
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Linksys Smart Wifi Router (Belkin Era)"
+            )
+            output_handler.write(output)
 
 
 
@@ -1545,6 +1550,14 @@ def getheaders(dest_ip, dport, output_handler):
             #Added 08/29/2021 -- The Auth header says Netgear ORBI
             output = (str(dest_ip).rstrip("\r\n)") + " | Netgear Orbi " )
             output_handler.write(output)
+        elif ("RidgeWave" in str(auth_header) or "BEC" in str(auth_header) or "MX-" in str(auth_header)) and int(e.code) == 401 and str(server) == "Boa/0.94.13":
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace('"', "")
+            output = (str(dest_ip).rstrip("\r\n)") + " | BEC Model " + str(device_model))
+            output_handler.write(output)
+
+
 
         #elif "nginx" in str(server) and int(e.code) == 401:
            # print("hi")
