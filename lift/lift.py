@@ -1477,11 +1477,13 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         elif "Boa/0.92o" in str(server) and "AXIS" in str(title_contents):
+            #Added 09/09/2021 -- This might fail but I don't think anything besides Axis uses 0.92o
             output = (
                 str(dest_ip).rstrip("\r\n)")
                 + " | Axis Network Device w/ Model Number " + str(title_contents.pop())
             )
             output_handler.write(output)
+
 
 
         else:
@@ -1574,11 +1576,27 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | Netgear Orbi " )
             output_handler.write(output)
         elif ("RidgeWave" in str(auth_header) or "BEC" in str(auth_header) or "MX-" in str(auth_header)) and int(e.code) == 401 and str(server) == "Boa/0.94.13":
+            #added 09/08/2021 -- Pulls model number from auth header.
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (str(dest_ip).rstrip("\r\n)") + " | BEC Model " + str(device_model))
             output_handler.write(output)
+        elif "DSL-" in str(auth_header) and int(e.code) == 401 and str(server) == "Boa/0.94.13":
+            #Added 09/09/2021 -- Pulls router number from auth header
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace('"', "")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Asus " + str(device_model))
+            output_handler.write(output)
+        elif "DCS-" in str(auth_header) and int(e.code) == 401 and str(server) == "Boa/0.94.13":
+            #Added 09/09/2021 -- Pulls model number from auth header
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace('"', "")
+            output = (str(dest_ip).rstrip("\r\n)") + " | D-LINK " + str(device_model))
+            output_handler.write(output)
+
 
 
 
@@ -1625,12 +1643,25 @@ def getheaders(dest_ip, dport, output_handler):
                 + " | Huawei Home Gateway Device (Probably PON)"
             )
             output_handler.write(output)
+
+        elif "Amped" in str(auth_header) and int(e.code) == 401 and str(server) == "Boa/0.94.14rc21":
+            #Added 09/09/2021 -- model number can be found manually here 00_00_00_userpassreq.html, its not behind the 401
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Amped Wireless Network Device (likely router)"
+            )
+            output_handler.write(output)
+
+
+
+
         elif int(e.code) == 302:
             if "/login.rsp" in str(e.headers):
                 output = (
                     str(dest_ip).rstrip("\r\n)") + " | Exacq Technologies CCTV Product"
                 )
                 output_handler.write(output)
+
 
         elif int(e.code) == 401:
             output = (
