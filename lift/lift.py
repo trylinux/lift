@@ -1458,7 +1458,30 @@ def getheaders(dest_ip, dport, output_handler):
                 + " | Linksys Smart Wifi Router (Belkin Era)"
             )
             output_handler.write(output)
+        elif "Net Video Browser" in str(title_contents) and server == "Boa/0.94.13":
+            #Added 09/09/2021 -- The object to download the "plugin" is named Tiandyvideo
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Tiandy Technologies CCTV Device"
+            )
+            output_handler.write(output)
 
+        elif "Login cgicc form" in str(title_contents) and server == "Boa/0.94.13":
+            #Added 09/09/2021 -- The banner is very obvious on this one. Unknown if it's an OEM.
+            #Updated: Yeah it's an OEM....Need to figure out which one.
+            #Updated: Later 09/09/2021 -- Found it. It's Pravis.
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Pravis Technologies CCTV Device (OEM)"
+            )
+            output_handler.write(output)
+
+        elif "Boa/0.92o" in str(server) and "AXIS" in str(title_contents):
+            output = (
+                str(dest_ip).rstrip("\r\n)")
+                + " | Axis Network Device w/ Model Number " + str(title_contents.pop())
+            )
+            output_handler.write(output)
 
 
         else:
