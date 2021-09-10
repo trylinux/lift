@@ -134,7 +134,7 @@ def main():
         try:
             for ip in netaddr.IPNetwork(str(args.subnet)):
                 try:
-                    if dport == 80:
+                    if int(dport) in [80, 8080, 81, 88, 8000, 8888, 7547]:
                         getheaders(str(ip).rstrip("\r\n)"), dport, output_handler)
                     elif args.recurse:
                         if dport == 53:
