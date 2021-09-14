@@ -1044,6 +1044,7 @@ def getheaders(dest_ip, dport, output_handler):
 
         elif (
             "DVRDVS-Webs" in str(server)
+            or "DNVRS-Webs" in str(server)
             or "Hikvision-Webs" in str(server)
             or "App-webs/" in str(server)
         ):
@@ -1533,7 +1534,7 @@ def getheaders(dest_ip, dport, output_handler):
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + " | D-Link Device Model "
+                + " | Device Model (Multiple Possible Vendors) "
                 + str(device_model)
             )
             output_handler.write(output)
