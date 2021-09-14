@@ -141,6 +141,11 @@ If you want more signatures added to lift's collection of certificates, please n
 
 - Write a tool for adding signatures in a standard fashion. In doing so, users of lift can supply their own list of indicators against which lift will compare the devices that it checks.
 
+## Contact
+
+- If you want to talk to me about this, please send an email to kestrellift@gmail.com
+
+- https://www.patreon.com/liftproject
 
 ## License
 
