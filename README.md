@@ -59,7 +59,7 @@ One router manufacturer even puts the firmware version number in the title of th
 1. Download the project
 
 ```
-$ git clone git@github.com:trylinux/lift.git
+$ git clone https://github.com/trylinux/lift.git
 $ cd lift
 ```
 
