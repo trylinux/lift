@@ -79,11 +79,18 @@ $ pip3 install -r requirements.txt
 
 ### Examples
 
-The best way to use this tool is to run 
+The simplest way to use this tool is to run 
 
 ```
 $ python lift.py -f <file_with_one_ip_per_line>  
 ```
+
+The most common way to use this tool is to profile port 80 and output to file
+
+```
+$ python lift.py -f <file_with_one_ip_per_line>  -p 80 -o <output_file>
+```
+
 
 For shodan input and to send to an output file 
 
