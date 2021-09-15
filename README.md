@@ -66,14 +66,14 @@ $ cd lift
 2. Create a virtual environment
 
 ```
-$ virtualenv -p python3 venv
+$ python3 -m venv venv
 $ source venv/bin/activate
 ```
 
 3. Install the project's dependencies in a virtual environment
 
 ```
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 ### Examples
