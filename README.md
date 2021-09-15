@@ -79,18 +79,17 @@ $ pip3 install -r requirements.txt
 
 ### Examples
 
-The simplest way to use this tool is to run 
-
-```
-$ python lift.py -f <file_with_one_ip_per_line>  
-```
-
 The most common way to use this tool is to profile port 80 and output to file
 
 ```
 $ python lift.py -f <file_with_one_ip_per_line>  -p 80 -o <output_file>
 ```
 
+The simplest way to use this tool is to run the following. WARNING: This does SSL checks and has known to be slow and have bugs. We are still working through this.
+
+```
+$ python lift.py -f <file_with_one_ip_per_line>  
+```
 
 For shodan input and to send to an output file 
 
@@ -104,7 +103,7 @@ Only one of the required arguments can be supplied when running the lift tool.
 **Required Arguments**:
 
 - **-f** &nbsp;&nbsp; or &nbsp;&nbsp; **--ifile** &nbsp;&nbsp;&nbsp;&nbsp; `filename` - file with one IP address per line
-- **-s** &nbsp;&nbsp; or &nbsp;&nbsp; **--subnet** &nbsp;&nbsp;&nbsp;&nbsp;`string` -  the IP address range of a subnet
+- or
 - **-i** &nbsp;&nbsp; or &nbsp;&nbsp; **--ip** &nbsp;&nbsp;&nbsp;&nbsp;`string` - a single IP address
 
 **Optional Arguments**:
