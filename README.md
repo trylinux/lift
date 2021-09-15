@@ -68,6 +68,7 @@ $ cd lift
 ```
 $ python3 -m venv venv
 $ source venv/bin/activate
+$ cd lift/
 ```
 
 3. Install the project's dependencies in a virtual environment
