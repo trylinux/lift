@@ -724,7 +724,7 @@ def getheaders(dest_ip, dport, output_handler):
                 get_label = soup.find("label").contents
                 if len(get_label) != 0:
                     for record in get_label:
-                        if "TP-LINK" in record:
+                        if "TP-LINK " in record:
                             output = (
                                 str(dest_ip).rstrip("\r\n)")
                                 + " | TP-Link Device (Unknown Model)"
@@ -1532,10 +1532,16 @@ def getheaders(dest_ip, dport, output_handler):
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
+            if "DSL-" in device_model:
+                device_model_specific = 'D-Link Model ' + str(device_model)
+            elif "EchoLife" in device_model:
+                device_model_specific = 'Huawei EchoLife Model ' + str(device_model)
+            else:
+                device_model_specific = "Device Model (Multiple Possible Vendors) "
             output = (
                 str(dest_ip).rstrip("\r\n)")
-                + " | Device Model (Multiple Possible Vendors) "
-                + str(device_model)
+                + " | " + device_model_specific
+
             )
             output_handler.write(output)
         elif (
@@ -1596,6 +1602,13 @@ def getheaders(dest_ip, dport, output_handler):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (str(dest_ip).rstrip("\r\n)") + " | D-LINK " + str(device_model))
+            output_handler.write(output)
+        elif "Westermo MRD" in str(auth_header) and int(e.code) == 401 and str(server) == "GoAhead-Webs":
+            #Added 09/15/2021 -- Pulls model number from auth header
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace('"', "")
+            output = (str(dest_ip).rstrip("\r\n)") + " | " + str(device_model))
             output_handler.write(output)
 
 
