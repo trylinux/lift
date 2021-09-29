@@ -1485,6 +1485,14 @@ def getheaders(dest_ip, dport, output_handler):
             )
             output_handler.write(output)
 
+        elif "Ruckus Wireless Admin" in str(title_contents) and str(server) == "GoAhead-Webs":
+            #Added 09/29/2021
+            output = (
+                    str(dest_ip).rstrip("\r\n)")
+                    + " | Ruckus Wireless Device "
+            )
+            output_handler.write(output)
+
 
 
         else:
