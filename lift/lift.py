@@ -1015,10 +1015,11 @@ def getheaders(dest_ip, dport, output_handler):
                 )
                 output_handler.write(output)
 
-        elif "::: Login :::" in str(
+        elif ("::: Login :::" in str(
             title_contents
-        ) and "Linux/2.x UPnP/1.0 Avtech/1.0" in str(server):
+        ) or "Remote Surveillance, Any time & Any where" in str(title_contents)) and "Linux/2.x UPnP/1.0 Avtech/1.0" in str(server):
             # Verified 08/10/2021.  This works on a very specific subset of AvTech Cameras
+            # Updated 11/18/2021 to fix a title thing
             output = (
                 str(dest_ip).rstrip("\r\n)")
                 + " | AvTech IP Camera (admin/admin) (Title and Server)"
@@ -1492,6 +1493,7 @@ def getheaders(dest_ip, dport, output_handler):
                     + " | Ruckus Wireless Device "
             )
             output_handler.write(output)
+
 
 
 
