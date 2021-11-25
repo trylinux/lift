@@ -1494,6 +1494,21 @@ def getheaders(dest_ip, dport, output_handler):
             )
             output_handler.write(output)
 
+        #elif str(server) == "KwikNet Web Server" and "Danfoss" in str(title_contents):
+        #    #Added 11/19/2021
+        #    output = (
+        #            str(dest_ip).rstrip("\r\n)")
+        #            + " |  "
+        #   )
+        #   output_handler.write(output)
+        elif  "Web Client Pro" in str(title_contents) and "lighttpd" in str(server):
+            #Added 11/24/2021, domain dvrdomain.com tied to this. See additional notes.
+            output = (
+                    str(dest_ip).rstrip("\r\n)")
+                    + " | Ctring OEM CCTV Product (Server and Title) "
+            )
+            output_handler.write(output)
+
 
 
 
