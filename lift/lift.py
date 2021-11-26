@@ -758,7 +758,13 @@ def getheaders(dest_ip, dport, output_handler):
                             + " | Hongdian Cellular Wifi Router (e.g. H8956)"
                     )
                     output_handler.write(output)
+            elif (str(server) == "lighttpd/1.4.55" or str(server) == "lighttpd/1.4.37") and content_length == 399:
+                #Added 11/26/2021, very specific signature to match an older model of the icctv devices. I found one that had a cert that pointed to icctv.co.kr.
+                output = (
+                    str(dest_ip).rstrip("\r\n)") + " | ICCTV Korea CCTV Device (Now KTCCTV)"
 
+                )
+                output_handler.write(output)
             else:
                 output = (
                     str(dest_ip).rstrip("\r\n)") + " | has server " +
@@ -1431,10 +1437,10 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | Unimo AU CCTV Product")
             output_handler.write(output)
 
-        elif str(
+        elif (str(
             server
         ) == "lighttpd/1.4.37" and "Intelligent Digital Security System" in str(
-            title_contents
+            title_contents)
         ):
             # Added 08_07_2021, The "remove activex" binary has a certificate that has the domain of icctv.co.kr and the address of Ewha in Korea.
             output = (
