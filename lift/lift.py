@@ -1515,6 +1515,12 @@ def getheaders(dest_ip, dport, output_handler):
             )
             output_handler.write(output)
 
+        elif "Redirecting..." in str(title_contents) and str(server) == "Apache":
+            output = (
+                    str(dest_ip).rstrip("\r\n)")
+                    + " | Mitel MiCollab Interface"
+            )
+            output_handler.write(output)
 
 
 
