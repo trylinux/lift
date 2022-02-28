@@ -1647,6 +1647,13 @@ def getheaders(dest_ip, dport, output_handler):
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (str(dest_ip).rstrip("\r\n)") + " | " + str(device_model))
             output_handler.write(output)
+        elif "E5300B" in str(auth_header) and int(e.code) == 401 and str(server) == "Vitesse Web Server":
+            #Added 02/27/2021 -- Might be a wide signature
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace('"', "")
+            output = (str(dest_ip).rstrip("\r\n)") + " | Ubiquoss " + str(device_model))
+            output_handler.write(output)
 
 
 
