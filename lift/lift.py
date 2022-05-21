@@ -1500,6 +1500,14 @@ def getheaders(dest_ip, dport, output_handler):
             )
             output_handler.write(output)
 
+        elif str(server) == "ulwsd/1.0.1-20140331" and str(title_contents) == "Web Client":
+            #Added 04/21/2022
+            output = (
+                    str(dest_ip).rstrip("\r\n)")
+                    + " | SpecoTech IP Device "
+            )
+            output_handler.write(output)
+
         #elif str(server) == "KwikNet Web Server" and "Danfoss" in str(title_contents):
         #    #Added 11/19/2021
         #    output = (
@@ -1653,6 +1661,11 @@ def getheaders(dest_ip, dport, output_handler):
             auth_header_realm = auth_header_split[0].split("=")
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (str(dest_ip).rstrip("\r\n)") + " | Ubiquoss " + str(device_model))
+            output_handler.write(output)
+
+        elif str(server) == "Zscaler/6.1" and int(e.code) == 403:
+            #Added 05/20/2022 -- Zscaler Proxies
+            output = str(dest_ip).rstrip("\r\n)") + " | Zscaler Proxy w/ 403"
             output_handler.write(output)
 
 
