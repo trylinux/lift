@@ -584,6 +584,9 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
                 + " | IntelBras WOM500 (Probably admin/admin) (Server string)"
             )
             output_handler.write(output)
+        elif "USG FLEX" in str(title_contents) or "USG20" in str(title_contents):
+            output = (str(dest_ip).rstrip("\r\n)") + " | Zyxel USG Firewall :: CVE-2022-30525")
+            output_handler.write(output)
         elif "ZeroShell" in str(cert):
             output = (str(dest_ip).rstrip("\r\n)") + " | ZeroShell Firewall")
             output_handler.write(output)
