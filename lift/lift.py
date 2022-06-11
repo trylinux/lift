@@ -1507,6 +1507,15 @@ def getheaders(dest_ip, dport, output_handler):
                     + " | SpecoTech IP Device "
             )
             output_handler.write(output)
+        elif (str(server)) == "micro_httpd" and "Eltex" in str(title_contents):
+            #Added 06/10/2022
+            get_model = title_contents.pop().split()
+            output = (
+                    str(dest_ip).rstrip("\r\n)")
+                    + " | Eltex " + get_model.pop()
+            )
+            output_handler.write(output)
+
 
         #elif str(server) == "KwikNet Web Server" and "Danfoss" in str(title_contents):
         #    #Added 11/19/2021
