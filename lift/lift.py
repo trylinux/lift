@@ -1232,7 +1232,7 @@ def getheaders(dest_ip, dport, output_handler):
             output = str(dest_ip).rstrip("\r\n)") + " | " + str(title_contents.pop())
             output_handler.write(output)
 
-        elif "Boa" in str(server) and str("Web Client") in str(title_contents):
+        elif ("Boa" in str(server) or "ulwsd/1.0.1-20140331" in str(server))  and str("Web Client") in str(title_contents):
             # Verified 08/19/2021: The file ums_plugin.exe contains the domain nadatel.com
             output = str(dest_ip).rstrip("\r\n)") + " | Nadatel Device"
             output_handler.write(output)
@@ -1536,6 +1536,13 @@ def getheaders(dest_ip, dport, output_handler):
             output = (
                     str(dest_ip).rstrip("\r\n)")
                     + " | Mitel MiCollab Interface"
+            )
+            output_handler.write(output)
+        elif "Boa/0.94.14rc21" in str(server) and "main page" in str(title_contents):
+            #Added 06/12/2022
+            output = (
+                    str(dest_ip).rstrip("\r\n)")
+                    + " | Digital Watchdog CCTV Device"
             )
             output_handler.write(output)
 
