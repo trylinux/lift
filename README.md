@@ -56,64 +56,70 @@ One router manufacturer even puts the firmware version number in the title of th
 
 ### Installation
 
-1. Download the project
+1) Download the project...
 
 ```
 $ git clone https://github.com/trylinux/lift.git
 $ cd lift
 ```
 
-2. Create a virtual environment
+2) Create a virtual environment...
 
 ```
-$ python3 -m venv venv
+$ virtualenv -p python3 venv
 $ source venv/bin/activate
-$ cd lift/
 ```
 
-3. Install the project's dependencies in a virtual environment
+3) Install Lift in the virtual environment...
 
 ```
-$ pip3 install -r requirements.txt
+$ python3 setup.py develop
 ```
 
 ### Examples
 
-The most common way to use this tool is to profile port 80 and output to file
+The simplest way to use this tool is to run the following...
+
+WARNING: Scanning port 443 does SSL checks and is known to be slow and have bugs.
 
 ```
-$ python lift.py -f <file_with_one_ip_per_line>  -p 80 -o <output_file>
+$ lift -f <file_with_one_ip_per_line> -p 80 -p 443 -o outputfile.txt
 ```
 
-The simplest way to use this tool is to run the following. WARNING: This does SSL checks and has known to be slow and have bugs. We are still working through this.
+For shodan input and to send to an output file...
 
 ```
-$ python lift.py -f <file_with_one_ip_per_line>  
+$ lift -f <shodan_json_file> -t shodan -p 80 -p 443 -o outputfile.txt
 ```
 
-For shodan input and to send to an output file 
+**Usage**:
 
 ```
-$ python lift.py -f <shodan_json_file> -t shodan -o outputfile.txt
+usage: lift [-h] [-v] [-c CONCURRENCY] [-i IP] [-s SUBNET] [-f IFILE] [-p PORT] [-t {standard,withport,shodan}] [-S] [-r] [-R] [-o OFILE] [-e EFILE]
+
+Low Impact Identification Tool
+
+options:
+  -h, --help            show this help message and exit
+  -v, --verbose         specifies the output verbosity (can specify multiple times)
+  -c CONCURRENCY, --concurrency CONCURRENCY
+                        specifies how many concurrent scans to run
+  -i IP, --ip IP        specifies an IP address to scan (can specify multiple times)
+  -s SUBNET, --subnet SUBNET
+                        specifies a CIDR subnet to scan (can specify multiple times)
+  -f IFILE, --ifile IFILE
+                        specifies a file containing targets to scan
+  -p PORT, --port PORT  specifies a port to scan (can specify multiple times)
+  -t {standard,withport,shodan}, --filetype {standard,withport,shodan}
+                        specifies the format of the --ifile argument
+  -S, --ssl             do SSL checks only
+  -r, --recurse         test for recursion and amplification
+  -R, --recon           run all tests
+  -o OFILE, --ofile OFILE
+                        specifies the output file (optional)
+  -e EFILE, --efile EFILE
+                        specifies the error file (default: lift.error)
 ```
-
-
-Only one of the required arguments can be supplied when running the lift tool.
-
-**Required Arguments**:
-
-- **-f** &nbsp;&nbsp; or &nbsp;&nbsp; **--ifile** &nbsp;&nbsp;&nbsp;&nbsp; `filename` - file with one IP address per line
-- or
-- **-i** &nbsp;&nbsp; or &nbsp;&nbsp; **--ip** &nbsp;&nbsp;&nbsp;&nbsp;`string` - a single IP address
-
-**Optional Arguments**:
-- **--p** &nbsp;&nbsp; or &nbsp;&nbsp; **--port**  `integer` - The port number at the supplied IP address that lift should connect to.
-- **-o** &nbsp;&nbsp; or &nbsp;&nbsp; **--ofile**  `filename` - The output file for the results. If it does exist, it'll be overwritten. If it doesn't exist, it'll be created
-- **-t** &nbsp;&nbsp; or &nbsp;&nbsp; **--filetype** `file type` - This is the format of the input file. LIFT takes a list of IPs (one per line) by default, but understands Shodan json files and files with <ip>:<port> (still one per line)
-
-
-Several arguments have been removed for the time being, including -v, -I and -r. 
-
 
 ## Documentation and Support
 
