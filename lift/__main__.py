@@ -4,7 +4,6 @@ import ipaddress
 import json
 import logging
 import pathlib
-import signal
 import sys
 
 from concurrent.futures import ThreadPoolExecutor
@@ -127,6 +126,7 @@ def check_target(args, target, output_handler):
             lift.ntp_monlist_check(target.ip, args.verbose)
     return target
 
+
 def main():
     args = parse_args()
 
@@ -169,11 +169,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#def shutdown(_sig, _frame):
-#    print("Quitting")
-#    executor.shutdown(wait=False, cancel_futures=True)
-#    sys.exit(0)
-#
-#signal.signal(signal.SIGINT, shutdown)
-#signal.signal(signal.SIGTERM, shutdown)
