@@ -66,7 +66,7 @@ $ cd lift
 2) Create a virtual environment...
 
 ```
-$ virtualenv -p python3 venv
+$ virtualenv --download -p python3 venv
 $ source venv/bin/activate
 ```
 
@@ -76,15 +76,17 @@ $ source venv/bin/activate
 $ python3 setup.py develop
 ```
 
+Now, when you're inside of this virtualenv, you'll be able to run the `lift` command.
+
 ### Examples
 
-The simplest way to use this tool is to run the following...
-
-WARNING: Scanning port 443 does SSL checks and is known to be slow and have bugs.
+The simplest way to use this tool is to enter your virtualenv and run the following...
 
 ```
 $ lift -f <file_with_one_ip_per_line> -p 80 -p 443 -o outputfile.txt
 ```
+
+WARNING: Scanning port 443 does SSL checks and is known to be slow and have bugs.
 
 For shodan input and to send to an output file...
 
