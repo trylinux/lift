@@ -152,20 +152,16 @@ def main():
                 futures.append(executor.submit(check_target, args, target, output_handler))
 
             for result in concurrent.futures.as_completed(futures):
-                try:
-                    result.result()
-                except Exception as e:
-                    print(f"Fatal error: {str(e)}")
-                    logging.exception(e)
-                finally:
-                    executor.shutdown(cancel_futures=True)
-                    sys.exit(1)
+                result.result()
+
         except KeyboardInterrupt:
             print("Stopping scans...")
+        except Exception as e:
+            print(f"Fatal error: {str(e)}")
+            logging.exception(e)
         finally:
             executor.shutdown(cancel_futures=True)
             sys.exit(0)
-
 
 if __name__ == "__main__":
     main()
