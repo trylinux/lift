@@ -1,23 +1,241 @@
+from __future__ import print_function
+from lib.modules.output import Output
+import traceback
 import logging
+import os
 import subprocess
 import sys
+import re
 import json
-import ssl
-import time
+
+if "threading" in sys.modules:
+    del sys.modules["threading"]
 
 from socket import socket
-from urllib.request import urlopen
-from urllib.error import HTTPError, URLError
+import ssl
+import argparse
+import time
+
+try:
+    from urllib.request import urlopen
+    from urllib.error import HTTPError, URLError
+except ImportError:
+    from urllib2 import urlopen, HTTPError, URLError
+
 
 import bs4
+import netaddr
 import os
-import dns.resolver
-# import pyasn
 
-from lift.lib import certs
-from lift.lib import ssdp_info
-from lift.lib import ntp_function
-from lift.lib.modules.output import Output
+# import pyasn
+import dns.resolver
+
+# Removing for the future fixing
+from lib import certs
+
+# from lib import ssdp_info, ntp_function
+
+logging.basicConfig(
+    filename="lift.error",
+    level=logging.DEBUG,
+    format="%(asctime)s %(name)s %(levelname)-8s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+logger = logging.getLogger(__name__)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Low Impact Identification Tool")
+    argroup = parser.add_mutually_exclusive_group(required=True)
+    argroup.add_argument("-i", "--ip", help="An Ip address")
+    argroup.add_argument("-f", "--ifile", help="A file of IPs")
+    parser.add_argument("-p", "--port", help="A port")
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        type=int,
+        default=1,
+        help="Not your usual verbosity. This is for debugging why specific outputs aren't working! USE WITH CAUTION",
+    )
+    parser.add_argument("-t","--filetype", help="Use ports from file", choices = ['standard','shodan','withport'], default = 'standard')
+    argroup.add_argument("-s", "--subnet", help="A subnet!")
+    # argroup.add_argument("-a", "--asn", help="ASN number. WARNING: This will take a while")
+    parser.add_argument("-r", "--recurse", help="Test Recursion", action="store_true")
+    parser.add_argument(
+        "-I", "--info", help="Get more info about operations", action="store_true"
+    )
+    parser.add_argument(
+        "-S", "--ssl", help="For doing SSL checks only", action="store_true"
+    )
+    parser.add_argument(
+        "-R",
+        "--recon",
+        help="Gather information about a given device",
+        action="store_true",
+    )
+    parser.add_argument("-o", "--ofile", help="The output file")
+    args = parser.parse_args()
+    # libpath = os.path.dirname(os.path.realpath(__file__)) + '/lib'
+    # asndb = pyasn.pyasn(libpath + '/ipasn.dat')
+    if args.verbose is None:
+        verbose = None
+    else:
+        verbose = args.verbose
+    if args.port is None:
+        dport = 443
+    else:
+        dport = int(args.port)
+    if args.ssl:
+        ssl_only = 1
+    else:
+        ssl_only = 0
+    if not args.info:
+        info = None
+    else:
+        info = 1
+    output_handler = Output(verbosity=verbose, output_file=args.ofile)
+    if args.ip and not args.recurse and not args.recon:
+
+        if dport in [80, 8080, 81, 88, 8000, 8888, 7547, 8081]:
+            getheaders(args.ip, dport, output_handler)
+
+        else:
+            testips(args.ip, dport, ssl_only, output_handler)
+    elif args.ifile and not args.recurse:
+        ipfile = args.ifile
+        dest_ip = args.ip
+        try:
+            active_futures = []
+            with open(ipfile) as f:
+                for line in f:
+                    if args.filetype == 'withport':
+                        line_split = re.split('[-:]', line.rstrip("\r\n)"))
+                        ip = line_split[0]
+                        dport = line_split[1]
+                    elif args.filetype == 'shodan':
+                        get_ip = json.loads(line)
+                        ip = get_ip['ip_str']
+                    else:
+                        ip = str(line).rstrip("\r\n)")
+                    if int(dport) in [80, 8080, 81, 88, 8000, 8888, 7547]:
+                        # print("Skipping SSL test for", dport)
+                        getheaders(ip, dport, output_handler)
+                    else:
+                        testips(
+                            ip, dport, ssl_only, output_handler
+                        )
+        except KeyboardInterrupt:
+            # print("Quitting")
+            sys.exit(0)
+        except Exception as e:
+            logger.exception(e)
+    elif args.subnet:
+        try:
+            for ip in netaddr.IPNetwork(str(args.subnet)):
+                try:
+                    if int(dport) in [80, 8080, 81, 88, 8000, 8888, 7547]:
+                        getheaders(str(ip).rstrip("\r\n)"), dport, output_handler)
+                    elif args.recurse:
+                        if dport == 53:
+                            recurse_DNS_check(str(ip).rstrip("\r\n"), verbose)
+                        elif dport == 1900:
+                            recurse_ssdp_check(str(ip).rstrip("\r\n"), verbose)
+                        elif dport == 123:
+                            ntp_monlist_check(str(ip).rstrip("\r\n"), verbose)
+                        else:
+                            recurse_ssdp_check(str(ip).rstrip("\r\n"), verbose)
+                            recurse_DNS_check(str(ip).rstrip("\r\n"), verbose)
+                            ntp_monlist_check(str(ip).rstrip("\r\n"), verbose)
+                    else:
+                        testips(str(ip), dport, ssl_only, output_handler)
+                except KeyboardInterrupt:
+                    print("Quitting from Subnet")
+                    sys.exit(0)
+                    pass
+                except Exception as e:
+                    if args.verbose is not None:
+                        print("Error occured in Subnet", e)
+                    sys.exit(0)
+        except KeyboardInterrupt:
+            sys.exit()
+        except Exception as e:
+            sys.exit()
+    # #   elif args.asn:
+    # #      for subnet in asndb.get_as_prefixes(int(args.asn)):
+    # #           try:
+    #                for ip in netaddr.IPNetwork(str(subnet)):
+    #                    if dport == 80:
+    #                        getheaders(str(ip).rstrip('\r\n)'), dport, verbose, info)
+    #                    elif args.recurse:
+    #                        if dport == 53:
+    #                            recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
+    #                        elif dport == 1900:
+    #                            recurse_ssdp_check(str(ip).rstrip('\r\n'), verbose)
+    #                        elif dport == 123:
+    #                            ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
+    #                        else:
+    #                            recurse_ssdp_check(str(ip).rstrip('\r\n'), verbose)
+    #                            recurse_DNS_check(str(ip).rstrip('\r\n'), verbose)
+    #                            ntp_monlist_check(str(ip).rstrip('\r\n'), verbose)
+    #                    else:
+    #                        testips(str(ip), dport, verbose, ssl_only, info)
+    #            except KeyboardInterrupt:
+    #                print("Quitting")
+    #                sys.exit(1)
+    #            except Exception as e:
+    #                if args.verbose is not None:
+    #                    print("Error occured in Subnet", e)
+    #                    sys.exit(0)
+
+    elif args.ifile and args.recurse:
+        ipfile = args.ifile
+        try:
+            with open(ipfile) as f:
+                for line in f:
+                    if dport == 53:
+                        recurse_DNS_check(str(line).rstrip("\r\n"), verbose)
+                    elif dport == 1900:
+                        recurse_ssdp_check(str(line).rstrip("\r\n"), verbose)
+                    elif dport == 123:
+                        ntp_monlist_check(str(line).rstrip("\r\n"), verbose)
+                    else:
+                        recurse_ssdp_check(str(line).rstrip("\r\n"), verbose)
+                        recurse_DNS_check(str(line).rstrip("\r\n"), verbose)
+                        ntp_monlist_check(str(line).rstrip("\r\n"), verbose)
+        except KeyboardInterrupt:
+            print("Quitting from first try in ifile")
+            sys.exit()
+        except Exception as e:
+            sys.exit()
+            print("error in recurse try", e)
+            raise
+    elif args.ip and args.recurse:
+        if dport == 53:
+            recurse_DNS_check(str(args.ip), verbose)
+        elif dport == 1900:
+            recurse_ssdp_check(str(args.ip), verbose)
+        elif dport == 123:
+            ntp_monlist_check(str(args.ip).rstrip("\r\n"), verbose)
+        else:
+            print("Trying 53,1900 and 123!")
+            recurse_DNS_check(str(args.ip), verbose)
+            recurse_ssdp_check(str(args.ip), verbose)
+            ntp_monlist_check(str(args.ip).rstrip("\r\n"), verbose)
+
+    if args.ip and args.recon:
+        print("Doing recon on ", args.ip)
+        dest_ip = args.ip
+        try:
+            testips(dest_ip, dport, verbose, ssl_only, info)
+            recurse_DNS_check(str(args.ip), verbose)
+            recurse_ssdp_check(str(args.ip), verbose)
+            ntp_monlist_check(str(args.ip).rstrip("\r\n"), verbose)
+        except KeyboardInterrupt:
+            print("Quitting")
+            sys.exit(0)
+        except Exception as e:
+            print("Encountered an error", e)
 
 
 def ishostup(dest_ip, dport, verbose):
@@ -294,7 +512,7 @@ def testips(dest_ip, dport, ssl_only, output_handler):
             print("Quitting")
             sys.exit(0)
         except URLError as e:
-            logging.exception(
+            logger.exception(
                 (str(dest_ip).rstrip("\r\n)") + " |" + str(dport) + " is not open")
             )
             getheaders(dest_ip, dport, output_handler)
@@ -309,12 +527,12 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                 getheaders(dest_ip, dport, output_handler)
             # if verbose is not None:
             # 	print( )str(dest_ip).rstrip('\r\n)') + " | had error " + str(e).rstrip('\r\n)'))
-            logging.exception("Error in testip: " + str(e) + " " + str(dest_ip).rstrip("\r\n)"))
+            logger.exception("Error in testip: " + str(e) + " " + str(dest_ip).rstrip("\r\n)"))
     except Exception as e:
         if "gaierror" in str(e):
             pass
         else:
-            logging.exception(e)
+            logger.exception(e)
 
 
 def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
@@ -413,7 +631,7 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
             dport = 80
             getheaders(dest_ip, dport, output_handler)
 
-            logging.exception("Error in getsslheaders: " + str(e) + str(dest_ip))
+            logger.exception("Error in getsslheaders: " + str(e) + str(dest_ip))
         pass
     return
 
@@ -500,7 +718,7 @@ def getheaders(dest_ip, dport, output_handler):
                         )
                         output_handler.write(output)
                 except Exception as e:
-                    logging.exception(e)
+                    logger.exception(e)
 
             elif "WebServer/1.0 UPnP/1.0" in str(server):
                 get_label = soup.find("label").contents
@@ -930,7 +1148,7 @@ def getheaders(dest_ip, dport, output_handler):
                 model_number = soup.find('td', {'class':'sws_home_right_table_style2'}).contents.pop()
                 output = str(dest_ip).rstrip("\r\n)") + " | Samsung SyncThru Printer Model " + model_number
             except Exception as e:
-                logging.exception(e)
+                logger.exception(e)
                 output = str(dest_ip).rstrip("\r\n)") + " | Samsung SyncThru Printer"
             output_handler.write(output)
 
@@ -1347,7 +1565,7 @@ def getheaders(dest_ip, dport, output_handler):
                 )
                 output_handler.write(str(crap_contents))
             except:
-                # logging.exception(e)
+                # logger.exception(e)
                 output = (
                     str(dest_ip).rstrip("\r\n)") + " | Title is empty and server is" + str(server) + " (NOID)"
                 )
@@ -1555,7 +1773,7 @@ def getheaders(dest_ip, dport, output_handler):
             )
             output_handler.write(output)
     except URLError as e:
-        logging.exception(
+        logger.exception(
             (str(dest_ip).rstrip("\r\n)") + " |" + str(dport) + " is not open")
         )
     except Exception as e:
@@ -1577,7 +1795,7 @@ def getheaders(dest_ip, dport, output_handler):
                     )
                     output_handler.write(output)
         except Exception as t:
-            logging.exception(
+            logger.exception(
                 "Error in getheaders(): ", str(dest_ip).rstrip("\r\n)"), " |", str(e)
             )
 
@@ -1603,7 +1821,7 @@ def process_html(html):
     return title_contents, soup, content_length
 
 
-def recurse_dns_check(dest_ip, vbose):
+def recurse_DNS_check(dest_ip, vbose):
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [str(dest_ip)]
     try:
@@ -1645,7 +1863,7 @@ def recurse_ssdp_check(dest_ip, vbose):
         print("Quitting in here")
         sys.exit(0)
     except Exception as e:
-        logging.exception("Encountered exception", e)
+        logger.exception("Encountered exception", e)
 
 
 def ntp_monlist_check(dest_ip, vbose):
@@ -1660,3 +1878,7 @@ def ntp_monlist_check(dest_ip, vbose):
         print("Quitting")
         sys.exit(1)
         pass
+
+
+if __name__ == "__main__":
+    main()
