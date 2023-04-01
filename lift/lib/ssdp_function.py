@@ -1,10 +1,13 @@
 import logging
+import random
 import time
 
 l = logging.getLogger("scapy.runtime")
 l.setLevel(49)
+
 from scapy.layers.inet import IP, UDP
-from scapy.all import sr1, random, Raw
+from scapy.packet import Raw
+from scapy.sendrecv import sr1
 
 
 class ssdp_scan:

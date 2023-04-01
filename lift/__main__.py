@@ -8,6 +8,7 @@ import sys
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
+from random import Random
 from typing import *
 
 from lift import lift
@@ -20,7 +21,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("-v", "--verbose", action="count", default=0,
                         help="specifies the output verbosity (can specify multiple times)")
     parser.add_argument("-c", "--concurrency", type=int, default=1,
-                        help="specifies how many concurrent scans to run")
+                        help="specifies how many concurrent scans to run (default: 1)")
+    parser.add_argument("-P", "--partition", type=str, default='1/1',
+                        help="specifies which partition of the data to scan (default: 1/1)")
+    parser.add_argument("-d", "--discreet", action="store_true",
+                        help="try to avoid scanning the same IP multiple times in quick succession")
 
     # target options
     parser.add_argument("-i", "--ip", action="append", type=str,
@@ -32,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("-p", "--port", type=int, action="append",
                         help="specifies a port to scan (can specify multiple times)")
     parser.add_argument("-t", "--filetype", choices=["standard", "withport", "shodan"], default="standard",
-                        help="specifies the format of the --ifile argument")
+                        help="specifies the format of the --ifile argument (default: standard)")
 
     # scanning options
     parser.add_argument("-S", "--ssl", action="store_true",
@@ -57,6 +62,14 @@ def parse_args() -> argparse.Namespace:
         parser.error("--port cannot be specified when --filetype is set to \"withport\"")
     elif not args.port:
         parser.error("--port is required unless --filetype is set to \"withport\"")
+
+    try:
+        part, whole = args.partition.split('/', maxsplit=1)
+        part, whole = int(part, base=10), int(whole, base=10)
+        assert 0 < part <= whole
+    except:
+        parser.error("--partition must specify the current partition (P) "
+                     "and the total number of partitions (N) as P/N (example: 2/4)")
 
     return args
 
@@ -98,6 +111,15 @@ def make_target_list(args) -> List[Target]:
             js = json.loads(ifile)
             for port in args.port:
                 targets.append(Target(str(ipaddress.ip_address(js["ip_str"])), int(port)))
+
+    if args.discreet:
+        # use a fixed seed so that the target list is stable across multiple runs
+        Random(0x3A43F693).shuffle(targets)
+
+    part, whole = args.partition.split('/', maxsplit=1)
+    part, whole = int(part, base=10), int(whole, base=10)
+    if part > 1 or whole > 1:
+        targets = [t for (i, t) in enumerate(targets) if (i % whole) == (part - 1)]
 
     return targets
 
