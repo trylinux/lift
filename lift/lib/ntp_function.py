@@ -1,15 +1,12 @@
-import sys
-
-if "threading" in sys.modules:
-    del sys.modules["threading"]
-
 import logging
-import time
+import random
 
 l = logging.getLogger("scapy.runtime")
 l.setLevel(49)
+
 from scapy.layers.inet import IP, UDP
-from scapy.all import send, Raw, random, send, sr1
+from scapy.packet import Raw
+from scapy.sendrecv import sr1
 
 
 class NTPscan:

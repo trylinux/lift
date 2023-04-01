@@ -12,7 +12,6 @@ setup(
     python_requires='>=3.9',
     install_requires=[
         "beautifulsoup4 ~= 4.12",
-        "netaddr ~= 0.8",
         "dnspython ~= 2.3",
         "scapy ~= 2.5"
     ],

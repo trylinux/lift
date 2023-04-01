@@ -97,7 +97,7 @@ $ lift -f <shodan_json_file> -t shodan -p 80 -p 443 -o outputfile.txt
 **Usage**:
 
 ```
-usage: lift [-h] [-v] [-c CONCURRENCY] [-i IP] [-s SUBNET] [-f IFILE] [-p PORT] [-t {standard,withport,shodan}] [-S] [-r] [-R] [-o OFILE] [-e EFILE]
+usage: lift [-h] [-v] [-c CONCURRENCY] [-P PARTITION] [-d] [-i IP] [-s SUBNET] [-f IFILE] [-p PORT] [-t {standard,withport,shodan}] [-S] [-r] [-R] [-o OFILE] [-e EFILE]
 
 Low Impact Identification Tool
 
@@ -105,7 +105,10 @@ options:
   -h, --help            show this help message and exit
   -v, --verbose         specifies the output verbosity (can specify multiple times)
   -c CONCURRENCY, --concurrency CONCURRENCY
-                        specifies how many concurrent scans to run
+                        specifies how many concurrent scans to run (default: 1)
+  -P PARTITION, --partition PARTITION
+                        specifies which partition of the data to scan (default: 1/1)
+  -d, --discreet        try to avoid scanning the same IP multiple times in quick succession
   -i IP, --ip IP        specifies an IP address to scan (can specify multiple times)
   -s SUBNET, --subnet SUBNET
                         specifies a CIDR subnet to scan (can specify multiple times)
@@ -113,7 +116,7 @@ options:
                         specifies a file containing targets to scan
   -p PORT, --port PORT  specifies a port to scan (can specify multiple times)
   -t {standard,withport,shodan}, --filetype {standard,withport,shodan}
-                        specifies the format of the --ifile argument
+                        specifies the format of the --ifile argument (default: standard)
   -S, --ssl             do SSL checks only
   -r, --recurse         test for recursion and amplification
   -R, --recon           run all tests
