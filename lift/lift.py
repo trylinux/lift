@@ -429,6 +429,10 @@ def getheaders(dest_ip, dport, output_handler):
             server = returned_response.info().get("Server")
         except:
             server = None
+        try:
+            etag = returned_response.info().get("Etag")
+        except:
+            etags = None
         html = returned_response.read()
         title_contents, soup, content_length = process_html(html)
 
@@ -745,6 +749,7 @@ def getheaders(dest_ip, dport, output_handler):
 
         elif "iGate" in str(title_contents):
             #Fixed on 04/02/23
+            print(headers_raw)
             output = (
                 str(dest_ip).rstrip('\r\n)') + " | iGate Network Device w/ Model Number " + str(title_contents.pop()))
             output_handler.write(output)
@@ -972,6 +977,10 @@ def getheaders(dest_ip, dport, output_handler):
 
         elif "SunGuard" in str(title_contents):
             output = (str(dest_ip).rstrip("\r\n)") + " | SunGuard.it Device (Title)")
+            output_handler.write(output)
+
+        elif "0-802-1e0" in str(etag) and "Webs" in str(server):
+            output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device")
             output_handler.write(output)
 
         elif "CMS Web Viewer" in str(title_contents) and (
