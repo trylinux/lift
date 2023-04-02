@@ -745,7 +745,9 @@ def getheaders(dest_ip, dport, output_handler):
 
         elif "iGate" in str(title_contents):
             #Fixed on 04/02/23
-            print(str(dest_ip).rstrip('\r\n)') + " | iGate Network Device w/ Model Number " + str(title_contents.pop()) )
+            output = (
+                str(dest_ip).rstrip('\r\n)') + " | iGate Network Device w/ Model Number " + str(title_contents.pop()))
+            output_handler.write(output)
 
         elif "LG ACSmart" in str(title_contents):
             # Modified and removed "premium". Verified 08/10/2021
