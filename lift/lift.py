@@ -863,6 +863,11 @@ def getheaders(dest_ip, dport, output_handler):
                 output = str(dest_ip).rstrip("\r\n)") + " | Hikvision-Based DVR (Server)"
                 output_handler.write(output)
 
+        elif etag is not None and (str(server) == "Webs" or str(server) == 'webserver') and "/doc/page/login.asp?_" in str(html):
+            #Added 04/03/2023 Yet Another HikVision signature
+            output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device (Header and Script)")
+            output_handler.write(output)
+
         elif "Router Webserver" in str(server):
             # Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
             output = (
@@ -983,9 +988,7 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | SunGuard.it Device (Title)")
             output_handler.write(output)
 
-        elif etag is not None and (str(server) == "Webs" or str(server) == 'webserver') and "/doc/page/login.asp?_" in str(html):
-            output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device (Header and Script)")
-            output_handler.write(output)
+
 
         elif "CMS Web Viewer" in str(title_contents) and (
             server is None or "lighttpd/1.4.54" in str(server)
