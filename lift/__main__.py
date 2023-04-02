@@ -90,7 +90,7 @@ def make_target_list(args) -> List[Target]:
 
     if isinstance(args.subnet, list):
         for subnet in args.subnet:
-            for ip in ipaddress.ip_network(subnet):
+            for ip in ipaddress.ip_network(subnet, False):
                 for port in args.port:
                     targets.append(Target(str(ipaddress.ip_address(ip)), int(port)))
 
