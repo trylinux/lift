@@ -527,6 +527,8 @@ def getheaders(dest_ip, dport, output_handler):
                 # This is a fucked up signature. I"m still working on it 08/15/2021
                 # print(str(dest_ip).rstrip('\r\n)') + " | Hangzhou Topvision/Taoshi based D/H/NVR or IP Camera")
 
+
+
             elif "Boa/0.94.13" in str(server) and content_length == 142:
                 # Verified 08/15/2021, the domain that is used pulls back to Macroview. This signature is pretty broad but until I find a better focus, I don't think anything else will work.
                 output = (
@@ -549,6 +551,12 @@ def getheaders(dest_ip, dport, output_handler):
                             + " | Hongdian Cellular Wifi Router (e.g. H8956)"
                     )
                     output_handler.write(output)
+
+            elif server == "nginx" and "id=\"http\" name=\"http\" value=\"5000\"" in str(html):
+                # Added 04/03/2023
+                output = (str(dest_ip).rstrip("\r\n)") + " | Synology Device (HTML)")
+                output_handler.write(output)
+
             elif (str(server) == "lighttpd/1.4.55" or str(server) == "lighttpd/1.4.37") and content_length == 399:
                 #Added 11/26/2021, very specific signature to match an older model of the icctv devices. I found one that had a cert that pointed to icctv.co.kr.
                 output = (
@@ -867,6 +875,7 @@ def getheaders(dest_ip, dport, output_handler):
             #Added 04/03/2023 Yet Another HikVision signature
             output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device (Header and Script)")
             output_handler.write(output)
+
 
         elif "Router Webserver" in str(server):
             # Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
