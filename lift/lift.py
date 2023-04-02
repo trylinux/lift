@@ -853,7 +853,7 @@ def getheaders(dest_ip, dport, output_handler):
             or "App-webs/" in str(server)
         ):
             # Verified 08/10/2021
-            output = str(dest_ip).rstrip("\r\n)") + " | Hikvision-Based DVR (Server)"
+            output = str(dest_ip).rstrip("\r\n)") + " | Hikvision-Based DVR (Server Only)"
             output_handler.write(output)
 
         elif str(server) == "web":
@@ -983,8 +983,8 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | SunGuard.it Device (Title)")
             output_handler.write(output)
 
-        elif etag is not None and str(server) == "Webs":
-            output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device")
+        elif etag is not None and (str(server) == "Webs" or str(server) == 'webserver') and "/doc/page/login.asp?_" in str(html):
+            output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device (Header and Script)")
             output_handler.write(output)
 
         elif "CMS Web Viewer" in str(title_contents) and (
