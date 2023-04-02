@@ -433,6 +433,11 @@ def getheaders(dest_ip, dport, output_handler):
             etag = returned_response.info().get("Etag")
         except:
             etags = None
+        #try:
+        #    keepalive = returned_response.headers.items()
+        #    print(keepalive)
+        #except:
+        #    keepalive = None
         html = returned_response.read()
         title_contents, soup, content_length = process_html(html)
 
@@ -749,7 +754,6 @@ def getheaders(dest_ip, dport, output_handler):
 
         elif "iGate" in str(title_contents):
             #Fixed on 04/02/23
-            print(headers_raw)
             output = (
                 str(dest_ip).rstrip('\r\n)') + " | iGate Network Device w/ Model Number " + str(title_contents.pop()))
             output_handler.write(output)
@@ -979,7 +983,7 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + " | SunGuard.it Device (Title)")
             output_handler.write(output)
 
-        elif "0-802-1e0" in str(etag) and "Webs" in str(server):
+        elif etag is not None and str(server) == "Webs":
             output = (str(dest_ip).rstrip("\r\n)") + " | HikVision Device")
             output_handler.write(output)
 
