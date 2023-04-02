@@ -925,6 +925,31 @@ def getheaders(dest_ip, dport, output_handler):
             output = str(dest_ip).rstrip("\r\n)") + " | Crestron AirMedia Device"
             output_handler.write(output)
 
+        elif "Q330 Web Server" in str(title_contents) and server == "Q330 V1.0":
+            #Added 04/02/2023
+            output = str(dest_ip).rstrip("\r\n)") + " | Quanterra Q330 Seismic System"
+            output_handler.write(output)
+
+        elif etag == "194e41dc6f674afe7a35b1006c546b2e" and server is None and "Comrex ACCESS" in str(title_contents):
+            #Added 04/02/2023
+            output = str(dest_ip).rstrip("\r\n)") + " | Comrex Device"
+            output_handler.write(output)
+
+        elif "Barix Instreamer Instreamer" in str(title_contents) and server is None:
+            #Added 04/02/2023 -- Need to grab the mac address from /menu.html. Its in a weird spot so
+            # it'll take some time.
+
+            #hostname = "http://%s:%s/menu.html" % (str(dest_ip).rstrip("\r\n)"), dport)
+            #get_response = urlopen(hostname, timeout=5)
+            #html = get_response.read()
+            #soup = bs4.BeautifulSoup(html, "html.parser")
+            #model_number = soup.find('td', {'class': 'sws_home_right_table_style2'}).contents.pop()
+
+            output = str(dest_ip).rstrip("\r\n)") + " | Barix InStreamer Device"
+            output_handler.write(output)
+
+        #elif "Carrier"
+
         elif "Seagate NAS" in str(title_contents) and server == None:
             # Added and verified on 08/18/2021
             output = str(dest_ip).rstrip("\r\n)") + " | Seagate NAS Device"
