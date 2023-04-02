@@ -740,8 +740,12 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
         # This signature needs to be moved to the 401 group.
-        # elif "iGate" in title_contents:
-        # print(str(dest_ip).rstrip('\r\n)') + " | iGate Router or Modem (Server name)")
+        #elif "iGate" in title_contents:
+        #    print(str(dest_ip).rstrip('\r\n)') + " | iGate Router or Modem (Server name)")
+
+        elif "iGate" in str(title_contents):
+            #Fixed on 04/02/23
+            print(str(dest_ip).rstrip('\r\n)') + " | iGate Network Device w/ Model Number " + str(title_contents.pop()) )
 
         elif "LG ACSmart" in str(title_contents):
             # Modified and removed "premium". Verified 08/10/2021
