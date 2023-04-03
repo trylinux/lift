@@ -468,7 +468,7 @@ def getheaders(dest_ip, dport, output_handler):
                 answer = None
             if "Serial" in str(server) and "HP" in str(server):
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | HP Product w/ Identifiers -- "
                     + str(server)
                 )
@@ -541,7 +541,7 @@ def getheaders(dest_ip, dport, output_handler):
                 find_redirect = soup.find_all('script')
                 if "/gui/" in str(find_redirect):
                     output = (
-                            str(dest_ip).rstrip("\r\n)")
+                            str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                             + " | Hongdian Cellular Wifi Router (e.g. H8956)"
                     )
                     output_handler.write(output)
@@ -579,7 +579,7 @@ def getheaders(dest_ip, dport, output_handler):
                         grab_header = str(row.text).split(":")
                         fw_version = grab_header[1].lstrip(" ")
             output = (
-                str(dest_ip).rstrip("\r\n)") + ":" + dport
+                str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                 + " | D-LINK Model "
                 + model_name
                 + " "
