@@ -128,7 +128,7 @@ def make_target_list(args) -> List[Target]:
 
 def check_target(args, target, output_handler):
     if not args.recurse and not args.recon:
-        if target.port in [80, 8080, 81, 88, 8000, 8888, 7547, 8081]:
+        if target.port not in [443, 8443]:
             lift.getheaders(target.ip, target.port, output_handler)
         else:
             lift.testips(target.ip, target.port, args.ssl, output_handler)
