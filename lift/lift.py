@@ -1074,7 +1074,7 @@ def getheaders(dest_ip, dport, output_handler):
                 ocx = soup.body.findAll("object", {"name": "dvrocx"})
                 if len(ocx) != 0:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ':' + str(dport) +
                         + " | Raysharp CCTV Device (Unknown Downstream Brand)"
                     )
                     output_handler.write(output)
@@ -1087,13 +1087,13 @@ def getheaders(dest_ip, dport, output_handler):
                 comment = soup.findAll(string=lambda tag: isinstance(tag, bs4.Comment))
                 if "RSVideoOcx.cab" in str(comment):
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport) +
                         + " | Raysharp CCTV Device (Unknown Downstream Brand)"
                     )
                     output_handler.write(output)
             except:
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport) +
                     + " | Raysharp CCTV Device Malformed Response Likely (Manually review)"
                 )
                 output_handler.write(output)
@@ -1102,7 +1102,7 @@ def getheaders(dest_ip, dport, output_handler):
             find_redirect = soup.findAll('script')
             if "/gui/status_main.cgi" in find_redirect:
                 output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport) +
                         + " | Hongdian Cellular Wifi Router (e.g. H8956)"
                 )
                 output_handler.write(output)
@@ -1161,12 +1161,12 @@ def getheaders(dest_ip, dport, output_handler):
             # verified 08/13/2021
             if "XVR LOGIN" in str(title_contents):
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Cenova XVR Product (OEM Shenzhen Milantek Co)"
                 )
             else:
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Shenzhen Milantek Co OEM Device (Unknown Downstream)"
                 )
             output_handler.write(output)
@@ -1178,7 +1178,7 @@ def getheaders(dest_ip, dport, output_handler):
         elif "nginx" in str(server) and "CentOS" not in str(title_contents):
             if "Ubuntu" in str(server):
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Ubuntu Server w/ "
                     + str(server)
                     + " with title w/ "
@@ -1291,7 +1291,7 @@ def getheaders(dest_ip, dport, output_handler):
         elif "Ruckus Wireless Admin" in str(title_contents) and str(server) == "GoAhead-Webs":
             #Added 09/29/2021
             output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Ruckus Wireless Device "
             )
             output_handler.write(output)
@@ -1299,7 +1299,7 @@ def getheaders(dest_ip, dport, output_handler):
         elif str(server) == "ulwsd/1.0.1-20140331" and str(title_contents) == "Web Client":
             #Added 04/21/2022
             output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | SpecoTech IP Device "
             )
             output_handler.write(output)
@@ -1330,14 +1330,14 @@ def getheaders(dest_ip, dport, output_handler):
 
         elif "Redirecting..." in str(title_contents) and str(server) == "Apache":
             output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Mitel MiCollab Interface"
             )
             output_handler.write(output)
         elif "Boa/0.94.14rc21" in str(server) and "main page" in str(title_contents):
             #Added 06/12/2022
             output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Digital Watchdog CCTV Device"
             )
             output_handler.write(output)
@@ -1352,7 +1352,7 @@ def getheaders(dest_ip, dport, output_handler):
                     title_stuff = "None"
                 crap_contents = (
 
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Title is "
                     + title_stuff.rstrip("\r\n)")
                     + " and server is "
@@ -1495,7 +1495,7 @@ def getheaders(dest_ip, dport, output_handler):
                 auth_header_realm = auth_header_split[0].split("=")
                 device_model = str(auth_header_realm[1]).replace('"', "")
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Everfocus CCTV Device Model "
                     + str(device_model)
                 )
@@ -1503,7 +1503,7 @@ def getheaders(dest_ip, dport, output_handler):
             else:
 
                 output = (
-                    str(dest_ip).rstrip("\r\n)")
+                    str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                     + " | Everfocus CCTV Device (admin/111111)"
                 )
             output_handler.write(output)
