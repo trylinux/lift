@@ -320,7 +320,7 @@ def testips(dest_ip, dport, ssl_only, output_handler):
 def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
     hostname = "https://%s:%s" % (str(dest_ip).rstrip("\r\n)"), dport)
     try:
-        checkheaders = urlopen(hostname, context=ctx, timeout=5)
+        checkheaders = urlopen(hostname, context=ctx, timeout=3)
         try:
             if ("ubnt.com", "UBNT") in cert:
                 output = (
@@ -420,7 +420,7 @@ def getheaders(dest_ip, dport, output_handler):
         dport = 80
     try:
         hostname = "http://%s:%s" % (str(dest_ip).rstrip("\r\n)"), dport)
-        returned_response = urlopen(hostname, timeout=5)
+        returned_response = urlopen(hostname, timeout=3)
 
         try:
             server = returned_response.info().get("Server")
@@ -1432,6 +1432,13 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
         elif "cpe@zte.com" in str(auth_header) and int(e.code) == 401:
             output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | ZTE ONU/ONT Device")
+            output_handler.write(output)
+        elif "WSTL CPE 1.0" in str(server) and int(e.code) == 401:
+            #Added 04/03/2023 -- Frontier seems to have a lot of them
+            auth_header_split = auth_header.split(",")
+            auth_header_realm = auth_header_split[0].split("=")
+            device_model = str(auth_header_realm[1]).replace('"', "")
+            output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Westell CPE Device")
             output_handler.write(output)
         elif "uhttpd/1.0.0" in str(server) and "NETGEAR Orbi" in str(auth_header) and int(e.code) == 401:
             #Added 08/29/2021 -- The Auth header says Netgear ORBI
