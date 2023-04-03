@@ -1436,7 +1436,7 @@ def getheaders(dest_ip, dport, output_handler):
             elif "EchoLife" in device_model:
                 device_model_specific = 'Huawei EchoLife Model ' + str(device_model)
             else:
-                device_model_specific = "Device Model (Multiple Possible Vendors) "
+                device_model_specific = "Device Model (Multiple Possible Vendors) " + str(device_model)
             output = (
                 str(dest_ip).rstrip("\r\n)")
                 + " | " + device_model_specific
