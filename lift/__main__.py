@@ -5,6 +5,7 @@ import json
 import logging
 import pathlib
 import sys
+import threading
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -155,7 +156,18 @@ def check_target(args, target, output_handler):
     return target
 
 
+def panic(*args, **kwargs):
+    from pprint import pprint
+    print('Punch·OuT!!')
+    pprint(args)
+    pprint(kwargs)
+
+
 def main():
+    sys.unraisablehook = panic
+    sys.excepthook = panic
+    threading.excepthook = panic
+
     args = parse_args()
 
     output_handler = lift.Output(
