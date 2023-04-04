@@ -5,13 +5,18 @@ import json
 import logging
 import pathlib
 import sys
+import threading
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from random import Random
 from typing import *
-import ctypes
-libgcc_s = ctypes.CDLL('libgcc_s.so.1')
+
+try:
+    import ctypes
+    ctypes.CDLL('libgcc_s.so.1')
+except:
+    pass
 
 from lift import lift
 
@@ -151,7 +156,18 @@ def check_target(args, target, output_handler):
     return target
 
 
+def panic(*args, **kwargs):
+    from pprint import pprint
+    print('Punch·OuT!!')
+    pprint(args)
+    pprint(kwargs)
+
+
 def main():
+    sys.unraisablehook = panic
+    sys.excepthook = panic
+    threading.excepthook = panic
+
     args = parse_args()
 
     output_handler = lift.Output(
