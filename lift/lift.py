@@ -546,7 +546,8 @@ def getheaders(dest_ip, dport, output_handler):
                     )
                     output_handler.write(output)
 
-            elif  server == "DNVRS-Webs" and "doc/page/login.asp" in str(html):
+            elif (server == "DNVRS-Webs" or server == "DVRDVS-Webs") and "doc/page/login.asp" in str(html):
+                #Added 04/03/2023 YET ANOTHER FREAKING HIKVISION SIGNATURE
                 output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | HikVision Device")
                 output_handler.write(output)
             elif server == "nginx" and "id=\"http\" name=\"http\" value=\"5000\"" in str(html):
