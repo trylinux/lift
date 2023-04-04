@@ -10,8 +10,12 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from random import Random
 from typing import *
-import ctypes
-libgcc_s = ctypes.CDLL('libgcc_s.so.1')
+
+try:
+    import ctypes
+    ctypes.CDLL('libgcc_s.so.1')
+except:
+    pass
 
 from lift import lift
 
