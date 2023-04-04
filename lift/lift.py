@@ -546,6 +546,9 @@ def getheaders(dest_ip, dport, output_handler):
                     )
                     output_handler.write(output)
 
+            elif  server == "DNVRS-Webs" and "doc/page/login.asp" in str(html):
+                output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | HikVision Device")
+                output_handler.write(output)
             elif server == "nginx" and "id=\"http\" name=\"http\" value=\"5000\"" in str(html):
                 # Added 04/03/2023
                 output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Synology Device (HTML)")
@@ -1458,7 +1461,7 @@ def getheaders(dest_ip, dport, output_handler):
             device_model = str(auth_header_realm[1]).replace('"', "")
             output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Asus " + str(device_model))
             output_handler.write(output)
-        elif "DCS-" in str(auth_header) and int(e.code) == 401 and str(server) == "Boa/0.94.13":
+        elif "DCS-" in str(auth_header) and int(e.code) == 401 and (str(server) == "Boa/0.94.13" or str(server) == "alphapd"):
             #Added 09/09/2021 -- Pulls model number from auth header
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
