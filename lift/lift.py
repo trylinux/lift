@@ -1597,7 +1597,7 @@ def getheaders(dest_ip, dport, output_handler):
                     output_handler.write(output)
         except Exception as t:
             logging.exception(
-                "Error in getheaders(): ", str(dest_ip).rstrip("\r\n)"), " |", str(e)
+                "Error in getheaders(): ", str(dest_ip).rstrip("\r\n)"), " |", str(t)
             )
 
 
