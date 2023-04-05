@@ -305,6 +305,8 @@ def testips(dest_ip, dport, ssl_only, output_handler):
             elif ("timed out" or "sslv3" in e) and ssl_only == 0:
                 getheaders(dest_ip, dport, output_handler)
                 pass
+            elif "timeout" in str(e):
+                pass
             else:
                 getheaders(dest_ip, dport, output_handler)
             # if verbose is not None:
