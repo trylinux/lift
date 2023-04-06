@@ -372,10 +372,7 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
             )
             output_handler.write(output)
         else:
-            if ssl_only == 0:
-                getheaders(dest_ip, 80, output_handler)
-            else:
-                print(
+                output = (
                     "Title on IP",
                     str(dest_ip).rstrip("\r\n)"),
                     "is",
@@ -384,6 +381,7 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
                     "and server is",
                     str(server),
                 )
+                output_handler(output)
         checkheaders.close()
     except HTTPError as e:
         if "Server" in str(e.info()):
