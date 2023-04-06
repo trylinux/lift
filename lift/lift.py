@@ -79,13 +79,13 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                     output_handler.write(output)
                 elif device == "netgear_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | NetGear Default cert UTM  (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "verifone_sapphire":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Verifone Sapphire Device (SSL)"
                     )
                     output_handler.write(output)
@@ -97,19 +97,19 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                     output_handler.write(output)
                 elif "filemaker" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Filemaker Secure Database Website (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "verizon_jungo":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Verizon Jungo OpenRG product (SSL/8443)"
                     )
                     output_handler.write(output)
                 elif device == "canon_iradv":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Canon IR-ADV Login Page (SSL/8443)"
                     )
                     output_handler.write(output)
@@ -120,25 +120,25 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                     output_handler.write(output)
                 elif device == "ecessa":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Ecessa PowerLink Wan Optimizer (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "nomadix_ag_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Nomadix AG series Gateway (SSL)"
                     )
                     output_handler.write(output)
                 elif "netvanta" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | ADTRAN NetVanta Total Access Device (SSL)"
                     )
                     output_handler.write(output)
                 elif "valuepoint_gwc_1" == device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | ValuePoint Networks Gateway Controller Series (SSL)"
                     )
                     output_handler.write(output)
@@ -152,13 +152,13 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                     output_handler.write(output)
                 elif device == "edgewater_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | EdgeWater Networks VOIP Solution (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "foscam_cam":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Foscam IPcam Client Login (SSL)"
                     )
                     output_handler.write(output)
@@ -167,88 +167,100 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                     output_handler.write(output)
                 elif device == "huawei_hg658":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Huawei Home Gateway HG658d (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "interpeak_device":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Something made by interpeak (SSL)"
                     )
                     output_handler.write(output)
                 elif device == "fujistu_celvin":
                     output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Fujitsu Celvin NAS (SSL)")
                     output_handler.write(output)
+
                 elif device == "opengear_default_cert":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Opengear Management Console Default cert (SSL)"
                     )
                     output_handler.write(output)
+
                 elif device == "zyxel_pk5001z":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Zyxel PK5001Z default cert (SSL)"
                     )
                     output_handler.write(output)
+
                 elif device == "audiocodecs_8443":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | AudioCodecs MP serices 443/8443 Default Cert (SSL)"
                     )
                     output_handler.write(output)
+
                 elif "supermicro_ipmi" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Supermicro IPMI Default Certs (SSL)"
                     )
                     output_handler.write(output)
+
                 elif device == "enco_player_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Enco Enplayer Default Cert (SSL)"
                     )
                     output_handler.write(output)
+
                 elif device == "ami_megarac":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | AMI MegaRac Remote Management Default Cert (SSL)"
                     )
                     output_handler.write(output)
+
                 elif device == "avocent_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Avocent Default cert (unknown device) (SSL)"
                     )
                     output_handler.write(output)
+
                 elif device == "ligowave_1":
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | LigoWave Default Cert (probably APC Propeller 5) (SSL)"
                     )
                     output_handler.write(output)
+
                 elif "intelbras_wom500" == device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | IntelBras Wom500 (admin/admin) (SSL)"
                     )
                     output_handler.write(output)
+
                 elif "netgear_2" == device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Netgear Default Cert Home Router (8443/SSL)"
                     )
                     output_handler.write(output)
+
                 elif "buffalo_1" == device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Buffalo Default Cert (443/SSL)"
                     )
                     output_handler.write(output)
+
                 elif "digi_int_1" == device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Digi Passport Default Cert (443/SSL)"
                     )
                     output_handler.write(output)
@@ -264,21 +276,24 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                         + " | Seagate/Axentra NAS Default Cert 863B4AB (443/SSL)"
                     )
                     output_handler.write(output)
+
                 elif "ironport_device" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Cisco IronPort Device Default SSL (443/SSL)"
                     )
                     output_handler.write(output)
+
                 elif "meru_net_1" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | Meru Network Management Device  (443/SSL)"
                     )
                     output_handler.write(output)
+
                 elif "bticino_1" in device:
                     output = (
-                        str(dest_ip).rstrip("\r\n)")
+                        str(dest_ip).rstrip("\r\n)") + ":" + str(dport)
                         + " | BTcinino My Home Device w/ Default Cert  (443/SSL)"
                     )
                     output_handler.write(output)
@@ -303,8 +318,6 @@ def testips(dest_ip, dport, ssl_only, output_handler):
                 getheaders(dest_ip, dport, output_handler)
             elif ("timed out" or "sslv3" in e) and ssl_only == 0:
                 getheaders(dest_ip, dport, output_handler)
-                pass
-            else:
                 pass
             # if verbose is not None:
             # 	print( )str(dest_ip).rstrip('\r\n)') + " | had error " + str(e).rstrip('\r\n)'))
