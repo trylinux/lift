@@ -406,7 +406,6 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
             pass
     except Exception as e:
             logging.exception("Error in getsslheaders: " + str(e) + str(dest_ip))
-        pass
     return
 
 
