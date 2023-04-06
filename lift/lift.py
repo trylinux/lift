@@ -297,7 +297,6 @@ def testips(dest_ip, dport, ssl_only, output_handler):
             logging.exception(
                 (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " |" + str(dport) + " is not open")
             )
-            getheaders(dest_ip, dport, output_handler)
         except Exception as e:
             s.close()
             if 111 in e and ssl_only == 0:
@@ -305,10 +304,8 @@ def testips(dest_ip, dport, ssl_only, output_handler):
             elif ("timed out" or "sslv3" in e) and ssl_only == 0:
                 getheaders(dest_ip, dport, output_handler)
                 pass
-            elif "timeout" in str(e):
-                pass
             else:
-                getheaders(dest_ip, dport, output_handler)
+                pass
             # if verbose is not None:
             # 	print( )str(dest_ip).rstrip('\r\n)') + " | had error " + str(e).rstrip('\r\n)'))
             logging.exception("Error in testip: " + str(e) + " " + str(dest_ip).rstrip("\r\n)"))
@@ -408,10 +405,6 @@ def getheaders_ssl(dest_ip, dport, cert, ctx, ssl_only, output_handler):
         else:
             pass
     except Exception as e:
-        if dport == 443 and ssl_only == 0:
-            dport = 80
-            getheaders(dest_ip, dport, output_handler)
-
             logging.exception("Error in getsslheaders: " + str(e) + str(dest_ip))
         pass
     return
