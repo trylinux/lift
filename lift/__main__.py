@@ -6,6 +6,7 @@ import logging
 import pathlib
 import sys
 import threading
+import traceback
 
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -156,15 +157,14 @@ def check_target(args, target, output_handler):
     return target
 
 
-def panic(*args, **kwargs):
-    from pprint import pprint
-    print('Punch·OuT!!')
-    pprint(args)
-    pprint(kwargs)
+def panic(exc_type, exc_obj, exc_tb):
+    if type(exc_obj) == SystemExit:
+        return
+    traceback.print_exception(exc_type, exc_obj, exc_tb, file=sys.stdout)
+    logging.exception(f"{type(exc_obj).__name__}: {exc_obj}", exc_info=(exc_type, exc_obj, exc_tb))
 
 
 def main():
-    sys.unraisablehook = panic
     sys.excepthook = panic
     threading.excepthook = panic
 
@@ -183,25 +183,27 @@ def main():
     )
 
     targets = make_target_list(args)
+    executor = ThreadPoolExecutor(max_workers=args.concurrency)
 
-    with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
-        try:
-            futures = []
+    try:
+        futures = []
 
-            for target in targets:
-                futures.append(executor.submit(check_target, args, target, output_handler))
+        for target in targets:
+            futures.append(executor.submit(check_target, args, target, output_handler))
 
-            for result in concurrent.futures.as_completed(futures):
-                result.result()
+        for result in concurrent.futures.as_completed(futures):
+            result.result()
 
-        except KeyboardInterrupt:
-            print("Stopping scans...")
-        except Exception as e:
-            print(f"Fatal error: {str(e)}")
-            logging.exception(e)
-        finally:
-            executor.shutdown(cancel_futures=True)
-            sys.exit(0)
+    except KeyboardInterrupt:
+        return 0
+    except Exception as e:
+        traceback.print_exception(*sys.exc_info(), file=sys.stdout)
+        logging.exception(f"{type(e).__name__}: {e}")
+        return 1
+    finally:
+        print("Finishing scans...")
+        executor.shutdown(cancel_futures=True)
+
 
 if __name__ == "__main__":
     main()
