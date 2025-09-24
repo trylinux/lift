@@ -12,7 +12,7 @@ setup(
     python_requires='>=3.9',
     install_requires=[
         "beautifulsoup4 ~= 4.12",
-        "dnspython ~= 2.3",
+        "dnspython",
         "scapy ~= 2.5"
     ],
     package_data={

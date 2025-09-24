@@ -432,9 +432,8 @@ def getheaders(dest_ip, dport, output_handler):
             server = None
         try:
             etag = returned_response.info().get("Etag")
-            print(etag)
         except:
-            etags = None
+            etag = None
         #try:
         #    keepalive = returned_response.headers.items()
         #    print(keepalive)
