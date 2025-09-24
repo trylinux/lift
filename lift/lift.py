@@ -11,7 +11,6 @@ from urllib.error import HTTPError, URLError
 
 import bs4
 import os
-import dns.resolver
 # import pyasn
 
 from lift.lib import certs
@@ -433,6 +432,7 @@ def getheaders(dest_ip, dport, output_handler):
             server = None
         try:
             etag = returned_response.info().get("Etag")
+            print(etag)
         except:
             etags = None
         #try:
@@ -602,7 +602,7 @@ def getheaders(dest_ip, dport, output_handler):
             output = (str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Synology Device Storage Device w/ title " + title_contents.pop())
             output_handler.write(output)
 
-        elif str(server) in str("ver2.4 rev0"):
+        elif str(server) is str("ver2.4 rev0"):
             output = (
                 str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Panasonic IP Camera/NVR Model: "
                 + str(title_contents.pop())
@@ -694,6 +694,7 @@ def getheaders(dest_ip, dport, output_handler):
                 str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Aethra Telecommunications Device (Title)"
             )
             output_handler.write(output)
+
 
         # I'm removing this signature on 08/09/2021
         # elif 'Industrial Ethernet Switch' in str(title_contents):
@@ -865,6 +866,8 @@ def getheaders(dest_ip, dport, output_handler):
             output_handler.write(output)
 
 
+
+
         elif "Router Webserver" in str(server):
             # Verified 08/10/2021 -- Should be noted that there is a 401 counterpart to this.
             output = (
@@ -919,6 +922,13 @@ def getheaders(dest_ip, dport, output_handler):
             #Added 04/02/2023
             output = str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Comrex Device"
             output_handler.write(output)
+
+        elif etag == "\"1722917735:2002\"" and server is None and "WEB" in str(title_contents):
+
+           output = (
+             str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Dahua Device (Etag and Title)"
+            )
+           output_handler.write(output)
 
         elif "Barix Instreamer Instreamer" in str(title_contents) and server is None:
             #Added 04/02/2023 -- Need to grab the mac address from /menu.html. Its in a weird spot so
@@ -1421,6 +1431,12 @@ def getheaders(dest_ip, dport, output_handler):
                 str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | iCatch OEM H/D/NVR Device (Server and headers)"
             )
             output_handler.write(output)
+        elif "SERCOMM CPE Authentication" in str(auth_header):
+            output = (
+                str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Sercomm CPE Device"
+            )
+            output_handler.write(output)
+
         elif "Router" in str(server) and int(e.code) == 401:
             auth_header_split = auth_header.split(",")
             auth_header_realm = auth_header_split[0].split("=")
@@ -1630,6 +1646,7 @@ def process_html(html):
 
 
 def recurse_dns_check(dest_ip, vbose):
+    import dns.resolver
     myResolver = dns.resolver.Resolver()
     myResolver.nameservers = [str(dest_ip)]
     try:
