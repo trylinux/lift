@@ -432,6 +432,7 @@ def getheaders(dest_ip, dport, output_handler):
             server = None
         try:
             etag = returned_response.info().get("Etag")
+            print(etag)
         except:
             etag = None
         #try:
@@ -783,6 +784,13 @@ def getheaders(dest_ip, dport, output_handler):
             output = str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Intellian Device (Title)"
             output_handler.write(output)
 
+        elif "H3C-Miniware-Webs" in str(server):
+            #verified 09/24/2025
+            output = (
+                str(dest_ip).rstrip('\r\n)') + ":" + str(dport) + " | H3C Device with Model: " + str(title_contents.pop()))
+            output_handler.write(output)
+
+
         elif "SECURUS" in str(title_contents):
             # Verified 08/10/2021
             output = str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Securus DVR (Title)"
@@ -965,6 +973,19 @@ def getheaders(dest_ip, dport, output_handler):
                 + str(title_contents.pop())
                 + " Router (Title and Server)"
             )
+            output_handler.write(output)
+        elif "\"222-79252\"" in etag and "Hydra/0.1.8" in str(server):
+            try:
+                hostname = "http://%s:%s/cgi-bin/dispatcher.cgi?cmd=0" % (str(dest_ip).rstrip("\r\n)"), dport)
+                get_response = urlopen(hostname, timeout=5)
+                html = get_response.read()
+                title_contents, soup, content_length = process_html(html)
+                model_number = str(title_contents.pop())
+                output = str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Zyxel " + model_number
+            except Exception as e:
+                logging.exception(e)
+                output = str(dest_ip).rstrip("\r\n)") + ":" + str(dport) + " | Zyxel Networking Device (Etag, Title, Server"
+
             output_handler.write(output)
 
         elif "SyncThru Web Service" in str(title_contents) and server is None:
